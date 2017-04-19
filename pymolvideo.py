@@ -3,7 +3,10 @@
 from pymol import cmd
 #this is to view all of the pdb files in your current working directory in number order, using pymol.
 from glob import glob
-lst = glob("input*.pdb")
+# print sys.argv
+folder=sys.argv[1]
+prot=folder.rsplit("/",1)[1]
+lst = glob(folder+"/*.pdb")
 lst.sort()
 for fil in lst: cmd.load(fil,"mov")
 cmd.hide()
@@ -43,8 +46,8 @@ cmd.bg_color('white')
 ### cut above here and paste into script ###
 
 cmd.movie.add_state_sweep(2,1,'start=1')
-cmd.movie.produce('cartoon.mpg',mode='ray',quality=100,quiet=1)
-cmd.save('cartoon.pse','','pse',quiet=0)
+cmd.movie.produce(folder+'cartoon.mpg',mode='ray',quality=100,quiet=1)
+cmd.save(folder+'cartoon.pse')
 
 print 'CARTOON rendering finished'
 
