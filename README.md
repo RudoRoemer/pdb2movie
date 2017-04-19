@@ -3,7 +3,8 @@ Code for generating movies of the most relevant movement modes of proteins from 
 
 
 Requirements: 
-PyMOL
+PyMOL 
+
 FreeMOL mpeg_encode component
 
 Instructions: 
