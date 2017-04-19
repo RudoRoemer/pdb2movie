@@ -1,0 +1,1 @@
+SRC += $(wildcard XML/*.cpp)

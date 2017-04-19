@@ -1,0 +1,133 @@
+University Beta Test Program License 
+ 
+Important: Please read this University Beta Test Program Participation Agreement 
+(“Participation Agreement”) carefully, as it sets out the terms and conditions you must agree to 
+in order to participate in the University Beta Test Program.  
+ 
+Terms and Conditions: 
+ 
+1. Use/Participant Feedback. You are hereby granted a nonexclusive, nonsublicensable, 
+nontransferable license to use the Beta Test Materials (as defined below) solely for testing and 
+evaluation purposes and not for commercial purposes.  You shall not disassemble, decompile, 
+reverse engineer, replicate, or otherwise copy any of the Beta Test Materials.  You agree to 
+provide reasonable feedback to ASU, about your experiences using features of the Beta Test 
+Materials and information about connectivity and usability of the Beta Test Materials. All of 
+your feedback shall be the property of ASU and may be used by ASU for any purpose it sees fit. 
+ 
+ 
+2. Beta Test Materials. ASU shall provide you with all the software and documentation related to 
+“FIRST” a collection of software routines (“Beta Test Materials”) required for participation in 
+the University Beta Test Program. You may be obligated to return some or all of the Beta Test 
+Materials sent to you, if so, ASU will supply you with the necessary shipping instructions. 
+ 
+ 
+3. Ownership of Beta Test Materials. You understand that ASU or its affiliates shall own all of 
+the Beta Test Materials, including without limitation all intellectual property rights therein. Any 
+modifications, improvements, developments and/or other alterations, including but not limited to 
+derivative works, of the Beta Test Materials, created or developed by you or by any of your 
+agents or employees shall be and remain the sole property of ASU.  You shall keep the Beta Test 
+Materials free of all security interests, liens, or other encumbrances. You may not sell, lease, 
+license, loan or otherwise transfer or dispose of any of the Beta Test Materials without the prior 
+written consent of ASU. You shall keep the Beta Test Materials in your possession, custody and 
+control in your place of work. 
+ 
+4. Confidential Nature of Beta Test Materials. You acknowledge and agree that: 
+ 
+ 
+( a ) the Beta Test Materials are the confidential information of ASU; 
+ 
+( b ) the Beta Test Materials are pre-release materials and not intended for University release; 
+ 
+( c ) the Beta Test Materials may be serial numbered for tracking purposes and would be 
+traceable to you; 
+ 
+( d ) disclosure of any part of the Beta Test Materials to any commercial for profit third party 
+will cause significant and irreparable harm to ASU, the extent of which may be difficult to 
+ascertain. Accordingly, you agree ASU shall be entitled to injunctive relief as well as all other 
+legal remedies that may be available in the event you breach this agreement. 
+ 
+ 
+5. Participant’s Warrants and Representations. You warrant and represent that you: 
+ 
+( a ) acknowledge and agree that you have no expectation of privacy or confidentiality in any 
+personal information, ideas, designs or inventions that you choose to disclose during your 
+participation in the University Beta Test Program or use of any of the Beta Test Materials; 
+ 
+( b ) will not disclose any part of the Beta Test Materials to any commercial for profit third party, 
+including but not limited to any commercial entity or any competitor of ASU; 
+ 
+( c ) agree that if you allow anyone else to use the Beta Test Materials you accept responsibility 
+for their acts, including any violations of this agreement which could result in the termination of 
+your account; 
+ 
+( d ) will immediately notify ASU if you find or become aware that the Beta Test Materials are in 
+the possession of a third party, and you will use your best efforts to help recover the Beta Test 
+Materials and to prevent any further loss. 
+ 
+( e ) will use the content and tools made available to you through the University Beta Test 
+Program only for the purposes intended, as any misuse of such content or tools may result in 
+immediate termination of your account and participation in the University Beta Test Program; 
+ 
+( f ) will not misappropriate any of the intellectual property of ASU or any other party as such 
+misappropriation may result in legal prosecution; 
+ 
+( g ) will not engage in the unauthorized transfer, exhibition, export, import or transmission of 
+programs and will not use any devices to circumvent any authentication schemes as such may be 
+prohibited by law.  
+ 
+( h ) will read and become familiar with the warnings and instructions for any Beta Test 
+Materials that may be sent to you before any installation or setup of such Beta Test Materials; 
+and 
+ 
+6. Acknowledgment of Data Collection. The Beta Test Materials may contain software that uses 
+“DNAS” (Dynamic Network Authentication System).  DNAS retrieves information about a 
+user’s hardware and software for authentication and copy protection. The information collected 
+does not identify the user personally.  
+ 
+ 
+8. NO WARRANTEE. SOFTWARE AND HARDWARE ARE PROVIDED “AS IS” AND, TO 
+THE MAXIMUM EXTENT PROVIDED UNDER LAW, ASU DISCLAIMS ALL 
+WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT 
+NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A 
+PARTICULAR PURPOSE. FOR ALL SOFTWARE PROVIDED AS PART OF THE 
+UNIVERSITY BETA TEST PROGRAM, ASU OR A PARTICIPATING PUBLISHER MAY 
+EITHER DELIVER A SELF EXPIRING (“TIME BOMB”) VERSION OF THE SOFTWARE 
+OR MAY DISCONTINUE HOSTING THE SOFTWARE AT ANY TIME. YOU AGREE 
+THAT ASU HAS NO LIABILITY FOR SUCH DISCONTINUANCE. ALL OTHER 
+SOFTWARE IS THE RESPONSIBILITY OF THE NAMED PUBLISHER. CHECK THE 
+TERMS AND CONDITIONS THAT MAY ACCOMPANY EACH SOFTWARE BETA 
+BEFORE USING. 
+ 
+ 
+9. LIMITATION OF LIABILITY AND REMEDIES. You agree that notwithstanding any 
+damages that you might incur for any reason whatsoever (including, without limitation, all direct 
+or general damages), the entire liability of ASU and any of its affiliates under any provision of 
+this Participation Agreement and your exclusive remedy for all of the foregoing shall be limited 
+to one dollar ($1). The foregoing limitations, exclusions and disclaimers shall apply to the 
+maximum extent permitted by applicable law, even if any remedy fails of its essential purpose. 
+In no event shall ASU or its affiliates be liable for any special, incidental, indirect, or 
+consequential damages whatsoever. 
+ 
+ 
+10. Term/Termination. You may terminate this Participation Agreement at any time by returning 
+the materials sent to you and providing ASU written notification of your termination. Your 
+account and participation privileges may be terminated immediately if you fail to comply with 
+any of the terms and conditions of this Participation Agreement or if you fail to provide 
+reasonable feedback in a timely manner. ASU also reserves the right to terminate your account or 
+the Beta Test Program at any time with or without cause. 
+ 
+
+11. Governing Law and Venue. You agree that the laws of the State of Arizona shall govern the 
+terms of this Participation Agreement and your participation in the University Beta Test Program. 
+ 
+
+12. Copy of Participation Agreement. Should you have any questions concerning this 
+Participation Agreement please contact ASU at: 
+ASU Software Beta Test Program 
+Arizona Technology Enterprises, LLC. 
+699 S. Mill Ave, Suite 601 
+Tempe, AZ 85281 
+(480) 965 5670 
+ 
+
+

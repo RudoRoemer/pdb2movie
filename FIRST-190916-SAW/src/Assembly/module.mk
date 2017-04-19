@@ -1,0 +1,2 @@
+SRC += $(wildcard Assembly/*.cpp)
+

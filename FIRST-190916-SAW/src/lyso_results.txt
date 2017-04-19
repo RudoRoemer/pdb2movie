@@ -1,0 +1,205 @@
+# --------------------------------------------------------------------
+# FILE INFO:
+
+ Input file name: lyso.pdb
+ Date: Fri Jan 30 17:50:47 2015
+
+# --------------------------------------------------------------------
+# INPUT PARAMETERS:
+
+ Command line: "./FIRST -E 0 lyso.pdb"
+ Energy cutoff: 0.00 kcal/mol
+
+# --------------------------------------------------------------------
+# RESULTS:
+
+           2644 Sites included in the calculation.
+              0 Sites excluded in the calculation.
+            164 Unique residues found.
+              0 Isolated sites.
+              0 Isolated dimers.
+            271 Hydrogen bonds included.
+             90 Hydrophobic tethers included.
+              0 Stacked ring interactions included.
+            234 Rigid clusters.
+              1 Rigid clusters larger than size 20.
+           1894 Sites in largest rigid cluster.
+             10 Sites in second largest rigid cluster.
+              4 Stressed Regions.
+            177 Total independent degrees of freedom.
+
+# --------------------------------------------------------------------
+# WARNINGS: LEVEL 1 warnings are most severe.
+
+ LEVEL 1 WARNINGS: 0
+
+ LEVEL 2 WARNINGS: 0
+
+ LEVEL 3 WARNINGS: 0
+
+
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+# FILE INFO:
+
+ Input file name: lyso.pdb
+ Date: Fri Jan 30 17:50:54 2015
+
+# --------------------------------------------------------------------
+# INPUT PARAMETERS:
+
+ Command line: "./FIRST -E 0 lyso.pdb -dil 1"
+ Energy cutoff: 0.00 kcal/mol
+
+# --------------------------------------------------------------------
+# RESULTS:
+
+           2644 Sites included in the calculation.
+              0 Sites excluded in the calculation.
+            164 Unique residues found.
+              0 Isolated sites.
+              0 Isolated dimers.
+            271 Hydrogen bonds included.
+             90 Hydrophobic tethers included.
+              0 Stacked ring interactions included.
+            234 Rigid clusters.
+              1 Rigid clusters larger than size 20.
+           1894 Sites in largest rigid cluster.
+             10 Sites in second largest rigid cluster.
+              4 Stressed Regions.
+            177 Total independent degrees of freedom.
+
+# --------------------------------------------------------------------
+# WARNINGS: LEVEL 1 warnings are most severe.
+
+ LEVEL 1 WARNINGS: 0
+
+ LEVEL 2 WARNINGS: 0
+
+ LEVEL 3 WARNINGS: 0
+
+
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+# FILE INFO:
+
+ Input file name: lyso.pdb
+ Date: Fri Jan 30 17:56:37 2015
+
+# --------------------------------------------------------------------
+# INPUT PARAMETERS:
+
+ Command line: "./FIRST -E 0 lyso.pdb -dil 1"
+ Energy cutoff: 0.00 kcal/mol
+
+# --------------------------------------------------------------------
+# RESULTS:
+
+           2644 Sites included in the calculation.
+              0 Sites excluded in the calculation.
+            164 Unique residues found.
+              0 Isolated sites.
+              0 Isolated dimers.
+            271 Hydrogen bonds included.
+             90 Hydrophobic tethers included.
+              0 Stacked ring interactions included.
+            234 Rigid clusters.
+              1 Rigid clusters larger than size 20.
+           1894 Sites in largest rigid cluster.
+             10 Sites in second largest rigid cluster.
+              4 Stressed Regions.
+            177 Total independent degrees of freedom.
+
+# --------------------------------------------------------------------
+# WARNINGS: LEVEL 1 warnings are most severe.
+
+ LEVEL 1 WARNINGS: 0
+
+ LEVEL 2 WARNINGS: 0
+
+ LEVEL 3 WARNINGS: 0
+
+
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+# FILE INFO:
+
+ Input file name: lyso.pdb
+ Date: Fri Jan 30 18:00:14 2015
+
+# --------------------------------------------------------------------
+# INPUT PARAMETERS:
+
+ Command line: "./FIRST -E 0 lyso.pdb -dil 1"
+ Energy cutoff: 0.00 kcal/mol
+
+# --------------------------------------------------------------------
+# RESULTS:
+
+           2644 Sites included in the calculation.
+              0 Sites excluded in the calculation.
+            164 Unique residues found.
+              0 Isolated sites.
+              0 Isolated dimers.
+            271 Hydrogen bonds included.
+             90 Hydrophobic tethers included.
+              0 Stacked ring interactions included.
+            234 Rigid clusters.
+              1 Rigid clusters larger than size 20.
+           1894 Sites in largest rigid cluster.
+             10 Sites in second largest rigid cluster.
+              4 Stressed Regions.
+            177 Total independent degrees of freedom.
+
+# --------------------------------------------------------------------
+# WARNINGS: LEVEL 1 warnings are most severe.
+
+ LEVEL 1 WARNINGS: 0
+
+ LEVEL 2 WARNINGS: 0
+
+ LEVEL 3 WARNINGS: 0
+
+
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+# FILE INFO:
+
+ Input file name: lyso.pdb
+ Date: Fri Jan 30 18:23:16 2015
+
+# --------------------------------------------------------------------
+# INPUT PARAMETERS:
+
+ Command line: "./FIRST lyso.pdb -non -E -2 -FRODA -totconf 1000 -freq 100 -mobRC1 -body -step 0.1"
+ Energy cutoff: -2.00 kcal/mol
+
+# --------------------------------------------------------------------
+# RESULTS:
+
+           2644 Sites included in the calculation.
+              0 Sites excluded in the calculation.
+            164 Unique residues found.
+              0 Isolated sites.
+              0 Isolated dimers.
+            119 Hydrogen bonds included.
+             90 Hydrophobic tethers included.
+              0 Stacked ring interactions included.
+            549 Rigid clusters.
+              5 Rigid clusters larger than size 20.
+            658 Sites in largest rigid cluster.
+            131 Sites in second largest rigid cluster.
+             17 Stressed Regions.
+            284 Total independent degrees of freedom.
+
+# --------------------------------------------------------------------
+# WARNINGS: LEVEL 1 warnings are most severe.
+
+ LEVEL 1 WARNINGS: 0
+
+ LEVEL 2 WARNINGS: 0
+
+ LEVEL 3 WARNINGS: 0
+
+
+# --------------------------------------------------------------------

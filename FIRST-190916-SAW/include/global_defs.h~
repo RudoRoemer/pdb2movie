@@ -1,0 +1,280 @@
+#ifndef _GLOBAL_DEFS_
+#define _GLOBAL_DEFS_
+
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <bitset>
+#include <typeinfo>
+#include <algorithm>
+#include <ctime> 
+#include <new>
+#include <sys/types.h>
+#include <cctype>
+#include "Vect.h"
+#include "Parameters.h"
+
+using namespace std;
+
+const string FIRST_VERSION_ID = "development version";
+const string FRODA_VERSION_ID = "1.2";
+const string TIMME_VERSION_ID = "1.5";
+
+const short int X = 0;
+const short int Y = 1;
+const short int Z = 2;
+const short int START_OF_LIST = -1;
+
+const float PH_DEFAULT_ENERGY = -10.000;
+
+const short int DONOR_SP2 = 1;
+const short int DONOR_SP3 = 2;
+
+const short int ACCEPTOR_SP2 = 3;
+const short int ACCEPTOR_SP3 = 4;
+
+const short int DONOR_AND_ACCEPTOR_SP2 = 5;
+const short int DONOR_AND_ACCEPTOR_SP3 = 6;
+
+const short int DONOR_CHARGED_SP2 = 11;
+const short int DONOR_CHARGED_SP3 = 12;
+
+const short int ACCEPTOR_CHARGED_SP2 = 13;
+const short int ACCEPTOR_CHARGED_SP3 = 14;
+
+const float PI = 3.1415926;
+
+const float MAX_COVALENT_BOND_DISTANCE = 3.2;
+
+const bool USE_PRUNED_LABEL = true;
+const bool NO_DECOMPS  = false;
+const bool RUN_DECOMPS = true;
+
+const short int FREE_PEBBLE = -1;
+const short int EMPTY_PEBBLE_SPACE = 0;
+const short int PEBBLE_1 = 0;
+const short int PEBBLE_2 = 1;
+const short int PEBBLE_3 = 2;
+const short int PEBBLE_4 = 3;
+const short int PEBBLE_5 = 4;
+const short int PEBBLE_6 = 5;
+
+const short int DEFAULT_NUMBER_OF_BARS = 5;
+
+const short int MIN_SEARCH_RANGE = 100;
+ 
+const short int CHECKED = -2;
+const short int START_NODE = -1;
+
+const string spacing = "   ";
+const string WHITESPC_TAB_NEWLINE = " \t\n";
+
+#define clear_screen system("clear"); cout << endl << endl 
+#define did_not_press_enter(input) input.size()
+#define did_press_enter(input) !(input.size() )
+
+////////////////////////////////////////////////////////////////////////////////
+//inline int string_2_int( string convert_this ){
+inline intmax_t string_2_int( string convert_this ){
+  return( atoi( convert_this.c_str()) );
+}
+
+inline float string_2_float( string convert_this ){
+  return( atof( convert_this.c_str()) );
+}
+////////////////////////////////////////////////////////////////////////////////
+
+typedef Vect<double> Vector;
+
+inline bool operator==(const Vector & firstVector, const Vector & secondVector) {
+  // TODO - return true if firstVector's components are within machine precision 
+  //        of secondVector
+  
+  if (firstVector.x != secondVector.x) {
+    return false;
+  }
+  
+  if (firstVector.y != secondVector.y) {
+    return false;
+  }
+  
+  if (firstVector.z != secondVector.z) {
+    return false;
+  }
+  
+  return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+inline double dotProduct (Vector &bond1, Vector &bond2) {
+  return bond1.x*bond2.x + bond1.y*bond2.y+bond1.z*bond2.z;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+struct template_data{
+  
+  template_data( string R, map<string,list<string> > M ){
+    std_group_name = R;
+    std_group_map  = M;
+  }
+
+  string std_group_name;
+  map<string,list<string> > std_group_map;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+class new_bonds{
+
+ public:
+
+  new_bonds(){ site_1 = 0; site_2 = 0; bars = 0; energy = 0.0; bond_type = "HB"; bond_ranking = 0.0; in_network = true; }
+  new_bonds( unsigned int S1, unsigned int S2, int B = 0, float E = -99999.0, string BT = "HB" ){
+    site_1 = S1;
+    site_2 = S2;
+    bars   = B;
+    energy = E;
+    bond_type = BT;
+    bond_ranking = E; // When a new bond is created, set the ranking equal to the energy.
+  }
+
+  // Overload the greater than/less than operators for sorting instances
+  // of this class.
+  //////////////////////////////////////////////////////////////////////
+  friend bool operator<( new_bonds bond_1, new_bonds bond_2 ){
+    return( bond_1.bond_ranking < bond_2.bond_ranking );
+  }
+  friend bool operator>( new_bonds bond_1, new_bonds bond_2 ){
+    return( bond_1.bond_ranking > bond_2.bond_ranking );
+  }
+  
+ public:
+  unsigned int site_1;
+  unsigned int site_2;
+  int bars;
+  float energy;
+  float bond_ranking;
+  string bond_type;
+
+  bool in_network;
+  static unsigned int total_in_network;
+
+};
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+struct labels{
+
+  labels(){ region_label = 0; region_size = 0;}
+  labels( int LABEL, int SIZE ){
+    region_label = LABEL;
+    region_size  = SIZE;
+  }
+
+  // Overload the greater than/less than operators for sorting containers 
+  // of this class.
+  //////////////////////////////////////////////////////////////////////
+  friend bool operator<( labels region_1, labels region_2){
+    return( region_1.region_size < region_2.region_size );
+  }
+  friend bool operator>( labels region_1, labels region_2){
+    return( region_1.region_size > region_2.region_size );
+  }
+
+  int region_label;
+  int region_size;
+};
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+inline bool invalid_float( string input ){
+
+  for( unsigned int a = 0; a < input.size(); a++ ){
+
+    if( a == 0 &&
+	(!isdigit(input[a]) &&
+	 input[0] != '-') )
+      return(true);
+    
+    else if( a > 0 &&
+	     isalpha(input[a]) &&
+	     input[a] != '.' )
+      return(true);
+    
+  }
+
+  return(false);
+}
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+struct angle_triple{
+
+  int atom_1;
+  int atom_2;
+  int atom_3;
+
+  angle_triple( int A1, int A2, int A3 ){
+    atom_1 = A1;
+    atom_2 = A2;
+    atom_3 = A3;
+  };
+};
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// structure for use with aromatic ring stacking (AJR 11.09.05)
+////////////////////////////////////////////////////////////////////////////////
+struct aromatic_ring{
+
+  float geom_center[3]; // geometric center of the 1st ring
+  float second_cntr[3]; // geometric center of the 2nd ring
+  float ring_norm[3];   // vector normal to plane of the aromatic ring
+  int residue_number;
+  unsigned int anchor_atom; // number of the ring atom connecting it to rest of structure
+  unsigned int external_atom; // number of atom covalently bonded to ring
+  unsigned int neighbor_atom1; // the 1st neighbor atom to the anchor_atom
+  unsigned int neighbor_atom2; // the 2nd neighbor atom to the anchor_atom
+  int resid; // matches structure.unique_res_id value (i.e 1st atom with that id).
+  int ring_count; // number of rings inside the aromatic_residue.
+  //  int joint_atom; // number of atom where rs_bars will be attached to
+  string residue_name;
+  short int chain_ID;
+  //  short int stack_pair_type; // classifier for 
+  vector<unsigned int> ring_atoms;
+  vector<int> stacked_neighbor_list; 
+  
+  aromatic_ring() {
+  
+    residue_number =0;
+    anchor_atom=0;
+    neighbor_atom1=0;
+    neighbor_atom2=0;
+    //joint_atom=0;
+    external_atom=0;
+    chain_ID = 0;
+    ring_count =0;
+    geom_center[0]=0.0;
+    geom_center[1]=0.0;
+    geom_center[2]=0.0;  
+    second_cntr[0]=0.0;
+    second_cntr[1]=0.0;
+    second_cntr[2]=0.0;
+ 
+    ring_norm[0]=0.0;
+    ring_norm[1]=0.0;
+    ring_norm[2]=0.0;   
+  }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+#endif
