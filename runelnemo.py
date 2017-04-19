@@ -9,7 +9,12 @@ def elnemosim(sys_args,hydropdb):
     os.system("./modesplit "+struct_file+" pdbmat.eigenfacs 7 11")
     folder=struct_file.rsplit("/",1)[0]
     os.system("mv pdbmat.* mode*.in "+folder+"/")
-
+    try:
+        os.mkdir(folder+"/Modes/")
+    except Exception:
+        os.system("rm -r "+folder+"/Modes/*")
+        pass
+    os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
     # print folder,prot
 
 
