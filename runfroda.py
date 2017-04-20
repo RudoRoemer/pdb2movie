@@ -8,10 +8,9 @@ def frodasim(args,hydro_file):
     os.system("cp "+folder+"/hphobes.out "+folder+"/hphobes.in")
 
 
-    step=0.1
-    dstep=0.01
-    cutlist=[1.0, 2.0]
-    modelist=range(7,12)
+
+
+
 
     if args.confs:
         totconf=int(args.confs[0])
@@ -33,8 +32,18 @@ def frodasim(args,hydro_file):
     else:
         dstep=0.01
 
-    
+    if args.modes:
+        modelist=[int(x) for x in args.modes]
+    else:
+        modelist=range(7,12)
 
+    if args.ecuts:
+        cutlist=[float(x) for x in args.ecuts]
+    else:
+        cutlist=[1.0, 2.0]
+
+
+    # print modelist, cutlist
     modelist=[format(i, '02d') for i in modelist]
     # print modelist
     signals=["pos","neg"]

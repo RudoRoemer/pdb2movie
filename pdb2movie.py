@@ -30,16 +30,23 @@ if __name__ == "__main__":#
                         help='Movement modes to be investigated')
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
+    parser.add_argument('--video',  nargs=1,
+                        help='Python file with PyMOL commands to be run before generating video')
     parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
                         help='Initial PDB file')
 
     # args = parser.parse_args(sys_args)
     args = parser.parse_args(sys.argv[1:])
     if (args.output):
+
         try:
             os.mkdir(args.output[0])
         except Exception:
-            os.system("rm -r "+args.output[0]+"/*")
+            userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/n]")
+            if (userinput=="y"):
+                os.system("rm -r "+args.output[0]+"/*")
+            else:
+                quit()
             pass
     else:
 

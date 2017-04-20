@@ -26,7 +26,7 @@ def cleanPDB(args):
         # print folder[-1][:-4]
         output_filename=args.pdbfile[0][:-4]+"/"+folder[-1][:-4]+"_clean.pdb"
     output=open(output_filename,'w')
-    print output_filename
+    # print output_filename
     for line in inputfile:
 
 

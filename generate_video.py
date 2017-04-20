@@ -7,10 +7,20 @@ import sys
 import os
 
 def gen_video(args,folder):
-    cutlist=[1.0, 2.0]
-    modelist=range(7,12)
+    if args.modes:
+        modelist=[int(x) for x in args.modes]
+    else:
+        modelist=range(7,12)
+
+    if args.ecuts:
+        cutlist=[float(x) for x in args.ecuts]
+    else:
+        cutlist=[1.0, 2.0]
     modelist=[format(i, '02d') for i in modelist]
     signals=['pos','neg']
+
+    prepare_script(args)
+
     for cut in cutlist:
         for mode in modelist:
             for sign in signals:
@@ -33,6 +43,12 @@ def gen_video(args,folder):
 #      0.000000000,    0.000000000, -348.124450684,\
 #    -14.108730316,  -18.215091705,   66.387222290,\
 #    274.463958740,  421.784942627,  -20.000000000' )
+
+def prepare_script(args):
+    if args.video:
+        os.system("cat video_template.py "+args.video[0]+" video_minimal.py > pymolvideo.py")
+    else:
+        os.system("cat video_template.py video_minimal.py > pymolvideo.py")
 
 
 
