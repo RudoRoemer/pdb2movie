@@ -18,11 +18,11 @@ Options:
 --keep MOLECULE LIST - stops the cleaning routine from removing the listed molecules from the PDB file     
 --output PATH - sets the output location for the simulations and videos    
 --waters - keeps water molecules in the PDB file (equivalent to --keep HOH)     
---confs CONFS         Total number of configurations to be calculated     
---freq FREQ           Frequency of saving intermediate configurations        
---step STEP           Size of random step       
---dstep DSTEP         Size of directed step        
---modes MODE LIST     Movement modes to be investigated           
---ecuts ECUTS LIST    Energy cutoff values        
---video FILE          Python file with PyMOL commands to be run before generating video            
+--confs CONFS -        Total number of configurations to be calculated     
+--freq FREQ   -        Frequency of saving intermediate configurations        
+--step STEP    -       Size of random step       
+--dstep DSTEP    -     Size of directed step        
+--modes MODE LIST -    Movement modes to be investigated           
+--ecuts ECUTS LIST -   Energy cutoff values        
+--video FILE        -  Python file with PyMOL commands to be run before generating video            
 
