@@ -26,4 +26,4 @@ Options:
 --modes MODE LIST -    Movement modes to be investigated           
 --ecuts ECUTS LIST -   Energy cutoff values        
 --video FILE        -  Python file with PyMOL commands to be run before generating video            
-
+--3d    -     generates anaglyph stereo videos       
