@@ -1,17 +1,40 @@
 import os
 
-def frodasim(sys_args,hydro_file,cutlist,modelist):
+def frodasim(args,hydro_file):
     folder=hydro_file.rsplit("/",1)[0]
     os.system("touch "+folder+"/stacked.in")
     os.system("cp "+folder+"/cov.out "+folder+"/cov.in")
     os.system("cp "+folder+"/hbonds.out "+folder+"/hbonds.in")
     os.system("cp "+folder+"/hphobes.out "+folder+"/hphobes.in")
 
-    totconf=1000
-    freq=100
+
     step=0.1
     dstep=0.01
+    cutlist=[1.0, 2.0]
+    modelist=range(7,12)
+
+    if args.confs:
+        totconf=int(args.confs[0])
+    else:
+        totconf=5000
+
+    if args.freq:
+        freq=int(args.freq[0])
+    else:
+        freq=100
+
+    if args.step:
+        step=float(args.step[0])
+    else:
+        step=0.1
+
+    if args.dstep:
+        dstep=float(args.dstep[0])
+    else:
+        dstep=0.01
+
     
+
     modelist=[format(i, '02d') for i in modelist]
     # print modelist
     signals=["pos","neg"]

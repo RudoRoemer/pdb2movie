@@ -1,6 +1,6 @@
 import os
 
-def elnemosim(sys_args,hydropdb):
+def elnemosim(args,hydropdb):
 
     struct_file=generate_structure(hydropdb)
     generate_pdbmat(struct_file)

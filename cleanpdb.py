@@ -1,22 +1,10 @@
 import sys
-import argparse
 
-def cleanPDB(sys_args):
+
+def cleanPDB(args):
 # def main():
 
-    parser = argparse.ArgumentParser(description='Clean PDB files for ElNemo.',usage='%(prog)s PDB [options]')
 
-    parser.add_argument('--keep',  nargs="*",
-                        help='List of molecules to be kept')
-    parser.add_argument('--output',  nargs=1,
-                        help='Output file')
-    parser.add_argument('--waters',  action='store_true',
-                        help='Flag for keeping water molecules')
-    parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
-                        help='PDB file to be cleaned')
-
-    # args = parser.parse_args(sys_args)
-    args = parser.parse_args(sys_args[1:])
     if (args.keep==None):
         args.keep=[]
     if args.waters:
@@ -30,14 +18,15 @@ def cleanPDB(sys_args):
     residues=[]
     # lines=open(args.pdbfile[0],'r')
     if (args.output):
-        output_filename=args.output[0]
+        output_filename=args.output[0]+"/"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
+        # print output_filename
     else:
         folder=args.pdbfile[0].split("/")
         # print folder
         # print folder[-1][:-4]
         output_filename=args.pdbfile[0][:-4]+"/"+folder[-1][:-4]+"_clean.pdb"
     output=open(output_filename,'w')
-
+    print output_filename
     for line in inputfile:
 
 
@@ -49,7 +38,9 @@ def cleanPDB(sys_args):
         # print line[0:6]
         if (line[0:6]=='HETATM'):
             if args.keep:
+                print args.keep, line[17:20].strip()
                 if line[17:20].strip() in args.keep:
+                    print "entered\n"
                     output.write(line)
             continue
         output.write(line)

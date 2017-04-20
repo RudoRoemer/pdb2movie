@@ -1,6 +1,6 @@
 import os
 
-def firstsim(sys_args,cleanpdb):
+def firstsim(args,cleanpdb):
     # print "./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb"
     os.system("./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
     renum_atoms(cleanpdb[:-9]+"hydro.pdb")

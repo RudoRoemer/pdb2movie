@@ -6,8 +6,9 @@ from glob import glob
 import sys
 import os
 
-def gen_video(folder,cutlist,modelist):
-
+def gen_video(args,folder):
+    cutlist=[1.0, 2.0]
+    modelist=range(7,12)
     modelist=[format(i, '02d') for i in modelist]
     signals=['pos','neg']
     for cut in cutlist:
