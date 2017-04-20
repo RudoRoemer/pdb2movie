@@ -9,10 +9,8 @@ prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
 lst.sort()
 for fil in lst: cmd.load(fil,"mov")
-cmd.hide()
-cmd.show('cartoon')
-cmd.bg_color('white')
-cmd.bg_color('black')
+cmd.bg_color('grey')
+cmd.do("stereo anaglyph")
 
 #cmd.select( 'flexchain', 'resi 22-30' )
 #cmd.hide( 'cartoon', 'flexchain' )
@@ -47,7 +45,9 @@ cmd.bg_color('black')
 #    274.463958740,  421.784942627,  -20.000000000' )
 
 ### cut above here and paste into script ###
-
+cmd.hide()
+cmd.show('cartoon')
+cmd.bg_color('white')
 cmd.movie.add_state_sweep(2,1,'start=1')
 cmd.movie.produce(folder+'cartoon.mpg',mode='ray',quality=100,quiet=1)
 cmd.save(folder+'cartoon.pse')

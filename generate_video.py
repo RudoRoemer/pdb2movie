@@ -28,7 +28,10 @@ def gen_video(args,folder):
                 # Desired pymol commands here to produce and save figures
 
                 currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
-                os.system("pymol -cq pymolvideo.py -- "+currfolder)
+                if args.3d:
+                    os.system("pymol -cq pymolvideo.py -- "+currfolder)
+                else:
+                    os.system("pymol -q pymolvideo.py -- "+currfolder)
 
 
 
@@ -45,10 +48,16 @@ def gen_video(args,folder):
 #    274.463958740,  421.784942627,  -20.000000000' )
 
 def prepare_script(args):
-    if args.video:
-        os.system("cat video_template.py "+args.video[0]+" video_minimal.py > pymolvideo.py")
+    if args.3d:
+        if args.video:
+            os.system("cat video_template.py <(echo \"stereo anaglyph\") "+args.video[0]+" video_minimal.py > pymolvideo.py")
+        else:
+            os.system("cat video_template.py <(echo \"stereo anaglyph\") video_minimal.py > pymolvideo.py")
     else:
-        os.system("cat video_template.py video_minimal.py > pymolvideo.py")
+        if args.video:
+            os.system("cat video_template.py "+args.video[0]+" video_minimal.py > pymolvideo.py")
+        else:
+            os.system("cat video_template.py video_minimal.py > pymolvideo.py")
 
 
 

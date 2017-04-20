@@ -1,5 +1,4 @@
 import sys
-import argparse
 import os
 import cleanpdb
 import runfirst
@@ -8,8 +7,14 @@ import runfroda
 import generate_video
 import argparse
 
-if __name__ == "__main__":#
 
+
+
+
+
+
+
+def parsing_args(sys_args):
     parser = argparse.ArgumentParser(description='Runs simulations and generates videos for the most likely movement modes given a PDB file.',usage='%(prog)s PDB [options]')
 
     parser.add_argument('--keep',  nargs="+",
@@ -18,6 +23,8 @@ if __name__ == "__main__":#
                         help='Output directory')
     parser.add_argument('--waters',  action='store_true',
                         help='Flag for keeping water molecules')
+    parser.add_argument('--3d',  action='store_true',
+                        help='Flag for generating anaglyph stereo movies')
     parser.add_argument('--confs',  nargs=1,
                         help='Total number of configurations to be calculated')
     parser.add_argument('--freq',  nargs=1,
@@ -36,13 +43,28 @@ if __name__ == "__main__":#
                         help='Initial PDB file')
 
     # args = parser.parse_args(sys_args)
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args(sys_args[1:])
+    return args
+
+
+
+
+
+
+
+
+if __name__ == "__main__":#
+    args=parsing_args(sys.argv)
+    if (args.3d):
+        userinput=raw_input("WARNING: PyMOL windows will open during generation and they won't close by themselves. You have been warned. Are you sure you want to continue? [y/n]   ")
+        if (userinput!="y"):
+            quit()
     if (args.output):
 
         try:
             os.mkdir(args.output[0])
         except Exception:
-            userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/n]")
+            userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/n]   ")
             if (userinput=="y"):
                 os.system("rm -r "+args.output[0]+"/*")
             else:

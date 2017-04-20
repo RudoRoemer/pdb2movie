@@ -9,6 +9,3 @@ prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
 lst.sort()
 for fil in lst: cmd.load(fil,"mov")
-cmd.hide()
-cmd.show('cartoon')
-cmd.bg_color('white')
