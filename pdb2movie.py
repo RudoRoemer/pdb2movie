@@ -23,7 +23,7 @@ def parsing_args(sys_args):
                         help='Output directory')
     parser.add_argument('--waters',  action='store_true',
                         help='Flag for keeping water molecules')
-    parser.add_argument('--3d',  action='store_true',
+    parser.add_argument('--threed',  action='store_true',
                         help='Flag for generating anaglyph stereo movies')
     parser.add_argument('--confs',  nargs=1,
                         help='Total number of configurations to be calculated')
@@ -55,7 +55,7 @@ def parsing_args(sys_args):
 
 if __name__ == "__main__":#
     args=parsing_args(sys.argv)
-    if (args.3d):
+    if (args.threed):
         userinput=raw_input("WARNING: PyMOL windows will open during generation and they won't close by themselves. You have been warned. Are you sure you want to continue? [y/n]   ")
         if (userinput!="y"):
             quit()
