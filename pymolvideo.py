@@ -9,8 +9,6 @@ prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
 lst.sort()
 for fil in lst: cmd.load(fil,"mov")
-cmd.bg_color('grey')
-cmd.do("stereo anaglyph")
 
 #cmd.select( 'flexchain', 'resi 22-30' )
 #cmd.hide( 'cartoon', 'flexchain' )
