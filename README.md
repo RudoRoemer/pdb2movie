@@ -6,9 +6,12 @@ Requirements:
 PyMOL     
 FreeMOL mpeg_encode component     
 Python libraries: glob, argparse        
- 
+
 Instructions:      
-Recompiling FIRST is probably necessary to make sure it references residue tables correctly in your filesystem. Go to FIRST-190916-SAW/src and run 'make'.    
+Recompiling FIRST is necessary!
+1) Go to FIRST-190916-SAW/src and run 'make clean'.
+2) run 'make'.
+3) You should be ready to go!    
 
 Usage:     
 python pdb2movie.py FILE [options]    

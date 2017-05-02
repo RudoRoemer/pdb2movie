@@ -1,29 +1,29 @@
 #################################################
-# Makefile for FIRST 
+# Makefile for FIRST
 # February 17, 2005. BMH
 #
-# 
 #
-# 2007.06.05 - BMH - Added script to do full 
-# dependency checking (depend.sh). Modified 
+#
+# 2007.06.05 - BMH - Added script to do full
+# dependency checking (depend.sh). Modified
 # Makefile to use "modules" for compartmentalized
-# source code, and recursive makefiles for 
-# independent ancilliary programs. 
+# source code, and recursive makefiles for
+# independent ancilliary programs.
 #
 # 2007.08.01 - BMH - Minor changes to reflect new
-# file names. Removed rule for depends file, and 
-# switched to just use the *.d files. 
+# file names. Removed rule for depends file, and
+# switched to just use the *.d files.
 #
 # 2006.02.11 - SAM - Cleaned up a bit of redundancy
 # and added a `depends' target so that modifications
-# to a header will no longer force a recompile of 
+# to a header will no longer force a recompile of
 # every source file (now, only those files that depend
 # on the header should be rebuilt)
 #
 # 2005.11.08 - BMH - Modified file to use Main.cpp
 # instead of FIRST5.cpp. This reflects the new
 # CVS development trunk named FIRST (major and minor
-# releases are now indexed by CVS revision tags). 
+# releases are now indexed by CVS revision tags).
 ##################################################
 
 FIRST := FIRST
@@ -33,20 +33,20 @@ CUR_VER = FIRST-dev
 # independantly.
 EXT_PROGS := hbdilute
 
-# List the module directories. 
+# List the module directories.
 MODULES := Assembly TIMME froda2 XML
 
 INC := $(patsubst %, -I%/, $(MODULES))
 INC += -I../include/
 
-LIBS := 
+LIBS :=
 SRC := $(wildcard *.cpp)
 
 CPP = g++
-CPP_OPTIMIZATION = -O3 
+CPP_OPTIMIZATION = -O3
 #DEBUG = -g -pg
 EXTRA = -Wall
-CPPFLAGS = $(INC) ${CPP_OPTIMIZATION} $(DEBUG) ${EXTRA} -ansi
+CPPFLAGS = $(INC) ${CPP_OPTIMIZATION} $(DEBUG) ${EXTRA} -ansi -fPIC
 
 INSTALL_HOME = $(CURDIR)/..
 
@@ -56,15 +56,15 @@ FIRST_ROOT = -DFIRST_ROOT='"${INSTALL_HOME}"'
 # need to be named "module.mk".
 include $(patsubst %, %/module.mk, $(MODULES))
 
-# Get the full list of object files to be linked into 
-# FIRST from all the modules. 
+# Get the full list of object files to be linked into
+# FIRST from all the modules.
 OBJLIST := $(patsubst %.cpp, %.o, $(filter %.cpp, $(SRC)))
 DEPLIST := $(patsubst %.cpp, %.d, $(filter %.cpp, $(SRC)))
 #EXCLUDED = hbdilute.o
 #OBJLIST := $(filter-out $(EXCLUDED), $(OBJLIST))
 
 # The default make will depend on FIRST and any other
-# INDEPENDENT executables. 
+# INDEPENDENT executables.
 all: FIRST external_progs
 
 # Compile FIRST
@@ -91,10 +91,10 @@ clean:
         (cd ../$$i; $(MAKE) clean); done
 
 ############################################################
-# Any independent executable programs (there is only	
-# one at this time, and hopefully it will be gone soon). 
+# Any independent executable programs (there is only
+# one at this time, and hopefully it will be gone soon).
 # Should have thier own makefile and be compiled
-# recursively. 
+# recursively.
 external_progs:
 	@for i in $(EXT_PROGS); do \
         echo "Compiling in $$i..."; \
@@ -102,5 +102,3 @@ external_progs:
 
 print:
 	@echo $(DEPLIST)
-
-
