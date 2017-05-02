@@ -29,9 +29,9 @@ def gen_video(args,folder):
 
                 currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
                 if args.threed:
-                    os.system("pymol -cq pymolvideo.py -- "+currfolder)
-                else:
                     os.system("pymol -q pymolvideo.py -- "+currfolder)
+                else:
+                    os.system("pymol -cq pymolvideo.py -- "+currfolder)
 
 
 
