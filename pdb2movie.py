@@ -80,9 +80,10 @@ if __name__ == "__main__":#
 
     clean_file=cleanpdb.cleanPDB(args)
     hydro_file=runfirst.firstsim(args,clean_file)
-    
+
 
     folder=hydro_file.rsplit("/",1)[0]
+    print(hydro_file,folder)
     runelnemo.elnemosim(args,hydro_file)
     runfroda.frodasim(args,hydro_file)
     generate_video.gen_video(args,folder)
