@@ -83,6 +83,7 @@ if __name__ == "__main__":#
 
 
     folder=hydro_file.rsplit("/",1)[0]
+    print("\n\n\n\nHERE IS THE RESULT!!!!\n\n")
     print(hydro_file,folder)
     runelnemo.elnemosim(args,hydro_file)
     runfroda.frodasim(args,hydro_file)
