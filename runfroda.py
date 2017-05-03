@@ -42,7 +42,7 @@ def frodasim(args,hydro_file):
     else:
         cutlist=[1.0, 2.0]
 
-
+    prot=hydro_file.rsplit("/",1)[1][:-10]
     # print modelist, cutlist
     modelist=[format(i, '02d') for i in modelist]
     # print modelist
@@ -71,4 +71,4 @@ def frodasim(args,hydro_file):
                     os.system("./FIRST-190916-SAW/src/FIRST "+hydro_file+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin")
                 else:
                     os.system("./FIRST-190916-SAW/src/FIRST "+hydro_file+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin")
-                os.system("mv "+folder+"/R504C_PaPBP3_hydro_froda* "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/")
+                os.system("mv "+hydro_file[:-4]+"_froda* "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/")
