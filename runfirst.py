@@ -5,10 +5,11 @@ def firstsim(args,cleanpdb):
     prot=cleanpdb[:-10].rsplit("/",1)[1]
     # print "prot is "+prot
     os.system("./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
-    renum_atoms(cleanpdb[:-9]+"hydro.pdb")
+    folder=cleanpdb.rsplit("/",1)[0]
+    renum_atoms(cleanpdb[:-9]+"hydro.pdb",folder)
 
     os.system("./FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
-    folder=cleanpdb.rsplit("/",1)[0]
+
 
     os.system("mv "+prot+"_hydro_hbdilute.txt "+folder+"/"+prot+"_hydro_hbdilute.txt")
     os.system("mv "+prot+"_hydro_hbdpath.txt "+folder+"/"+prot+"_hydro_hbdpath.txt")
@@ -18,10 +19,10 @@ def firstsim(args,cleanpdb):
     # print folder,prot
 
 
-def renum_atoms(filename):
+def renum_atoms(filename,folder):
 
     inputfile=open(filename,'r')
-    tempfile=open("tmp.pdb",'w')
+    tempfile=open(folder+"/tmp.pdb",'w')
     counter=1
     # test=format(1, '05d')
     # print test
@@ -34,4 +35,4 @@ def renum_atoms(filename):
     inputfile.close()
     tempfile.close()
     os.system("rm "+filename)
-    os.system("mv tmp.pdb "+filename)
+    os.system("mv "+folder+"/tmp.pdb "+filename)
