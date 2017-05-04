@@ -9,6 +9,7 @@ prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
 lst.sort()
 for fil in lst: cmd.load(fil,"mov")
+filename="../prot-test/EcCTXM15+Avibactam1465_res301/Run-1.0-mode07-neg.mpg"
 
 #cmd.select( 'flexchain', 'resi 22-30' )
 #cmd.hide( 'cartoon', 'flexchain' )
@@ -47,7 +48,7 @@ cmd.hide()
 cmd.show('cartoon')
 cmd.bg_color('white')
 cmd.movie.add_state_sweep(2,1,'start=1')
-cmd.movie.produce(folder+'cartoon.mpg',mode='ray',quality=100,quiet=1)
+cmd.movie.produce(filename,mode='ray',quality=100,quiet=1)
 cmd.save(folder+'cartoon.pse')
 
 print 'CARTOON rendering finished'

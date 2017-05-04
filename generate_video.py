@@ -5,6 +5,8 @@
 from glob import glob
 import sys
 import os
+import subprocess
+
 
 def gen_video(args,folder):
     if args.modes:
@@ -19,12 +21,14 @@ def gen_video(args,folder):
     modelist=[format(i, '02d') for i in modelist]
     signals=['pos','neg']
 
-    prepare_script(args)
+
 
     for cut in cutlist:
         for mode in modelist:
             for sign in signals:
-
+                filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                print (filename)
+                prepare_script(args,filename)
                 # Desired pymol commands here to produce and save figures
 
                 currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
@@ -47,18 +51,23 @@ def gen_video(args,folder):
 #    -14.108730316,  -18.215091705,   66.387222290,\
 #    274.463958740,  421.784942627,  -20.000000000' )
 
-def prepare_script(args):
+def prepare_script(args,filename):
+
+    # string="cat video_template.py <(echo filename=\'"+filename+"\') video_minimal.py >pymolvideo.py"
+    # string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
+
     if args.threed:
         if args.video:
-            os.system("cat video_template.py <(echo \"stereo anaglyph\") "+args.video[0]+" video_minimal.py > pymolvideo.py")
+            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
         else:
-            os.system("cat video_template.py <(echo \"stereo anaglyph\") video_minimal.py > pymolvideo.py")
+            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\")  video_minimal.py > pymolvideo.py'
     else:
         if args.video:
-            os.system("cat video_template.py "+args.video[0]+" video_minimal.py > pymolvideo.py")
+            string='cat video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' video_minimal.py > pymolvideo.py'
         else:
-            os.system("cat video_template.py video_minimal.py > pymolvideo.py")
-
+            string='cat video_template.py <(echo filename=\\"'+filename+'\\") video_minimal.py > pymolvideo.py'
+    # print(string)
+    os.system("bash -c '{}'".format(string))
 
 
 
@@ -68,4 +77,5 @@ if __name__ == "__main__":#
     # print sys.argv
     folder=sys.argv[1]
     # pymol_test()
-    gen_video(folder,cutlist,modelist)
+    prepare_script(sys.argv,"t1t.mpg")
+    # gen_video(folder,cutlist,modelist)
