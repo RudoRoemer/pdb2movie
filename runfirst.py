@@ -29,7 +29,7 @@ def renum_atoms(filename,folder):
     for line in inputfile:
 
         if (line[0:6].strip()=='ATOM'):
-            line=line[:7]+format(counter, '04d')+line[11:]
+            line=line[:6]+format(counter, '05d')+line[11:]
             tempfile.write(line)
             counter=counter+1
     inputfile.close()
