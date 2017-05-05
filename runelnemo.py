@@ -25,7 +25,7 @@ def generate_structure(filename):
 
     inputfile=open(filename,'r')
     outputfile=filename[:-10]+".structure"
-    print outputfile
+    # print outputfile
     tempfile=open(outputfile,'w')
 
     for line in inputfile:

@@ -38,9 +38,9 @@ def cleanPDB(args):
         # print line[0:6]
         if (line[0:6]=='HETATM'):
             if args.keep:
-                print args.keep, line[17:20].strip()
+                # print args.keep, line[17:20].strip()
                 if line[17:20].strip() in args.keep:
-                    print "entered\n"
+                    # print "entered\n"
                     output.write(line)
             continue
         output.write(line)
@@ -53,5 +53,5 @@ def cleanPDB(args):
     return output_filename
 #
 if __name__ == "__main__":#
-    print sys.argv
+    # print sys.argv
     cleanPDB(sys.argv)
