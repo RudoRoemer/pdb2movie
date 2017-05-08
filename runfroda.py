@@ -1,4 +1,13 @@
 import os
+import multiprocessing
+
+
+
+def call_froda(command):
+    os.system(command)
+
+
+
 
 def frodasim(args,hydro_file):
     folder=hydro_file.rsplit("/",1)[0]
@@ -47,6 +56,7 @@ def frodasim(args,hydro_file):
     modelist=[format(i, '02d') for i in modelist]
     # print modelist
     signals=["pos","neg"]
+    jobs=[]
     try:
         os.mkdir(folder+"/Runs/")
     except Exception:
@@ -66,9 +76,12 @@ def frodasim(args,hydro_file):
                 except Exception:
                     os.system("rm -r "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/*")
                     pass
-
+                os.system("cp "+hydro_file+" "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb")
                 if (sign=="neg"):
-                    os.system("./FIRST-190916-SAW/src/FIRST "+hydro_file+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin")
+                    command="./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin"
                 else:
-                    os.system("./FIRST-190916-SAW/src/FIRST "+hydro_file+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin")
-                os.system("mv "+hydro_file[:-4]+"_froda* "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/")
+                    command="./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin"
+                p = multiprocessing.Process(target=call_froda,args=(command,))
+                jobs.append(p)
+                p.start()
+                

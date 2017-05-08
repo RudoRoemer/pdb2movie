@@ -23,6 +23,8 @@ def parsing_args(sys_args):
                         help='Output directory')
     parser.add_argument('--waters',  action='store_true',
                         help='Flag for keeping water molecules')
+    parser.add_argument('--multiple',  action='store_true',
+                        help='Keep multiple chains (default: uses only chain A)')
     parser.add_argument('--threed',  action='store_true',
                         help='Flag for generating anaglyph stereo movies')
     parser.add_argument('--confs',  nargs=1,

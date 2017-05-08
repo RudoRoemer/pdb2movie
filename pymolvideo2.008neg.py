@@ -9,7 +9,7 @@ prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
 lst.sort()
 for fil in lst: cmd.load(fil,"mov")
-filename="../AMR_structures/EcCTXM15+Avibactam1523_res167//Run-2.0-mode11-neg.mpg"
+filename="/home/msrlbl/tmp/EcCTXM15+Avibactam_res11//Run-2.0-mode08-neg.mpg"
 
 #cmd.select( 'flexchain', 'resi 22-30' )
 #cmd.hide( 'cartoon', 'flexchain' )

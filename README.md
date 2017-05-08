@@ -14,14 +14,15 @@ Recompiling FIRST is necessary!
 3) You should be ready to go!    
 
 Usage:     
+(Run it from the folder where pdb2movie.py is!)
 python pdb2movie.py FILE [options]    
 FILE is your desired PDB file    
 
 Options:     
 
---keep MOLECULE LIST - stops the cleaning routine from removing the listed molecules from the PDB file     
---output PATH - sets the output location for the simulations and videos    
---waters - keeps water molecules in the PDB file (equivalent to --keep HOH)     
+--keep MOLECULE LIST - Stops the cleaning routine from removing the listed molecules from the PDB file     
+--output PATH - Sets the output location for the simulations and videos    
+--waters - Keeps water molecules in the PDB file (equivalent to --keep HOH)     
 --confs CONFS -        Total number of configurations to be calculated     
 --freq FREQ   -        Frequency of saving intermediate configurations        
 --step STEP    -       Size of random step       
@@ -29,4 +30,5 @@ Options:
 --modes MODE LIST -    Movement modes to be investigated           
 --ecuts ECUTS LIST -   Energy cutoff values        
 --video FILE        -  Python file with PyMOL commands to be run before generating video            
---threed    -     generates anaglyph stereo videos       
+--threed    -     Generates anaglyph stereo videos     
+--multiple      -     Keeps multiple chains from the original PDB file (default: uses only chain A)   

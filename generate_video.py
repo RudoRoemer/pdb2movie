@@ -5,7 +5,36 @@
 from glob import glob
 import sys
 import os
-import subprocess
+import multiprocessing
+import argparse
+
+
+def parsing_video_args(sys_args):
+    parser = argparse.ArgumentParser(description='Generates videos for the most likely movement modes given a folder where the runs are stored.',usage='%(prog)s folder [options]')
+
+
+    parser.add_argument('--threed',  action='store_true',
+                        help='Flag for generating anaglyph stereo movies')
+    parser.add_argument('--modes',  nargs="+",
+                        help='Movement modes to be investigated')
+    parser.add_argument('--ecuts',  nargs="+",
+                        help='Energy cutoff values')
+    parser.add_argument('--video',  nargs=1,
+                        help='Python file with PyMOL commands to be run before generating video')
+    parser.add_argument('folder', metavar='PDB', type=str, nargs=1,
+                        help='Folder where the runs can be found')
+
+    # args = parser.parse_args(sys_args)
+    args = parser.parse_args(sys_args[1:])
+    return args
+
+
+
+
+def call_pymol(command):
+    os.system(command)
+
+
 
 
 def gen_video(args,folder):
@@ -20,7 +49,7 @@ def gen_video(args,folder):
         cutlist=[1.0, 2.0]
     modelist=[format(i, '02d') for i in modelist]
     signals=['pos','neg']
-
+    jobs=[]
 
 
     for cut in cutlist:
@@ -28,16 +57,17 @@ def gen_video(args,folder):
             for sign in signals:
                 filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 print (filename)
-                prepare_script(args,filename)
+                prepare_script(args,filename,cut,mode,sign)
                 # Desired pymol commands here to produce and save figures
 
                 currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
                 if args.threed:
-                    os.system("pymol -q pymolvideo.py -- "+currfolder)
+                    command='pymol -q pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
                 else:
-                    os.system("pymol -cq pymolvideo.py -- "+currfolder)
-
-
+                    command='pymol -cq pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
+                p = multiprocessing.Process(target=call_pymol,args=(command,))
+                jobs.append(p)
+                p.start()
 
 
 
@@ -51,31 +81,29 @@ def gen_video(args,folder):
 #    -14.108730316,  -18.215091705,   66.387222290,\
 #    274.463958740,  421.784942627,  -20.000000000' )
 
-def prepare_script(args,filename):
+def prepare_script(args,filename,cut,mode,sign):
 
     # string="cat video_template.py <(echo filename=\'"+filename+"\') video_minimal.py >pymolvideo.py"
     # string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
 
     if args.threed:
         if args.video:
-            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
+            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo'+str(cut)+mode+sign+'.py'
         else:
-            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\")  video_minimal.py > pymolvideo.py'
+            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\")  video_minimal.py > pymolvideo'+str(cut)+mode+sign+'.py'
     else:
         if args.video:
-            string='cat video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' video_minimal.py > pymolvideo.py'
+            string='cat video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' video_minimal.py > pymolvideo'+str(cut)+mode+sign+'.py'
         else:
-            string='cat video_template.py <(echo filename=\\"'+filename+'\\") video_minimal.py > pymolvideo.py'
+            string='cat video_template.py <(echo filename=\\"'+filename+'\\") video_minimal.py > pymolvideo'+str(cut)+mode+sign+'.py'
     # print(string)
     os.system("bash -c '{}'".format(string))
 
 
 
 if __name__ == "__main__":#
-    cutlist=[1.0, 2.0]
-    modelist=range(7,12)
-    # print sys.argv
-    folder=sys.argv[1]
+    args=parsing_video_args(sys.argv)
+    folder=args.folder[0]
     # pymol_test()
-    prepare_script(sys.argv,"t1t.mpg")
-    # gen_video(folder,cutlist,modelist)
+    # prepare_script(sys.argv,"t1t.mpg")
+    gen_video(args,folder)
