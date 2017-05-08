@@ -11,10 +11,7 @@ def call_froda(command):
 
 def frodasim(args,hydro_file):
     folder=hydro_file.rsplit("/",1)[0]
-    os.system("touch "+folder+"/stacked.in")
-    os.system("cp "+folder+"/cov.out "+folder+"/cov.in")
-    os.system("cp "+folder+"/hbonds.out "+folder+"/hbonds.in")
-    os.system("cp "+folder+"/hphobes.out "+folder+"/hphobes.in")
+
 
 
 
@@ -69,14 +66,20 @@ def frodasim(args,hydro_file):
             os.system("rm -r "+folder+"/Runs/"+str(cut)+"/*")
             pass
         for mode in modelist:
-            os.system("cp "+folder+"/Modes/"+"mode"+mode+".in "+folder+"/mode.in")
+
             for sign in signals:
                 try:
                     os.mkdir(folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign)
                 except Exception:
                     os.system("rm -r "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/*")
                     pass
+                os.system("cp "+folder+"/Modes/"+"mode"+mode+".in "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/mode.in")
                 os.system("cp "+hydro_file+" "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb")
+                os.system("touch "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/stacked.in")
+                os.system("cp "+folder+"/cov.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/cov.in")
+                os.system("cp "+folder+"/hbonds.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hbonds.in")
+                os.system("cp "+folder+"/hphobes.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hphobes.in")
+
                 if (sign=="neg"):
                     command="./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin"
                 else:
@@ -84,4 +87,6 @@ def frodasim(args,hydro_file):
                 p = multiprocessing.Process(target=call_froda,args=(command,))
                 jobs.append(p)
                 p.start()
-                
+    for job in jobs:
+        job.join()
+    return

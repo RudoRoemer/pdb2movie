@@ -31,7 +31,7 @@ def cleanPDB(args):
 
 
         if (line[0:6].strip()=='ATOM'):
-            if (line[21]!='A' && !(args.multiple)):
+            if (line[21]!='A' and not(args.multiple)):
                 # print line[21]
                 continue
             residues.append(int(line[23:26].strip()))
