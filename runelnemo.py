@@ -1,4 +1,5 @@
 import os
+import sys
 
 def elnemosim(args,hydropdb):
     # print(hydropdb)
@@ -55,3 +56,14 @@ def generate_pdbmat(struct_file):
     datfile.write("LevelSHIFT                 =    1.0E-09 ! Non-zero value often required (numerical reasons).\n")
     datfile.write("Matrix FORMAT              =       FREE ! Free, or Binary, matrix saved.\n")
     datfile.close()
+
+
+
+
+
+if __name__ == "__main__":#
+    args=[]
+    hydro=sys.argv[1]
+    # pymol_test()
+    # prepare_script(sys.argv,"t1t.mpg")
+    elnemosim(args,hydro)
