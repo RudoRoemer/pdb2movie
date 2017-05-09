@@ -73,6 +73,14 @@ def gen_video(args,folder):
     for job in jobs:
         job.join()
 
+    if (os.system('grep \'FREEMOL\' $(which pymol)')):
+        for cut in cutlist:
+            for mode in modelist:
+                for sign in signals:
+                    filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                    currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
+                    command='convert -quality 100 '+currfolder+'/*/*.ppm '+filename
+
 
     for cut in cutlist:
         for mode in modelist:
@@ -107,6 +115,7 @@ def prepare_script(args,filename,cut,mode,sign,folder):
             string='cat video_template.py <(echo filename=\\"'+filename+'\\") video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
     # print(string)
     os.system("bash -c '{}'".format(string))
+
 
 
 

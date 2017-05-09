@@ -89,4 +89,14 @@ def frodasim(args,hydro_file):
                 p.start()
     for job in jobs:
         job.join()
+
+    for cut in cutlist:
+        for mode in modelist:
+            for sign in signals:
+                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/hphobes.in')
+                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/hbonds.in')
+                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/cov.in')
+                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/stacked.in')
+                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/tmp.pdb')
+
     return
