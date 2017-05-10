@@ -58,10 +58,10 @@ def parsing_args(sys_args):
 if __name__ == "__main__":#
     args=parsing_args(sys.argv)
     # print "test"
-    if (args.threed):
-        userinput=raw_input("WARNING: PyMOL windows will open during generation and they won't close by themselves. You have been warned. Are you sure you want to continue? [y/n]   ")
-        if (userinput!="y"):
-            quit()
+    # if (args.threed):
+    #     userinput=raw_input("WARNING: PyMOL windows will open during generation and they won't close by themselves. You have been warned. Are you sure you want to continue? [y/n]   ")
+    #     if (userinput!="y"):
+    #         quit()
     if (args.output):
 
         try:
