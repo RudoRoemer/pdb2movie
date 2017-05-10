@@ -114,7 +114,7 @@ def prepare_script(args,filename,cut,mode,sign,folder):
         else:
             string='cat video_template.py <(echo filename=\\"'+filename+'\\") video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
     # print(string)
-    os.system("bash -c '{}'".format(string))
+    os.system("bash -c '{0}'".format(string))
 
 
 
