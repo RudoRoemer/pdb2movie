@@ -100,7 +100,7 @@ def gen_video(exec_folder,args,folder):
 #    -14.108730316,  -18.215091705,   66.387222290,\
 #    274.463958740,  421.784942627,  -20.000000000' )
 
-def prepare_script(args,filename,cut,mode,sign,folder):
+def prepare_script(exec_folder,args,filename,cut,mode,sign,folder):
 
     # string="cat video_template.py <(echo filename=\'"+filename+"\') video_minimal.py >pymolvideo.py"
     # string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
