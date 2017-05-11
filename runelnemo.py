@@ -9,6 +9,7 @@ def elnemosim(exec_folder,args,hydropdb):
     os.system("cp "+struct_file+" "+folder+"/tmp_"+str(os.getpid())+".structure")
     os.system("cp "+exec_folder+"/pdbmat "+folder+"/pdbmat")
     generate_pdbmat(struct_file,folder)
+    print("calling "+folder+"/pdbmat")
     os.system(folder+"/pdbmat")
     os.system("rm "+folder+"/tmp_"+str(os.getpid())+".structure")
     os.system("rm "+folder+"/pdbmat")
