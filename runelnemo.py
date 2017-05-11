@@ -11,26 +11,26 @@ def elnemosim(exec_folder,args,hydropdb):
     generate_pdbmat(struct_file,folder)
     fp=open(folder+"pdbmat.dat","r")
     fp.readline()
-    # print("calling "+folder+"/pdbmat")
-    # os.system(folder+"/pdbmat")
-    # os.system("rm "+folder+"/tmp_"+str(os.getpid())+".structure")
-    # os.system("rm "+folder+"/pdbmat")
-    # os.system("cp "+exec_folder+"/diagstd "+folder+"/diagstd")
-    # os.system(folder+"/diagstd")
-    # os.system("rm "+folder+"/diagstd")
-    # os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
-    # os.system("mv pdbmat.eigenfacs "+folder+"/pdbmat.eigenfacs")
-    # os.system(folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs 7 11")
-    # os.system("rm "+folder+"/modesplit")
-    #
-    # os.system("mv pdbmat.* mode*.in "+folder+"/")
+    print("calling "+folder+"/pdbmat")
+    os.system(folder+"/pdbmat")
+    os.system("rm "+folder+"/tmp_"+str(os.getpid())+".structure")
+    os.system("rm "+folder+"/pdbmat")
+    os.system("cp "+exec_folder+"/diagstd "+folder+"/diagstd")
+    os.system(folder+"/diagstd")
+    os.system("rm "+folder+"/diagstd")
+    os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
+    os.system("mv pdbmat.eigenfacs "+folder+"/pdbmat.eigenfacs")
+    os.system(folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs 7 11")
+    os.system("rm "+folder+"/modesplit")
 
-    # try:
-    #     os.mkdir(folder+"/Modes/")
-    # except Exception:
-    #     os.system("rm -r "+folder+"/Modes/*")
-    #     pass
-    # os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
+    os.system("mv pdbmat.* mode*.in "+folder+"/")
+
+    try:
+        os.mkdir(folder+"/Modes/")
+    except Exception:
+        os.system("rm -r "+folder+"/Modes/*")
+        pass
+    os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
     # print folder,prot
 
 
