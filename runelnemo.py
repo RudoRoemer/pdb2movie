@@ -21,7 +21,7 @@ def elnemosim(exec_folder,args,hydropdb):
     os.system("rm "+folder+"/modesplit")
     #
     os.system("mv pdbmat.* mode*.in "+folder+"/")
-    
+
     try:
         os.mkdir(folder+"/Modes/")
     except Exception:
@@ -52,7 +52,7 @@ def generate_structure(filename):
 
 
 def generate_pdbmat(struct_file,folder):
-    datfile=open("pdbmat.dat","w")
+    datfile=open(folder+"pdbmat.dat","w")
     datfile.write("Coordinate FILENAME = "+folder+"/tmp_"+str(os.getpid())+".structure\n")
     datfile.write("INTERACtion DISTance CUTOF =     12.000\n")
     datfile.write("INTERACtion FORCE CONStant =      1.000\n")
