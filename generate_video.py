@@ -37,7 +37,7 @@ def call_pymol(command):
 
 
 
-def gen_video(args,folder):
+def gen_video(exec_folder,args,folder):
     print(folder)
     if args.modes:
         modelist=[int(x) for x in args.modes]
@@ -58,7 +58,7 @@ def gen_video(args,folder):
             for sign in signals:
                 filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 print (filename)
-                prepare_script(args,filename,cut,mode,sign,folder)
+                prepare_script(exec_folder,args,filename,cut,mode,sign,folder)
                 # Desired pymol commands here to produce and save figures
 
                 currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
@@ -79,7 +79,9 @@ def gen_video(args,folder):
                 for sign in signals:
                     filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                     currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
-                    command='convert -quality 100 '+currfolder+'/*/*.ppm '+filename
+                    command='convert -quality 100 '+folder+'/*/*.ppm '+filename
+                    print(command)
+                    os.system(command)
 
 
     for cut in cutlist:
@@ -105,14 +107,14 @@ def prepare_script(args,filename,cut,mode,sign,folder):
 
     if args.threed:
         if args.video:
-            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
+            string='cat '+exec_folder+'/video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
         else:
-            string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\")  video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
+            string='cat '+exec_folder+'/video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\")  '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
     else:
         if args.video:
-            string='cat video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
+            string='cat '+exec_folder+'/video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
         else:
-            string='cat video_template.py <(echo filename=\\"'+filename+'\\") video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
+            string='cat '+exec_folder+'/video_template.py <(echo filename=\\"'+filename+'\\") '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
     # print(string)
     os.system("bash -c '{0}'".format(string))
 

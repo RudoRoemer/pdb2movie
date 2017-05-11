@@ -1,20 +1,23 @@
 import os
 
-def firstsim(args,cleanpdb):
+def firstsim(exec_folder,args,cleanpdb):
     # print "./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb"
     prot=cleanpdb[:-10].rsplit("/",1)[1]
     # print "prot is "+prot
-    os.system("./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
+    os.system(exec_folder+"/./reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
     folder=cleanpdb.rsplit("/",1)[0]
+
+
     renum_atoms(cleanpdb[:-9]+"hydro.pdb",folder)
 
-    os.system("./FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
+    os.system(exec_folder+"/./FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
 
 
     os.system("mv "+prot+"_hydro_hbdilute.txt "+folder+"/"+prot+"_hydro_hbdilute.txt")
     os.system("mv "+prot+"_hydro_hbdpath.txt "+folder+"/"+prot+"_hydro_hbdpath.txt")
     os.system("mv "+prot+"_hydro_hbd_lrc.txt "+folder+"/"+prot+"_hydro_hbd_lrc.txt")
-    print("\n\n\n\n"+cleanpdb[:-9]+"hydro.pdb")
+    os.system("mv residue_map.txt "+folder+"/residue_map.txt")
+    # print("\n\n\n\n"+cleanpdb[:-9]+"hydro.pdb")
     return cleanpdb[:-9]+"hydro.pdb"
     # print folder,prot
 

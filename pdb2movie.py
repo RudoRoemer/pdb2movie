@@ -62,6 +62,10 @@ if __name__ == "__main__":#
     #     userinput=raw_input("WARNING: PyMOL windows will open during generation and they won't close by themselves. You have been warned. Are you sure you want to continue? [y/n]   ")
     #     if (userinput!="y"):
     #         quit()
+    exec_folder=sys.argv[0].rsplit("/",1)[0]
+    if (exec_folder.endswith(".py")):
+        exec_folder="."
+    # print(exec_folder)
     if (args.output):
 
         try:
@@ -82,12 +86,12 @@ if __name__ == "__main__":#
             pass
 
     clean_file=cleanpdb.cleanPDB(args)
-    hydro_file=runfirst.firstsim(args,clean_file)
+    hydro_file=runfirst.firstsim(exec_folder,args,clean_file)
 
 
     folder=hydro_file.rsplit("/",1)[0]
-    print("\n\n\n\nHERE IS THE RESULT!!!!\n\n")
-    print(hydro_file,folder)
-    runelnemo.elnemosim(args,hydro_file)
-    runfroda.frodasim(args,hydro_file)
-    generate_video.gen_video(args,folder)
+    # print("\n\n\n\nHERE IS THE RESULT!!!!\n\n")
+    # print(hydro_file,folder)
+    runelnemo.elnemosim(exec_folder,args,hydro_file)
+    runfroda.frodasim(exec_folder,args,hydro_file)
+    generate_video.gen_video(exec_folder,args,folder)

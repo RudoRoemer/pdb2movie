@@ -1,18 +1,27 @@
 import os
 import sys
 
-def elnemosim(args,hydropdb):
+def elnemosim(exec_folder,args,hydropdb):
     # print(hydropdb)
     struct_file=generate_structure(hydropdb)
-    # print(struct_file)
-    os.system("cp "+struct_file+" tmp_"+str(os.getpid())+".structure")
-    generate_pdbmat(struct_file)
-    os.system("./pdbmat")
-    os.system("rm tmp_"+str(os.getpid())+".structure")
-    os.system("./diagstd")
-    os.system("./modesplit "+struct_file+" pdbmat.eigenfacs 7 11")
     folder=struct_file.rsplit("/",1)[0]
+    # print(struct_file)
+    os.system("cp "+struct_file+" "+folder+"/tmp_"+str(os.getpid())+".structure")
+    os.system("cp "+exec_folder+"/pdbmat "+folder+"/pdbmat")
+    generate_pdbmat(struct_file,folder)
+    os.system(folder+"/pdbmat")
+    os.system("rm "+folder+"/tmp_"+str(os.getpid())+".structure")
+    os.system("rm "+folder+"/pdbmat")
+    os.system("cp "+exec_folder+"/diagstd "+folder+"/diagstd")
+    os.system(folder+"/diagstd")
+    os.system("rm "+folder+"/diagstd")
+    os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
+    os.system("mv pdbmat.eigenfacs "+folder+"/pdbmat.eigenfacs")
+    os.system(folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs 7 11")
+    os.system("rm "+folder+"/modesplit")
+    #
     os.system("mv pdbmat.* mode*.in "+folder+"/")
+    
     try:
         os.mkdir(folder+"/Modes/")
     except Exception:
@@ -26,7 +35,7 @@ def generate_structure(filename):
 
     inputfile=open(filename,'r')
     outputfile=filename[:-10]+".structure"
-    # print outputfile
+    print outputfile
     tempfile=open(outputfile,'w')
 
     for line in inputfile:
@@ -42,9 +51,9 @@ def generate_structure(filename):
     # os.system("mv tmp.pdb "+filename)
 
 
-def generate_pdbmat(struct_file):
+def generate_pdbmat(struct_file,folder):
     datfile=open("pdbmat.dat","w")
-    datfile.write("Coordinate FILENAME = tmp_"+str(os.getpid())+".structure\n")
+    datfile.write("Coordinate FILENAME = "+folder+"/tmp_"+str(os.getpid())+".structure\n")
     datfile.write("INTERACtion DISTance CUTOF =     12.000\n")
     datfile.write("INTERACtion FORCE CONStant =      1.000\n")
     datfile.write("Origin of MASS values      =       CONS ! CONstant, or from COOrdinate file.\n")
@@ -64,6 +73,9 @@ def generate_pdbmat(struct_file):
 if __name__ == "__main__":#
     args=[]
     hydro=sys.argv[1]
+    exec_folder=sys.argv[0].rsplit("/",1)[0]
+    if (exec_folder.endswith(".py")):
+        exec_folder="."
     # pymol_test()
     # prepare_script(sys.argv,"t1t.mpg")
-    elnemosim(args,hydro)
+    elnemosim(exec_folder,args,hydro)

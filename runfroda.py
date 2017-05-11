@@ -9,7 +9,7 @@ def call_froda(command):
 
 
 
-def frodasim(args,hydro_file):
+def frodasim(exec_folder,args,hydro_file):
     folder=hydro_file.rsplit("/",1)[0]
 
 
@@ -81,9 +81,9 @@ def frodasim(args,hydro_file):
                 os.system("cp "+folder+"/hphobes.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hphobes.in")
 
                 if (sign=="neg"):
-                    command="./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin"
+                    command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin"
                 else:
-                    command="./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin"
+                    command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin"
                 p = multiprocessing.Process(target=call_froda,args=(command,))
                 jobs.append(p)
                 p.start()
