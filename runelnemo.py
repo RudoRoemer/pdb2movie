@@ -6,7 +6,7 @@ def elnemosim(exec_folder,args,hydropdb):
     struct_file=generate_structure(hydropdb)
     folder=struct_file.rsplit("/",1)[0]
     # print(struct_file)
-    os.system("cp "+struct_file+" "+folder+"/tmp_"+str(os.getpid())+".structure")
+    os.system("cp "+struct_file+" tmp_"+str(os.getpid())+".structure")
     os.system("cp "+exec_folder+"/pdbmat "+folder+"/pdbmat")
     generate_pdbmat(struct_file,folder)
     print("calling "+folder+"/pdbmat")
@@ -57,7 +57,7 @@ def generate_pdbmat(struct_file,folder):
     filename='pdbmat.dat'
     # print(filename)
     datfile=open(filename,'w')
-    datfile.write("Coordinate FILENAME ="+folder+"/tmp_"+str(os.getpid())+".structure\n")
+    datfile.write("Coordinate FILENAME =/tmp_"+str(os.getpid())+".structure\n")
     datfile.write("INTERACtion DISTance CUTOF =     12.000\n")
     datfile.write("INTERACtion FORCE CONStant =      1.000\n")
     datfile.write("Origin of MASS values      =       CONS ! CONstant, or from COOrdinate file.\n")
