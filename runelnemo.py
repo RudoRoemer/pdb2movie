@@ -56,7 +56,9 @@ def generate_structure(filename):
 
 def generate_pdbmat(struct_file,folder):
     print("pdbmat.dat at "+folder+"/pdbmat.dat")
-    datfile=open(folder+"pdbmat.dat","w")
+    filename=folder+'/pdbmat.dat'
+    print(filename)
+    datfile=open(filename,'w')
     datfile.write("Coordinate FILENAME = "+folder+"/tmp_"+str(os.getpid())+".structure\n")
     datfile.write("INTERACtion DISTance CUTOF =     12.000\n")
     datfile.write("INTERACtion FORCE CONStant =      1.000\n")
@@ -66,7 +68,7 @@ def generate_pdbmat(struct_file,folder):
     datfile.write("Maximum bond LENGTH        =      0.000\n")
     datfile.write("BOND FORCE CONStant        =      0.000\n")
     datfile.write("ANGLE FORCE CONStant       =      0.000\n")
-    datfile.write("LevelSHIFT                 =    1.0E-09 ! Non-zero value often required (numerical reasons).\n")
+    datfile.write("LevelSHIFT                 =    1.0E-09 ! non-zero value often required (numerical reasons).\n")
     datfile.write("Matrix FORMAT              =       FREE ! Free, or Binary, matrix saved.\n")
     datfile.close()
 
