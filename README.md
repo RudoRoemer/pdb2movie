@@ -14,7 +14,6 @@ Recompiling FIRST is necessary!
 3) You should be ready to go!    
 
 Usage:     
-(Run it from the folder where pdb2movie.py is!)
 python pdb2movie.py FILE [options]    
 FILE is your desired PDB file    
 
