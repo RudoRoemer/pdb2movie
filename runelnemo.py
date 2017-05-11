@@ -23,12 +23,12 @@ def elnemosim(exec_folder,args,hydropdb):
     #
     # os.system("mv pdbmat.* mode*.in "+folder+"/")
 
-    try:
-        os.mkdir(folder+"/Modes/")
-    except Exception:
-        os.system("rm -r "+folder+"/Modes/*")
-        pass
-    os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
+    # try:
+    #     os.mkdir(folder+"/Modes/")
+    # except Exception:
+    #     os.system("rm -r "+folder+"/Modes/*")
+    #     pass
+    # os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
     # print folder,prot
 
 
