@@ -7,6 +7,7 @@ import sys
 import os
 import multiprocessing
 import argparse
+import subprocess
 
 
 def parsing_video_args(sys_args):
@@ -78,10 +79,12 @@ def gen_video(exec_folder,args,folder):
             for mode in modelist:
                 for sign in signals:
                     filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                    tmpfolder=filename.rsplit("/",1)[1][:-3]
+
                     currfolder=folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
-                    command='convert -quality 100 '+folder+'/*/*.ppm '+filename
+                    command=['convert', '-quality',' 100',folder+'/'+tmpfolder+'tmp/*.ppm',filename]
                     print(command)
-                    os.system(command)
+                    subprocess.call(command)
 
 
     for cut in cutlist:
