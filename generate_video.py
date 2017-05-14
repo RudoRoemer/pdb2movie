@@ -110,9 +110,9 @@ def prepare_script(exec_folder,args,filename,cut,mode,sign,folder):
 
     if args.threed:
         if args.video:
-            string='cat '+exec_folder+'/video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
+            string='cat '+exec_folder+'/video_template.py <(echo \"cmd.set(\\"stereo_mode\\",10)\") <(echo \"cmd.stereo(\\"on\\")\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
         else:
-            string='cat '+exec_folder+'/video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\")  '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
+            string='cat '+exec_folder+'/video_template.py <(echo \"cmd.set(\\"stereo_mode\\",10)\") <(echo \"cmd.stereo(\\"on\\")\") <(echo filename=\\"'+filename+'\\")  '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
     else:
         if args.video:
             string='cat '+exec_folder+'/video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
@@ -127,6 +127,9 @@ def prepare_script(exec_folder,args,filename,cut,mode,sign,folder):
 if __name__ == "__main__":#
     args=parsing_video_args(sys.argv)
     folder=args.folder[0]
+    exec_folder=sys.argv[0].rsplit("/",1)[0]
+    if (exec_folder.endswith(".py")):
+        exec_folder="."
     # pymol_test()
     # prepare_script(sys.argv,"t1t.mpg")
-    gen_video(args,folder)
+    gen_video(exec_folder,args,folder)
