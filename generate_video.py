@@ -16,6 +16,8 @@ def parsing_video_args(sys_args):
 
     parser.add_argument('--threed',  action='store_true',
                         help='Flag for generating anaglyph stereo movies')
+    parser.add_argument('--combi',  action='store_true',
+                        help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--modes',  nargs="+",
                         help='Movement modes to be investigated')
     parser.add_argument('--ecuts',  nargs="+",
@@ -89,11 +91,14 @@ def gen_video(exec_folder,args,folder):
 
     for cut in cutlist:
         for mode in modelist:
+            if args.combi:
+                filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"
+                os.system('cat '+filename+'pos.mpg '+filename+'neg.mpg > '+filename+'combi.mpg')
             for sign in signals:
                 os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
                 filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 tmpfolder=filename.rsplit("/",1)[1][:-3]
-                os.system('rm -r '+folder+'/'+tmpfolder+'tmp/)
+                os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
     return
 
 #cmd.set(full_screen='on')
