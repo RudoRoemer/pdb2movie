@@ -91,6 +91,9 @@ def gen_video(exec_folder,args,folder):
         for mode in modelist:
             for sign in signals:
                 os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
+                filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                tmpfolder=filename.rsplit("/",1)[1][:-3]
+                os.system('rm -r '+folder+'/'+tmpfolder+'tmp/)
     return
 
 #cmd.set(full_screen='on')
