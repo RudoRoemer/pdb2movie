@@ -3,6 +3,11 @@ import sys
 
 def elnemosim(exec_folder,args,hydropdb):
     # print(hydropdb)
+    if args.modes:
+        modelist=[int(x) for x in args.modes]
+    else:
+        modelist=range(7,12)
+
     struct_file=generate_structure(hydropdb)
     folder=struct_file.rsplit("/",1)[0]
     # print(struct_file)
@@ -18,7 +23,7 @@ def elnemosim(exec_folder,args,hydropdb):
     # os.system("rm "+folder+"/diagstd")
     os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
     os.system("mv pdbmat.eigenfacs "+folder+"/pdbmat.eigenfacs")
-    os.system(folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs 7 11")
+    os.system(folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs "+str(modelist[0])+" "+str(modelist[-1]))
     # os.system("rm "+folder+"/modesplit")
 
     os.system("mv pdbmat.* mode*.in "+folder+"/")
@@ -29,6 +34,10 @@ def elnemosim(exec_folder,args,hydropdb):
         os.system("rm -r "+folder+"/Modes/*")
         pass
     os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
+    os.system("rm tmp_"+str(os.getpid())+".structure")
+    os.system("rm "+folder+"/pdbmat")
+    os.system("rm "+folder+"/diagstd")
+    os.system("rm "+folder+"/modesplit")
     # print folder,prot
 
 
