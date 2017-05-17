@@ -34,6 +34,7 @@
 ### cut above here and paste into script ###
 cmd.hide()
 cmd.show('cartoon')
+
 cmd.bg_color('grey')
 cmd.movie.add_state_sweep(2,1,'start=1')
 cmd.movie.produce(filename,mode='ray',quality=100,quiet=1)

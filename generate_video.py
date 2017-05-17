@@ -16,6 +16,8 @@ def parsing_video_args(sys_args):
 
     parser.add_argument('--threed',  action='store_true',
                         help='Flag for generating anaglyph stereo movies')
+    parser.add_argument('--res',  nargs=2,
+                        help='Video resolution (width, height)')
     parser.add_argument('--combi',  action='store_true',
                         help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--modes',  nargs="+",
@@ -97,6 +99,7 @@ def gen_video(exec_folder,args,folder):
             for sign in signals:
                 os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
                 filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                os.system('chmod 755 '+filename)
                 tmpfolder=filename.rsplit("/",1)[1][:-3]
                 os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
     return
@@ -116,17 +119,16 @@ def prepare_script(exec_folder,args,filename,cut,mode,sign,folder):
     # string="cat video_template.py <(echo filename=\'"+filename+"\') video_minimal.py >pymolvideo.py"
     # string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
 
+
+    string='cat '+exec_folder+'/video_template.py '
+    if args.res:
+        string=string+'<(echo \"cmd.viewport('+str(args.res[0])+','+str(args.res[1])+')\") '
     if args.threed:
-        if args.video:
-            string='cat '+exec_folder+'/video_template.py <(echo \"cmd.set(\\"stereo_mode\\",10)\") <(echo \"cmd.stereo(\\"on\\")\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
-        else:
-            string='cat '+exec_folder+'/video_template.py <(echo \"cmd.set(\\"stereo_mode\\",10)\") <(echo \"cmd.stereo(\\"on\\")\") <(echo filename=\\"'+filename+'\\")  '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
-    else:
-        if args.video:
-            string='cat '+exec_folder+'/video_template.py <(echo filename=\\"'+filename+'\\") '+args.video[0]+' '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
-        else:
-            string='cat '+exec_folder+'/video_template.py <(echo filename=\\"'+filename+'\\") '+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
-    # print(string)
+        string=string+'<(echo \"cmd.set(\\"stereo_mode\\",10)\") <(echo \"cmd.stereo(\\"on\\")\") '
+    string=string+'<(echo filename=\\"'+filename+'\\") '
+    if args.video:
+         strng=string+args.video[0]+' '
+    string=string+exec_folder+'/video_minimal.py > '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py'
     os.system("bash -c '{0}'".format(string))
 
 

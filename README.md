@@ -26,8 +26,10 @@ Options:
 --freq FREQ   -        Frequency of saving intermediate configurations        
 --step STEP    -       Size of random step       
 --dstep DSTEP    -     Size of directed step        
+--res WID HEI    -     Resolution of generated videos (width, height)      
 --modes MODE LIST -    Movement modes to be investigated           
 --ecuts ECUTS LIST -   Energy cutoff values        
 --video FILE        -  Python file with PyMOL commands to be run before generating video            
 --threed    -     Generates anaglyph stereo videos     
+--combi     -          Creates videos combining positive and negative directions for each mode/cutoff energy      
 --multiple      -     Keeps multiple chains from the original PDB file (default: uses only chain A)   

@@ -5,6 +5,7 @@ from pymol import cmd
 from glob import glob
 # print sys.argv
 folder=sys.argv[1]
+
 prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
 lst.sort()

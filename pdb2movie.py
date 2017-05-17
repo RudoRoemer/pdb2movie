@@ -21,12 +21,12 @@ def parsing_args(sys_args):
                         help='List of molecules to be kept')
     parser.add_argument('--output',  nargs=1,
                         help='Output directory')
+    parser.add_argument('--res',  nargs=2,
+                        help='Video resolution (width, height)')
     parser.add_argument('--waters',  action='store_true',
                         help='Flag for keeping water molecules')
     parser.add_argument('--multiple',  action='store_true',
                         help='Keep multiple chains (default: uses only chain A)')
-    parser.add_argument('--transp',  action='store_true',
-                        help='Use transparent background for video')
     parser.add_argument('--combi',  action='store_true',
                         help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--threed',  action='store_true',
