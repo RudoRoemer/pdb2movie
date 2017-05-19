@@ -4,7 +4,7 @@ from pymol import cmd
 #this is to view all of the pdb files in your current working directory in number order, using pymol.
 from glob import glob
 # print sys.argv
-folder=sys.argv[1]
+folder=sys.argv[2]
 
 prot=folder.rsplit("/",1)[1]
 lst = glob(folder+"/*.pdb")
