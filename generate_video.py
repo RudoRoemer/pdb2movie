@@ -97,7 +97,7 @@ def gen_video(exec_folder,args,folder):
                 filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"
                 os.system('cat '+filename+'pos.mpg '+filename+'neg.mpg > '+filename+'combi.mpg')
             for sign in signals:
-                os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
+                # os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
                 filename=folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 os.system('chmod 755 '+filename)
                 tmpfolder=filename.rsplit("/",1)[1][:-3]
