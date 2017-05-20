@@ -5,7 +5,7 @@ Code for generating movies of the most relevant movement modes of proteins from 
 Requirements:     
 PyMOL     
 FreeMOL mpeg_encode component     
-Python libraries: glob, argparse        
+Python libraries: argparse        
 
 Instructions:      
 Recompiling FIRST is necessary!
