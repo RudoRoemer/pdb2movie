@@ -1,7 +1,12 @@
 import sys
+import os
+
+def remove_rotamers(output_filename,exec_folder):
+    os.system('pymol -qc '+exec_folder+'/remove_rotamers.py '+output_filename)
 
 
-def cleanPDB(args):
+
+def cleanPDB(args,exec_folder):
 # def main():
 
 
@@ -51,6 +56,7 @@ def cleanPDB(args):
             print("WARNING: residue "+str(i)+" is missing!")
     inputfile.close()
     output.close()
+    remove_rotamers(output_filename,exec_folder)
     return output_filename
 #
 if __name__ == "__main__":#

@@ -89,7 +89,7 @@ if __name__ == "__main__":#
             os.system("rm -r "+args.pdbfile[0][:-4]+"/*")
             pass
 
-    clean_file=cleanpdb.cleanPDB(args)
+    clean_file=cleanpdb.cleanPDB(args,exec_folder)
     hydro_file=runfirst.firstsim(exec_folder,args,clean_file)
 
 
