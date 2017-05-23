@@ -51,25 +51,25 @@ def gen_video(exec_folder, args, folder):
     signals = ['pos', 'neg']
     jobs = []
 
-    for cut in cutlist:
-        for mode in modelist:
-            for sign in signals:
-                filename = folder + "/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
-                print (filename)
-                prepare_script(exec_folder, args, filename, cut, mode, sign, folder)
-                # Desired pymol commands here to produce and save figures
+    # for cut in cutlist:
+    #     for mode in modelist:
+    #         for sign in signals:
+    #             filename = folder + "/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+    #             print (filename)
+    #             prepare_script(exec_folder, args, filename, cut, mode, sign, folder)
+    #             # Desired pymol commands here to produce and save figures
 
-                currfolder = folder + "/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
-                if args.threed:
-                    command = 'pymol -q '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
-                else:
-                    command = 'pymol -cq '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
-                p = multiprocessing.Process(target=call_pymol, args=(command,))
-                jobs.append(p)
-                p.start()
+    #             currfolder = folder + "/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
+    #             if args.threed:
+    #                 command = 'pymol -q '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
+    #             else:
+    #                 command = 'pymol -cq '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
+    #             p = multiprocessing.Process(target=call_pymol, args=(command,))
+    #             jobs.append(p)
+    #             p.start()
 
-    for job in jobs:
-        job.join()
+    # for job in jobs:
+    #     job.join()
 
     if (os.system('grep \'FREEMOL\' $(which pymol)')):
         for cut in cutlist:
