@@ -95,7 +95,7 @@ def gen_video(exec_folder, args, folder):
                 filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 os.system('chmod 744 '+filename)
                 tmpfolder = filename.rsplit("/", 1)[1][:-3]
-                # os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
+                os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
     return
 
 # cmd.set(full_screen='on')
