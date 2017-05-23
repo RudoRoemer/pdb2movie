@@ -80,7 +80,7 @@ def gen_video(exec_folder, args, folder):
 
                     currfolder = folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
                     # command = ['convert', '-quality', ' 100', folder+'/'+tmpfolder+'tmp/*.ppm', filename]
-                    command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -loglevel debug -y -b 6000k '+filename
+                    command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
                     # command = ['ffmpeg', '-pattern_type', 'glob', '-i', '\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\"', '-c:v', 'mpeg2video', '-pix_fmt', 'yuv420p', '-me_method', 'epzs', '-threads', '4', '-r', '30.000030', '-g', '45', '-bf', '2', '-trellis', '2', '-y', '-b', '6000k', filename]
                     print(command)
                     os.system("bash -c '{0}'".format(command))
@@ -97,7 +97,7 @@ def gen_video(exec_folder, args, folder):
                 filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 os.system('chmod 744 '+filename)
                 tmpfolder = filename.rsplit("/", 1)[1][:-3]
-                os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
+                # os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
     return
 
 # cmd.set(full_screen='on')
