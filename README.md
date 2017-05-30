@@ -8,10 +8,11 @@ FreeMOL mpeg_encode component
 Python libraries: argparse        
 
 Instructions:      
-Recompiling FIRST is necessary!
-1) Go to FIRST-190916-SAW/src and run 'make clean'.
-2) run 'make'.
-3) You should be ready to go!    
+Recompiling FIRST and diagstd is necessary!
+1) Go to FIRST-190916-SAW/src and run 'make'.
+2) You should be ready to go! 
+
+(Note that if your C++/Fortran compilers are not the ones I use, you might need to edit some Makefiles.)   
 
 Usage:     
 python pdb2movie.py FILE [options]    
