@@ -1,0 +1,929 @@
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+ Pdbmat> Computes the Hessian matrix, using an Elastic Network Model.
+ Pdbmat> Version 3.50, Fevrier 2004.    
+
+ Pdbmat> Options to be read in pdbmat.dat file.
+
+%Pdbmat-Wn> No known keyword in ligne:
+BOND FORCE CONSTANT        =                                                    
+%Pdbmat-Wn> This command ligne is skipped.
+
+
+ Pdbmat> Coordinate filename     = ../prot-test/EcCTXM15+Avibactam1465_res301/EcCTXM15+Avibac
+
+ Pdbmat> Distance cutoff         =      12.00
+         Force constant          =       1.00
+         Origin of mass values   =       CONS
+
+%Openam-Err> File: ../prot-test/EcCTXM15+Avibactam1465_res301/EcCTXM15+Avibac
+ Expected in the current directory, but not found.
+ Diagstd> Version 1.05, August 2004.     
+%Diagstd-Er: Matrice des derivees secondes non trouvee.
+ Noms possibles:  pdbmat.sdijf  (CERFACS) -formattee, creuse, format libre.
+ pdbmat.sdijb  (CERFBIN) -non formattee, creuse, format libre.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+Reading command line options.
+
+ ---------------------------------------------------------- 
+                           FIRST                            
+     Floppy Inclusion and Rigid Substructure Topography     
+                        VERSION development version
+
+                           FRODA                            
+      Framework Rigidity Optimised Dynamic Algorithm        
+                        VERSION 1.2
+
+                            and                     
+
+                           TIMME                            
+  Tool for Identifying Mobility in Macromolecular Ensembles 
+                        VERSION 1.5
+
+                Arizona State University            
+
+ Copyright (c) 2004-2006 Brandon Hespenheide, Stephen Wells 
+     Scott Menor and Dan Farrell. All Rights Reserved.      
+ ---------------------------------------------------------- 
+
+ Random number generator: mt19937ar.cpp                     
+ Copyright (c) 1997 - 2002, Makoto Matsumoto and            
+                            Takuji Nishimura, 
+ All rights reserved.                                       
+ Copyright (c) 2005, Mutsuo Saito,                          
+ All rights reserved.                                       
+ ---------------------------------------------------------- 
+
+Hybrid-36 PDB serial and sequence numbers: hybrid_36_c.cpp  
+cctbx Copyright (c) 2006, The Regents of the University of  
+California, through Lawrence Berkeley National Laboratory   
+(subject to receipt of any required approvals from the U.S. 
+Dept. of Energy).  All rights reserved.                                            
+ ---------------------------------------------------------- 
+
+Reading PDB data...
+Scanning PDB file...
+Error: No ATOM or HETATM records were found in the input file.
+ Movie: frame    1 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    2 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    3 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    4 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    5 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    6 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    7 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    8 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame    9 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   10 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   11 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   12 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   13 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   14 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   15 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   16 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   17 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   18 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   19 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   20 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   21 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+ Movie: frame   22 of   60, 0.01 sec. (0:00:00 - 0:00:00 to go).
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+Error: unable to initalize the pymol.cmd module
+test
+
+
+
+
+../prot-test/EcCTXM15+Avibactam1465_res301/EcCTXM15+Avibactam1465_res301_hydro.pdb
+
+
+
+
+HERE IS THE RESULT!!!!
+
+
+('../prot-test/EcCTXM15+Avibactam1465_res301/EcCTXM15+Avibactam1465_res301_hydro.pdb', '../prot-test/EcCTXM15+Avibactam1465_res301')
+../prot-test/EcCTXM15+Avibactam1465_res301/EcCTXM15+Avibactam1465_res301.structure

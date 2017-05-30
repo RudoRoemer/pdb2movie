@@ -27,6 +27,7 @@
 ##################################################
 
 FIRST := FIRST
+DIAGSTD := diagstd
 CUR_VER = FIRST-dev
 
 # List external programs that need to be compiled
@@ -42,6 +43,7 @@ INC += -I../include/
 LIBS :=
 SRC := $(wildcard *.cpp)
 
+FORT = f90
 CPP = g++
 CPP_OPTIMIZATION = -O3
 #DEBUG = -g -pg
@@ -49,6 +51,7 @@ EXTRA = -Wall
 CPPFLAGS = $(INC) ${CPP_OPTIMIZATION} $(DEBUG) ${EXTRA} -ansi -fPIC
 
 INSTALL_HOME = $(CURDIR)/..
+DIAGSTD_HOME = $(CURDIR)/../..
 
 FIRST_ROOT = -DFIRST_ROOT='"${INSTALL_HOME}"'
 
@@ -65,11 +68,14 @@ DEPLIST := $(patsubst %.cpp, %.d, $(filter %.cpp, $(SRC)))
 
 # The default make will depend on FIRST and any other
 # INDEPENDENT executables.
-all: FIRST external_progs
+all: FIRST external_progs DIAGSTD
 
 # Compile FIRST
 FIRST: $(OBJLIST)
 	$(CPP) -o $@ $(OBJLIST) $(LIBS) $(CPPFLAGS)
+
+DIAGSTD: %.f
+	$(FORT) $@ diagstd
 
 %.o: %.cpp
 	${CPP} ${CPPFLAGS} ${FIRST_ROOT} -c $< -o $@
