@@ -27,7 +27,7 @@ c     MEMORY LIMITS:
 c     **************
 c     NATMAX: Maximum number of atoms allowed.
 
-      parameter(natmax=2000,ndim=3*natmax)
+      parameter(natmax=4000,ndim=3*natmax)
  
 c.......................................................................
 c     YHS-Sep-2002: Premiere version, from Diagijr v1.13 (Bordeaux).

@@ -43,7 +43,7 @@ INC += -I../include/
 LIBS :=
 SRC := $(wildcard *.cpp)
 
-FORT = f90
+FORT = gfortran
 CPP = g++
 CPP_OPTIMIZATION = -O3
 #DEBUG = -g -pg
@@ -74,8 +74,8 @@ all: FIRST external_progs DIAGSTD
 FIRST: $(OBJLIST)
 	$(CPP) -o $@ $(OBJLIST) $(LIBS) $(CPPFLAGS)
 
-DIAGSTD: %.f
-	$(FORT) $@ diagstd
+DIAGSTD: diagstd.f
+	$(FORT) -o diagstd diagstd.f
 
 %.o: %.cpp
 	${CPP} ${CPPFLAGS} ${FIRST_ROOT} -c $< -o $@
