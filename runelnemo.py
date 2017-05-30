@@ -18,7 +18,7 @@ def elnemosim(exec_folder,args,hydropdb):
     os.system(folder+"/pdbmat")
     # os.system("rm "+folder+"/tmp_"+str(os.getpid())+".structure")
     # os.system("rm "+folder+"/pdbmat")
-    os.system("cp "+exec_folder+"/diagstd "+folder+"/diagstd")
+    os.system("cp "+exec_folder+"/./FIRST-190916-SAW/src/diagstd "+folder+"/diagstd")
     os.system(folder+"/diagstd")
     # os.system("rm "+folder+"/diagstd")
     os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
