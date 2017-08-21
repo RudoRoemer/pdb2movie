@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 '''
 cleanpdb.py - removes rotamers and non-protein molecules
 
@@ -6,6 +8,7 @@ cleanpdb.py - removes rotamers and non-protein molecules
 
 import sys
 import os
+import argparse
 
 
 '''
@@ -20,6 +23,47 @@ string exec_folder: location where the python scripts are located
 def remove_rotamers(output_filename,exec_folder):
     # calls pymol using remove_rotamers.py - for details on this, see that file!
     os.system('pymol -qc '+exec_folder+'/remove_rotamers.py '+output_filename)
+
+
+def parsing_args(sys_args):
+
+    # the argparse library takes care of all the parsing from a list of command-line arguments to a structure
+    parser = argparse.ArgumentParser(description='Runs simulations and generates videos for the most likely movement modes given a PDB file.',usage='%(prog)s PDB [options]')
+
+    parser.add_argument('--keep',  nargs="+",
+                        help='List of molecules to be kept')
+    parser.add_argument('--output',  nargs=1,
+                        help='Output directory')
+    parser.add_argument('--res',  nargs=2,
+                        help='Video resolution (width, height)')
+    parser.add_argument('--waters',  action='store_true',
+                        help='Flag for keeping water molecules')
+    parser.add_argument('--multiple',  action='store_true',
+                        help='Keep multiple chains (default: uses only chain A)')
+    parser.add_argument('--combi',  action='store_true',
+                        help='Combine both positive and negative directions into a single movie')
+    parser.add_argument('--threed',  action='store_true',
+                        help='Flag for generating anaglyph stereo movies')
+    parser.add_argument('--confs',  nargs=1,
+                        help='Total number of configurations to be calculated')
+    parser.add_argument('--freq',  nargs=1,
+                        help='Frequency of saving intermediate configurations')
+    parser.add_argument('--step',  nargs=1,
+                        help='Size of random step')
+    parser.add_argument('--dstep',  nargs=1,
+                        help='Size of directed step')
+    parser.add_argument('--modes',  nargs="+",
+                        help='Movement modes to be investigated')
+    parser.add_argument('--ecuts',  nargs="+",
+                        help='Energy cutoff values')
+    parser.add_argument('--video',  nargs=1,
+                        help='Python file with PyMOL commands to be run before generating video')
+    parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
+                        help='Initial PDB file')
+
+    # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
+    args = parser.parse_args(sys_args[1:])
+    return args
 
 
 
@@ -62,13 +106,14 @@ def cleanPDB(args,exec_folder):
     else:
         folder=args.pdbfile[0].split("/")
         output_filename=args.pdbfile[0][:-4]+"/"+folder[-1][:-4]+"_clean.pdb"
+    #print(output_filename)
     output=open(output_filename,'w')
 
 
 
     # goes over every single line from tge 
     for line in inputfile:
-
+        #print(line)
         # only looks at atoms in the PDB file
         if (line[0:6].strip()=='ATOM'):
 
@@ -91,9 +136,11 @@ def cleanPDB(args,exec_folder):
                 if line[17:20].strip() in args.keep:
 
                     output.write(line)
+                    #print("printing line" +line)
             continue
 
         # if you didn't hit a continue, you get here and that line is kept
+        #print("printing line" +line)
         output.write(line)
 
     # takes only unique values of residues list
@@ -110,12 +157,14 @@ def cleanPDB(args,exec_folder):
     output.close()
 
     # calls pymol to remove remaining rotamers
-    remove_rotamers(output_filename,exec_folder)
+    #remove_rotamers(output_filename,exec_folder)
 
     #done!
     return output_filename
 
 
-# calling this as a single script will probably not work, I think?
-#if __name__ == "__main__":#
-#    cleanPDB(sys.argv)
+#calling this as a single script will probably not work, I think?
+if __name__ == "__main__":#
+   args=parsing_args(sys.argv)
+   exec_folder=sys.argv[0].rsplit("/",1)[0]
+   cleanPDB(args,exec_folder)

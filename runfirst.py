@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+
 '''
 runfirst.py - functions to run FIRST simulations, analyzing rigidity in proteins
-
 '''
 
 
@@ -78,7 +79,7 @@ def renum_atoms(filename,folder):
     for line in inputfile:
 
         # if line is an atom...
-        if (line[0:6].strip()=='ATOM'):
+        if (line[0:6].strip()=='ATOM' or line[0:6].strip()=='HETATM'):
 
             # we chop up the line, cutting out the current atom number and putting the value of counter as atom number
             line=line[:6]+format(counter, '05d')+line[11:]
