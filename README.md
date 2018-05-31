@@ -34,3 +34,5 @@ Options:
 --threed    -     Generates anaglyph stereo videos     
 --combi     -          Creates videos combining positive and negative directions for each mode/cutoff energy      
 --multiple      -     Keeps multiple chains from the original PDB file (default: uses only chain A)   
+
+See also the web-server-based implementation at https://pdb2movie.warwick.ac.uk.
