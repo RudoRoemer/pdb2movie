@@ -101,7 +101,7 @@ def generate_structure(filename):
     # let's open up the PDB file and generate a filename for the output file based on its path
     inputfile=open(filename,'r')
     outputfile=filename[:-10]+".structure"
-    print outputfile
+    #print outputfile
 
     # now we open the output file as well
     tempfile=open(outputfile,'w')
