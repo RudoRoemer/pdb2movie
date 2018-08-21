@@ -1,6 +1,5 @@
 '''
-runfroda.py - functions to run FRODA simulations, generating conformers for the proteins
-
+runfroda.py - functions to run FRODA_simulations, generating conformers for the proteins
 '''
 
 import os
@@ -76,7 +75,7 @@ def frodasim(exec_folder,args,hydro_file):
         cutlist=[1.0, 2.0]
 
 
-    # we isolate the name of the protein, which is in the PDB path somewhere!
+    # we isolate the name of the protein, which is in the PDB_path somewhere!
     prot=hydro_file.rsplit("/",1)[1][:-10]
     # print modelist, cutlist
 
@@ -116,7 +115,7 @@ def frodasim(exec_folder,args,hydro_file):
 
                 # now there's some setup before starting FRODA: we need to copy the correct mode file from Modes...
                 os.system("cp "+folder+"/Modes/"+"mode"+mode+".in "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/mode.in")
-                # ... the relevant PDB file, and cov.out, and hbonds.out, and hphobes.out as input files (also we need to create an empty stacked.in)
+                # ... the relevant PDB_file, and cov.out, and hbonds.out, and hphobes.out as input files (also we need to create an empty stacked.in)
                 os.system("cp "+hydro_file+" "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb")
                 os.system("touch "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/stacked.in")
                 os.system("cp "+folder+"/cov.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/cov.in")
