@@ -23,13 +23,27 @@ Outputs:
 
 
 def firstsim(exec_folder,args,cleanpdb):
+
+    print ("---------------------------------------------------------------")
+    print ("firstsim:")
+    print ("----------------------------------------------------------------")
+
     # print "./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb"
 
     # first we isolate the name of the protein, which is in the clean PDB path somewhere!
+    print ("---------------------------------------------------------------")
+    print ("firstsim: find name of protein")
+    print ("----------------------------------------------------------------")
+
     prot=cleanpdb[:-10].rsplit("/",1)[1]
     # print "prot is "+prot
 
     # now, we need to run reduce to add hydrogens to protein residues - this generates a PDB file with hydrogens
+
+    print ("---------------------------------------------------------------")
+    print ("firstsim: calling reduce.3.23.130521")
+    print ("----------------------------------------------------------------")
+
     os.system(exec_folder+"/./reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
 
     # we also isolate the folder where outputs are being saved
@@ -38,8 +52,12 @@ def firstsim(exec_folder,args,cleanpdb):
     # now, we call an external function to renumber the atoms taking the hydrogens into account
     renum_atoms(cleanpdb[:-9]+"hydro.pdb",folder)
 
-
     # finally we run FIRST with the PDB after hydrogen addition!
+
+    print ("---------------------------------------------------------------")
+    print ("firstsim: running FIRST with new PDB file after hydrogens added")
+    print ("----------------------------------------------------------------")
+
     os.system(exec_folder+"/./FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
 
     # housekeeping: move the output files to the output folder
@@ -74,6 +92,10 @@ def renum_atoms(filename,folder):
     counter=1
     # test=format(1, '05d')
     # print test
+
+    print ("---------------------------------------------------------------")
+    print ("renum_atoms:")
+    print ("----------------------------------------------------------------")
 
     # looping over every line in the input file
     for line in inputfile:

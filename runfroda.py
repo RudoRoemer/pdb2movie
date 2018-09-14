@@ -33,14 +33,12 @@ Inputs:
 
 def frodasim(exec_folder,args,hydro_file):
 
+    print ("---------------------------------------------------------------")
+    print ("frodasim:")
+    print ("----------------------------------------------------------------")
 
     # first things first: we get the output folder from the path to the PDB file with hydrogens
     folder=hydro_file.rsplit("/",1)[0]
-
-
-
-
-
 
     # now we need to care about a bunch of command-line arguments: if they were passed, we set them, otherwise we use default values
     # that is true for confs, frew, step, dstep, modes, ecuts
@@ -93,6 +91,9 @@ def frodasim(exec_folder,args,hydro_file):
         os.system("rm -r "+folder+"/Runs/*")
         pass
 
+    print ("---------------------------------------------------------------")
+    print ("runfroda: generating subfolders")
+    print ("----------------------------------------------------------------")
 
     # now for every cutoff energy we will create a subfolder before anything
     for cut in cutlist:
@@ -124,6 +125,10 @@ def frodasim(exec_folder,args,hydro_file):
 
 
                 # now we actually run FRODA - there's a slight difference between positive and negative directions
+                print ("---------------------------------------------------------------")
+                print ("runfroda:",cut,mode,sign)
+                print ("----------------------------------------------------------------")
+
                 if (sign=="neg"):
                     command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin"
                 else:

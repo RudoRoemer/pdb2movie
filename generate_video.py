@@ -75,6 +75,11 @@ string folder: folder where the PDB files to be turned into a video are located 
 
 
 def gen_video(exec_folder, args, folder):
+    
+    print ("---------------------------------------------------------------")
+    print ("gen_video:")
+    print ("----------------------------------------------------------------")
+
     # print(folder)
 
     # check for a list of modes and cutoff energies in the arguments, fills it in with defaults if no specification

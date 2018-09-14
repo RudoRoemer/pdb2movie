@@ -20,6 +20,9 @@ Inputs:
 
 def elnemosim(exec_folder,args,hydropdb):
 
+    print ("---------------------------------------------------------------")
+    print ("elnemosim:")
+    print ("----------------------------------------------------------------")
 
      # check for a list of modes in the arguments, fills it in with defaults if no specification
     if args.modes:
@@ -27,8 +30,11 @@ def elnemosim(exec_folder,args,hydropdb):
     else:
         modelist=range(7,12)
 
-
     # call external function to generate a structure file - more details in that function
+    print ("---------------------------------------------------------------")
+    print ("elnemosim: generate structure file")
+    print ("----------------------------------------------------------------")
+
     struct_file=generate_structure(hydropdb)
     # from that filename, get the folder where all the outputs are
     folder=struct_file.rsplit("/",1)[0]
@@ -42,18 +48,29 @@ def elnemosim(exec_folder,args,hydropdb):
     os.system("cp "+exec_folder+"/pdbmat "+folder+"/pdbmat")
 
     # now, we need to generate a pdbmat options file using an external function as well - more details there!
+    print ("---------------------------------------------------------------")
+    print ("elnemosim: generate pdbmat options file")
+    print ("----------------------------------------------------------------")
+
     generate_pdbmat(struct_file,folder)
     print("calling "+folder+"/pdbmat")
 
     # finally, we run our local copy of pdbmat
+    print ("---------------------------------------------------------------")
+    print ("elnemosim: running local pdbmat()")
+    print ("----------------------------------------------------------------")
+
     os.system(folder+"/pdbmat")
     
     # we will need to use the same trick of a local copy with diagstd as well
     os.system("cp "+exec_folder+"/./FIRST-190916-SAW/src/diagstd "+folder+"/diagstd")
 
     # now, we run the local copy of diagstd
-    os.system(folder+"/diagstd")
+    print ("---------------------------------------------------------------")
+    print ("elnemosim: running local diagstd()")
+    print ("----------------------------------------------------------------")
 
+    os.system(folder+"/diagstd")
 
     # same trick with modesplit as well 
     os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
@@ -67,7 +84,6 @@ def elnemosim(exec_folder,args,hydropdb):
 
     # modesplit also generates outputs in the local folder, not the output one - we need to move them there
     os.system("mv pdbmat.* mode*.in "+folder+"/")
-
 
     # now we have some housekeeping to do - putting all movement modes into a "Modes" folder and removing all local copies of executables
     try:
