@@ -140,8 +140,13 @@ if __name__ == "__main__":#
     print ("----------------------------------------------------------------")
     runfroda.frodasim(exec_folder,args,hydro_file)
 
-    #finally, we generate the videos
+    # We generate the videos
     print ("---------------------------------------------------------------")
     print ("pdb2movie: generating the videos")
     print ("----------------------------------------------------------------")
     generate_video.gen_video(exec_folder,args,folder)
+    
+    # finally, we are done
+    print ("---------------------------------------------------------------")
+    print ("pdb2movie: all should be done, enjoy!")
+    print ("----------------------------------------------------------------")
