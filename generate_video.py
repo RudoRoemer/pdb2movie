@@ -131,6 +131,8 @@ def gen_video(exec_folder, args, folder):
     for job in jobs:
         job.join()
 
+
+
     # checks whether freemol is present in the system, if it is not we will have some extra work
     if (os.system('grep \'FREEMOL\' $(which pymol)')):
 
@@ -138,7 +140,7 @@ def gen_video(exec_folder, args, folder):
         for cut in cutlist:
             for mode in modelist:
                 for sign in signals:
-                    filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mp4"
+                    filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                     tmpfolder = filename.rsplit("/", 1)[1][:-3]
 
                     currfolder = folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
@@ -146,7 +148,7 @@ def gen_video(exec_folder, args, folder):
 
 
                     # finally, we will generate a video using ffmpeg instead of freemol, based on the ppm screenshots pymol has generated before
-                    command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v copy -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b:v 6000k '+filename
+                    command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
                     
                     # command = ['ffmpeg', '-pattern_type', 'glob', '-i', '\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\"', '-c:v', 'mpeg2video', '-pix_fmt', 'yuv420p', '-me_method', 'epzs', '-threads', '4', '-r', '30.000030', '-g', '45', '-bf', '2', '-trellis', '2', '-y', '-b', '6000k', filename]
                     # print(command)
