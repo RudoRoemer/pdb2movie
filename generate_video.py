@@ -3,15 +3,11 @@ generate_video.py - takes a series of PDB files and generates a video
 
 '''
 
-
-
-
 import sys
 import os
 import multiprocessing
 import argparse
 import subprocess
-
 
 '''
 parsing_video_args: takes all command-line arguments and parse them into a structure with argument fields
@@ -24,7 +20,6 @@ Outputs:
 structure args: structured object with fields corresponding to the possible parameters from command line
 
 '''
-
 
 def parsing_video_args(sys_args):
 
@@ -51,16 +46,12 @@ def parsing_video_args(sys_args):
     args = parser.parse_args(sys_args[1:])
     return args
 
-
-
 '''
 call_pymol: simple wrapper for calling a Linux command
 '''
 
 def call_pymol(command):
     os.system(command)
-
-
 
 '''
 gen_video: takes a folder full of PDB files for conformers and generate a video out of them
@@ -72,8 +63,6 @@ string folder: folder where the PDB files to be turned into a video are located 
 
 
 '''
-
-
 def gen_video(exec_folder, args, folder):
     
     print ("---------------------------------------------------------------")
@@ -96,10 +85,8 @@ def gen_video(exec_folder, args, folder):
     modelist = [format(i, '02d') for i in modelist]
     signals = ['pos', 'neg']
 
-
     # initialise a list of jobs for multiprocessing 
     jobs = []
-
 
     # loop over all combinations of cutoffs, modes, signs
     for cut in cutlist:
@@ -109,7 +96,6 @@ def gen_video(exec_folder, args, folder):
                 # generates a filename with the correct cutoff, mode and sign
                 filename = folder + "/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 print (filename)
-
 
                 # generates a separate script for this combination of cutoff, mode and sign
                 prepare_script(exec_folder, args, filename, cut, mode, sign, folder)
@@ -126,7 +112,6 @@ def gen_video(exec_folder, args, folder):
                 p = multiprocessing.Process(target=call_pymol, args=(command,))
                 jobs.append(p)
                 p.start()
-
 
     # this is here so that we wait for every process to finish before proceeding
     for job in jobs:
@@ -150,7 +135,6 @@ def gen_video(exec_folder, args, folder):
                     currfolder = folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
                     # command = ['convert', '-quality', ' 100', folder+'/'+tmpfolder+'tmp/*.ppm', filename]
 
-
                     # finally, we will generate a video using ffmpeg instead of freemol, based on the ppm screenshots pymol has generated before
                     command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
                     
@@ -158,9 +142,6 @@ def gen_video(exec_folder, args, folder):
                     print(command)
                     os.system("bash -c '{0}'".format(command))
                     # subprocess.call(command)
-
-
-
 
     # now we loop over cutoffs and modes, and if we want combined movies we do that purely by concatenating two videos
     for cut in cutlist:
@@ -207,12 +188,10 @@ string folder: folder where the PDB files to be turned into a video are located 
 
 '''
 
-
 def prepare_script(exec_folder, args, filename, cut, mode, sign, folder):
 
     # string="cat video_template.py <(echo filename=\'"+filename+"\') video_minimal.py >pymolvideo.py"
     # string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
-
 
     # the way this works is we generate a pretty big string with a command that will concatenate a bunch of stuff into a py file.
     # the start of this py file is video_template.py
@@ -239,9 +218,6 @@ def prepare_script(exec_folder, args, filename, cut, mode, sign, folder):
 
     # then, we run the big string command!
     os.system("bash -c '{0}'".format(string))
-
-
-
 
 # if we're running this as a separate script, we need to parse arguments and then call gen_video, that's pretty much it!
 if __name__ == "__main__":
