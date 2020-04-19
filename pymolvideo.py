@@ -51,6 +51,6 @@ cmd.movie.add_state_sweep(2,1,'start=1')
 cmd.movie.produce(filename,mode='ray',quality=100,quiet=1)
 cmd.save(folder+'cartoon.pse')
 
-print 'CARTOON rendering finished'
+print ('CARTOON rendering finished')
 
 cmd.quit()
