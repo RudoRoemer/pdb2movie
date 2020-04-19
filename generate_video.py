@@ -122,6 +122,7 @@ def gen_video(exec_folder, args, folder):
                     command = 'pymol -q '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
                 else:
                     command = 'pymol -cq '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
+                print (command)
                 p = multiprocessing.Process(target=call_pymol, args=(command,))
                 jobs.append(p)
                 p.start()
@@ -131,12 +132,15 @@ def gen_video(exec_folder, args, folder):
     for job in jobs:
         job.join()
 
+    # give output to show where video generation is
 
+    print ( "generate_video: working on "+filename+" in "+currfolder)
 
     # checks whether freemol is present in the system, if it is not we will have some extra work
     if (os.system('grep \'FREEMOL\' $(which pymol)')):
-
+        print ( "generate_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
         # if freemol is not there, we will loop over all combinations once more, generate the correct filename and so on
+        print ( "generate_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
         for cut in cutlist:
             for mode in modelist:
                 for sign in signals:
@@ -151,7 +155,7 @@ def gen_video(exec_folder, args, folder):
                     command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
                     
                     # command = ['ffmpeg', '-pattern_type', 'glob', '-i', '\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\"', '-c:v', 'mpeg2video', '-pix_fmt', 'yuv420p', '-me_method', 'epzs', '-threads', '4', '-r', '30.000030', '-g', '45', '-bf', '2', '-trellis', '2', '-y', '-b', '6000k', filename]
-                    # print(command)
+                    print(command)
                     os.system("bash -c '{0}'".format(command))
                     # subprocess.call(command)
 
