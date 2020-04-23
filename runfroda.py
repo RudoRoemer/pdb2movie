@@ -15,9 +15,10 @@ Inputs:
 
 
 def call_froda(command):
+    name = multiprocessing.current_process().name
+    print '--- starting:', name
     os.system(command)
-
-
+    print '--- exiting:', name
 
 '''
 frodasim: main function for running FRODA simulations on a protein
@@ -135,7 +136,7 @@ def frodasim(exec_folder,args,hydro_file):
                     command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin"
 
                 # we assign a new process to this call of froda (the reason why call_froda exists at all), append it to job list and start it
-                p = multiprocessing.Process(target=call_froda,args=(command,))
+                p = multiprocessing.Process(name=command,target=call_froda,args=(command,))
                 jobs.append(p)
                 p.start()
 
