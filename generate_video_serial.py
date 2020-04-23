@@ -88,6 +88,10 @@ def gen_video(exec_folder, args, folder):
     # initialise a list of jobs for multiprocessing 
     jobs = []
 
+    print ("---------------------------------------------------------------")
+    print ("gen_video: making still images")
+    print ("----------------------------------------------------------------")
+
     # loop over all combinations of cutoffs, modes, signs
     for cut in cutlist:
         for mode in modelist:
@@ -108,6 +112,7 @@ def gen_video(exec_folder, args, folder):
                     command = 'pymol -q '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
                 else:
                     command = 'pymol -cq '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py -- '+currfolder
+                    
                 print (command)
                 os.system("bash -c '{0}'".format(command))
                 #p = multiprocessing.Process(target=call_pymol, args=(command,))
@@ -117,9 +122,12 @@ def gen_video(exec_folder, args, folder):
     # this is here so that we wait for every process to finish before proceeding
     #for job in jobs:
     #    job.join()
+ 
+    print ("---------------------------------------------------------------")
+    print ("gen_video: combining still images into movie")
+    print ("----------------------------------------------------------------")
 
     # give output to show where video generation is
-
     print ( "generate_video: working on "+filename+" in "+currfolder)
 
     # checks whether freemol is present in the system, if it is not we will have some extra work
@@ -145,6 +153,11 @@ def gen_video(exec_folder, args, folder):
                     # subprocess.call(command)
 
     # now we loop over cutoffs and modes, and if we want combined movies we do that purely by concatenating two videos
+   
+    print ("---------------------------------------------------------------")
+    print ("gen_video: final production details")
+    print ("----------------------------------------------------------------")
+
     for cut in cutlist:
         for mode in modelist:
             if args.combi:
