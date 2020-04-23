@@ -9,7 +9,7 @@ import cleanpdb
 import runfirst
 import runelnemo
 import runfroda
-import generate_video
+import generate_video_serial
 import argparse
 
 '''
@@ -143,7 +143,7 @@ if __name__ == "__main__":#
     print ("---------------------------------------------------------------")
     print ("pdb2movie: generating the videos")
     print ("----------------------------------------------------------------")
-    generate_video.gen_video(exec_folder,args,folder)
+    generate_video_serial.gen_video(exec_folder,args,folder)
     
     # finally, we are done
     print ("---------------------------------------------------------------")
