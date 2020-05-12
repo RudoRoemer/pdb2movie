@@ -102,13 +102,15 @@ def gen_video(exec_folder, args, folder):
 
                 # generates a filename with the correct cutoff, mode and sign
                 filename = folder + "/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
-                print (filename)
 
                 # generates a separate script for this combination of cutoff, mode and sign
                 prepare_script(exec_folder, args, filename, cut, mode, sign, folder)
                 # Desired pymol commands here to produce and save figures
 
                 currfolder = folder + "/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
+
+                # give output to show where image generation is
+                print ( "gen_video: working on IMAGES for "+filename+" in "+currfolder)
 
                 # calls pymol with the generated script, with a new process for each combination of cutoffs, modes and signs
                 if args.threed:
@@ -128,32 +130,38 @@ def gen_video(exec_folder, args, folder):
  
     print ("---------------------------------------------------------------")
     print ("gen_video: combining still images into movie")
+    print ("gen_video: UNLESS already done by PYMOL+FREEMOL")
     print ("----------------------------------------------------------------")
 
-    # give output to show where video generation is
-    print ( "generate_video: working on "+filename+" in "+currfolder)
-
     # checks whether freemol is present in the system, if it is not we will have some extra work
-    if (os.system('grep \'FREEMOL\' $(which pymol)')):
-        print ( "generate_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
+    #if (os.system('grep \'FREEMOL\' $(which pymol)')):
+    if (os.system('echo $FREEMOL | grep \'freemol\' ')):
+
         # if freemol is not there, we will loop over all combinations once more, generate the correct filename and so on
-        print ( "generate_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
+        print ( "gen_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
+        
         for cut in cutlist:
             for mode in modelist:
                 for sign in signals:
                     filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                     tmpfolder = filename.rsplit("/", 1)[1][:-3]
-
                     currfolder = folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
+
+                    # give output to show where video generation is
+                    print ( "gen_video: working on VIDEO for "+filename+" in "+currfolder)
+
+                    # finally, we will generate a video using ffmpeg instead of freemol,
+                    # based on the ppm screenshots pymol has generated before
                     # command = ['convert', '-quality', ' 100', folder+'/'+tmpfolder+'tmp/*.ppm', filename]
 
-                    # finally, we will generate a video using ffmpeg instead of freemol, based on the ppm screenshots pymol has generated before
                     command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
                     
                     # command = ['ffmpeg', '-pattern_type', 'glob', '-i', '\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\"', '-c:v', 'mpeg2video', '-pix_fmt', 'yuv420p', '-me_method', 'epzs', '-threads', '4', '-r', '30.000030', '-g', '45', '-bf', '2', '-trellis', '2', '-y', '-b', '6000k', filename]
                     print(command)
                     os.system("bash -c '{0}'".format(command))
                     # subprocess.call(command)
+    else:
+        print ( "gen_video: $FREEMOL is defined --- hence pymol should have done movies already" )
 
     # now we loop over cutoffs and modes, and if we want combined movies we do that purely by concatenating two videos
    
