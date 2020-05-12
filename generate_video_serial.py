@@ -110,7 +110,7 @@ def gen_video(exec_folder, args, folder):
                 currfolder = folder + "/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
 
                 # give output to show where image generation is
-                print ( "gen_video: working on IMAGES for "+filename+" in "+currfolder)
+                print ( "gen_video: working on IMAGES/VIDEOS for "+filename+" in "+currfolder)
 
                 # calls pymol with the generated script, with a new process for each combination of cutoffs, modes and signs
                 if args.threed:
