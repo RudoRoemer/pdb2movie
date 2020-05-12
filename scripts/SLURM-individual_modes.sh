@@ -20,7 +20,7 @@ cat > ${jobfile} << EOD
 pwd
 echo "--- working on $ecut, $mode, $direct"
 
-pymol -cq ./pymolvideo$mode$ecut$direct.py -- ./Runs/$ecut/Mode$mode-$direct/
+pymol -cq ./pymolvideo$ecut$mode$direct.py -- ./Runs/$ecut/Mode$mode-$direct/
 
 echo "--- finished with $ecut, $mode, $direct"
 EOD
