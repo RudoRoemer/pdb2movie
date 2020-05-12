@@ -4,7 +4,13 @@ ecut=${1:-1.0}
 mode=${2:-7}   
 direct=${3:-pos}
 
-echo "CovID: mode=" $mode ", ecut=" $ecut
+echo "CovID: mode=" $mode ", ecut=" $ecut ", direction=" $direct
+
+if [ -f Run-$ecut-mode$mode-$direct.mpg ]
+then 
+    echo "WRNG:" Run-$ecut-mode$mode-$direct.mpg " exists --- please delete before proceeding!"
+    exit
+fi
 
 jobfile=`printf "$ecut-$mode-$direct.sh"`
 echo $jobfile
