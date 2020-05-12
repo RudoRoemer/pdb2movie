@@ -1,2 +1,7 @@
 *.o
 *.d
+*.structure
+*.log
+*~
+*.pyc
+*.out
