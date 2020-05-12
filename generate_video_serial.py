@@ -51,7 +51,10 @@ call_pymol: simple wrapper for calling a Linux command
 '''
 
 def call_pymol(command):
+    name = multiprocessing.current_process().name
+    print '--- starting:', name
     os.system(command)
+    print '--- exiting:', name
 
 '''
 gen_video: takes a folder full of PDB files for conformers and generate a video out of them
@@ -115,7 +118,7 @@ def gen_video(exec_folder, args, folder):
                     
                 print (command)
                 os.system("bash -c '{0}'".format(command))
-                #p = multiprocessing.Process(target=call_pymol, args=(command,))
+                #p = multiprocessing.Process(name=command,target=call_pymol, args=(command,))
                 #jobs.append(p)
                 #p.start()
 
