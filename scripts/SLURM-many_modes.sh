@@ -3,7 +3,7 @@
 for ecut in 1.0 2.0 3.0
 do
 
-for mode in 7 8 9 10 11 12
+for mode in 07 08 09 10 11 12
 do
 
 for direct in pos neg
@@ -13,14 +13,12 @@ echo "CovID: mode=" $mode ", ecut=" $ecut ", direction=" $direct
 
 if [ -f Run-$ecut-mode$mode-$direct.mpg ]
 then 
-    echo "WRNG:" Run-$ecut-mode$mode-$direct.mpg " exists --- please delete before proceeding!"
-    exit
-fi
-
-jobfile=`printf "$ecut-$mode-$direct.sh"`
-echo $jobfile
-
-cat > ${jobfile} << EOD
+    echo "WRNG:" Run-$ecut-mode$mode-$direct.mpg " exists --- skipped!"
+else
+    jobfile=`printf "$ecut-$mode-$direct.sh"`
+    echo $jobfile
+    
+    cat > ${jobfile} << EOD
 #!/bin/bash
 #SBATCH --ntasks=1
 ##SBATCH --mem-per-cpu=2012
@@ -38,11 +36,12 @@ EOD
 
 #cat ${jobfile}
 
-chmod 755 ${jobfile}
-#(sbatch -q devel ${jobfile})
+    chmod 755 ${jobfile}
+    #(sbatch -q devel ${jobfile})
 (sbatch -q taskfarm ${jobfile})
-#(sbatch ${jobfile})
-#source ${jobfile}
+    #(sbatch ${jobfile})
+    #source ${jobfile}
+fi
 
 done
 done
