@@ -37,8 +37,10 @@ echo "--- working on $pdb"
 cd $dir
 pwd
 
-mkdir -p $pdb
-cd $pdb
+echo $pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`
+
+mkdir -p $pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`
+cd $pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`
 pwd
 
 cp ../$pdb.pdb .
@@ -53,7 +55,7 @@ cd ../../
 
 pwd
 
-echo "python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes 7 8 9 10 11 12 --ecuts 1.0 2.0 3.0 --res 1920 1080 >& ../$pdb.log"
+echo "python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 >& ../$pdb.log"
 python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 >& ../$pdb.log 
 
 echo "--- finished with $pdb"
