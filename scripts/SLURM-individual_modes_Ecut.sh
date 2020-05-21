@@ -29,7 +29,7 @@ cat > ${jobfile} << EOD
 ##SBATCH --mem-per-cpu=2012
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=2012
-#SBATCH --time=00:10:00
+#SBATCH --time=48:00:00
 
 pwd
 echo "--- working on $pdb"
@@ -62,8 +62,8 @@ EOD
 #cat ${jobfile}
 
 chmod 755 ${jobfile}
-(sbatch -q devel ${jobfile})
-#(sbatch -q taskfarm ${jobfile})
+#(sbatch -q devel ${jobfile})
+(sbatch -q taskfarm ${jobfile})
 #(sbatch ${jobfile})
 #source ${jobfile}
 

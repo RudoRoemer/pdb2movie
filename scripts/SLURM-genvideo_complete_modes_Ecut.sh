@@ -25,7 +25,7 @@ cat > ${jobfile} << EOD
 #!/bin/bash
 #SBATCH --ntasks=1
 ##SBATCH --mem-per-cpu=2012
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=2012
 #SBATCH --time=48:00:00
 
