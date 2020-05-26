@@ -21,7 +21,8 @@ do
     pwd
 
     for mpg in *-combi.mpg
-    do echo $mpg
+    do 
+	echo $mpg
 	if [ ! -f $target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4 ]
 	then
 	    ffmpeg -hide_banner -loglevel panic -i $mpg -vcodec libx264 -crf 28 $target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4
