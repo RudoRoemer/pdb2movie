@@ -11,7 +11,7 @@ do
 for mode in $allmodes
 do
 
-echo "CovID: mode=" $mode ", ecut=" $ecut ", direction=" $direct
+echo "CovID: mode=" $mode ", ecut=" $ecut
 
 if [ ! -f Run-$ecut-mode$mode-pos.mpg ] 
 then
