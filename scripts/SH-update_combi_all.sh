@@ -1,30 +1,35 @@
 #!/bin/bash
 
-for ecut in 1.0 2.0 3.0
+allecuts=`ls -1 *.mpg | cut -d "-" -f 2 | sort | uniq`
+allmodes=`ls -1 *.mpg | cut -d "-" -f 3 | cut -b 5-6 | sort | uniq`
+
+echo "ecuts=" $allecuts ", allmodes=" $allmodes
+
+for ecut in $allecuts
 do
 
-for mode in 07 08 09 10 11 12
+for mode in $allmodes
 do
 
 echo "CovID: mode=" $mode ", ecut=" $ecut ", direction=" $direct
 
-if [ -f Run-$ecut-mode$mode-pos.mpg ] 
+if [ ! -f Run-$ecut-mode$mode-pos.mpg ] 
 then
-    echo "WRNG:" Run-$ecut-mode$mode-pos.mpg " does NOT exist --- skipped COMBI creation!"
-    exit
+    echo "WRNG:" Run-$ecut-mode$mode-pos.mpg " does NOT exist --- skipping COMBI creation!"
+    break
 fi
 
-if [ -f Run-$ecut-mode$mode-neg.mpg ] 
+if [ ! -f Run-$ecut-mode$mode-neg.mpg ] 
 then
-    echo "WRNG:" Run-$ecut-mode$mode-neg.mpg " does NOT exist --- skipped COMBI creation!"
+    echo "WRNG:" Run-$ecut-mode$mode-neg.mpg " does NOT exist --- skipping COMBI creation!"
     exit
 fi
 
 if [[ -f Run-$ecut-mode$mode-combi.mpg ]]
 then 
-    if [[ Run-$ecut-mode$mode-combi.mpg -nt Run-$ecut-mode$mode-pos.mpg ]] && [[ Run-$ecut-mode$mode-combi.mpg -nt Run-$ecut-mode$mode-new.mpg ]] 
+    if [[ Run-$ecut-mode$mode-combi.mpg -ot Run-$ecut-mode$mode-pos.mpg ]] || [[ Run-$ecut-mode$mode-combi.mpg -ot Run-$ecut-mode$mode-neg.mpg ]] 
 	then #make new combi
-	    echo "--- making NEW" Run-$ecut-mode$mode-combi.mpg 
+	    echo "--- UPDATING" Run-$ecut-mode$mode-combi.mpg 
 	    cat Run-$ecut-mode$mode-pos.mpg Run-$ecut-mode$mode-neg.mpg > Run-$ecut-mode$mode-combi.mpg 
     else
 	echo "WRNG: newer" Run-$ecut-mode$mode-combi.mpg " exists --- skipped!"
