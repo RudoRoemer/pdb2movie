@@ -3,6 +3,8 @@
 allecuts=`ls -1 *.mpg | cut -d "-" -f 2 | sort | uniq`
 allmodes=`ls -1 *.mpg | cut -d "-" -f 3 | cut -b 5-6 | sort | uniq`
 
+pwd
+
 echo "ecuts=" $allecuts ", allmodes=" $allmodes
 
 for ecut in $allecuts
