@@ -48,6 +48,7 @@ cp ../$pdb.pdb .
 git clone https://github.com/RudoRoemer/pdb2movie.git
 cd pdb2movie
 git checkout devel
+git pull
 
 cd FIRST-190916-SAW/src
 make
