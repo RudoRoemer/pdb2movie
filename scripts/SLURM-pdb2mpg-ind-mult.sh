@@ -5,6 +5,7 @@ pdbname=${2:-test}
 confs=${3:-10}
 modes=${4:-"7"}
 ecuts=${5:-"1.0"}
+options=${6:""}
 
 echo "CodID: dir=" $dir ", confs=" $confs ", modes=" $modes ", Ecuts=" $ecuts
 
@@ -56,8 +57,8 @@ cd ../../
 
 pwd
 
-echo "python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 >& ../$pdb.log"
-python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 --multiple >& ../$pdb.log 
+echo "python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 --multiple $options >& ../$pdb.log"
+python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 --multiple $options >& ../$pdb.log 
 
 echo "--- finished with $pdb"
 EOD
