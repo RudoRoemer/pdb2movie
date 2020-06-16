@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source=${1:-"./"}
-target=${2:-"./"}
+source=${1:-"."}
+target=${2:-"."}
 pdb=${3:-"aaaa"}
 #overwrite=${4:-"n"}
 
