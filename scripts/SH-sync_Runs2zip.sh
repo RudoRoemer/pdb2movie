@@ -27,7 +27,7 @@ do
 
     for ecut in $allecuts
     do 
-        newestfile=`ls -tr 3.0 | tail -1`
+        newestfile=`ls -tr $ecut | tail -1`
 	echo $newestfile
         targetzip=$target/$dir/$dir/$dir-$ecut.zip 
 	echo $targetzip
@@ -36,7 +36,7 @@ do
 	then
 	    cd $ecut
 	   echo $ecut "--> .zip"
-           zip -uqR $targetzip "tmp_froda*.pdb"
+           zip -qR --filesync -dg -ds 50m $targetzip "tmp_froda*.pdb"
 	   cd ..
 	else
 	    echo "NEW" $targetzip "already exists --- skipping!"
