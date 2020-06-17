@@ -5,9 +5,10 @@ pdbname=${2:-test}
 confs=${3:-10}
 modes=${4:-"7"}
 ecuts=${5:-"1.0"}
-options=${6:""}
+options=${6:-" "}
 
-echo "CodID: dir=" $dir ", confs=" $confs ", modes=" $modes ", Ecuts=" $ecuts
+echo "CovID: dir=" $dir ", confs=" $confs ", modes=" $modes ", Ecuts=" $ecuts
+echo "Options string=" $options
 
 for pdb in $pdbname #\
 #5r80 5r81 5r82 5r83 5r84 \
@@ -21,7 +22,10 @@ for pdb in $pdbname #\
 do
 #echo $pdb
 
-jobfile=`printf "$pdb.sh"`
+ecutsstr=`echo $modes | sed "s/ /-/g"`
+modesstr=`echo $ecuts | sed "s/ /-/g"`
+
+jobfile=$pdb"-"$ecutsstr"_"$modesstr".sh"
 echo $jobfile
 
 cat > ${jobfile} << EOD
@@ -67,9 +71,9 @@ EOD
 #cat ${jobfile}
 
 chmod 755 ${jobfile}
-(sbatch -q devel ${jobfile})
+#(sbatch -q devel ${jobfile})
 #(sbatch -q taskfarm ${jobfile})
 #(sbatch ${jobfile})
-#source ${jobfile}
+source ${jobfile}
 
 done
