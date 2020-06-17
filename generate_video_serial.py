@@ -5,7 +5,7 @@ generate_video.py - takes a series of PDB files and generates a video
 
 import sys
 import os
-import multiprocessing
+#import multiprocessing
 import argparse
 import subprocess
 
