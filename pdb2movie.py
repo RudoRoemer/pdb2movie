@@ -38,6 +38,8 @@ def parsing_args(sys_args):
                         help='Flag for keeping water molecules')
     parser.add_argument('--multiple',  action='store_true',
                         help='Keep multiple chains (default: uses only chain A)')
+    parser.add_argument('--nomovie',  action='store_true',
+                        help='Stop calculation after FRODA and before any attempt to generate images and movies')
     parser.add_argument('--combi',  action='store_true',
                         help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--threed',  action='store_true',
@@ -139,12 +141,18 @@ if __name__ == "__main__":#
     print ("----------------------------------------------------------------")
     runfroda.frodasim(exec_folder,args,hydro_file)
 
-    # We generate the videos
-    print ("---------------------------------------------------------------")
-    print ("pdb2movie: generating the videos")
-    print ("----------------------------------------------------------------")
-    generate_video_serial.gen_video(exec_folder,args,folder)
-    
+    if args.nomovie:
+        # --nomovie setting
+        print ("---------------------------------------------------------------")
+        print ("pdb2movie: NOT generating any videos")
+        print ("----------------------------------------------------------------")
+    else:
+        # We generate the videos
+        print ("---------------------------------------------------------------")
+        print ("pdb2movie: generating the videos")
+        print ("----------------------------------------------------------------")
+        generate_video_serial.gen_video(exec_folder,args,folder)
+        
     # finally, we are done
     print ("---------------------------------------------------------------")
     print ("pdb2movie: all should be done, enjoy!")
