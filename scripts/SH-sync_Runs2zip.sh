@@ -27,14 +27,14 @@ do
 
     for ecut in $allecuts
     do 
-        newestfile=`ls -tr $ecut | tail -1`
+        newestfile=$ecut/`ls -tr $ecut | tail -1`
 	echo $newestfile
         targetzip=$target/$dir/$dir/$dir-$ecut.zip 
 	echo $targetzip
 
 	if [[ ! -f $targetzip ]] || [[ $newestfile -nt $targetzip ]]
 	then
-	    cd $ecut
+	   cd $ecut
 	   echo $ecut "--> .zip"
            zip -qR --filesync -dg -ds 50m $targetzip "tmp_froda*.pdb"
 	   cd ..
