@@ -5,7 +5,7 @@ pdbname=${2:-test}
 confs=${3:-10}
 modes=${4:-"7"}
 ecuts=${5:-"1.0"}
-options=${6:""}
+options=${6:-""}
 
 echo "CodID: dir=" $dir ", confs=" $confs ", modes=" $modes ", Ecuts=" $ecuts
 
