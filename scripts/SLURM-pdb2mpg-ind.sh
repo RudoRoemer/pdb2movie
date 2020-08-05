@@ -20,7 +20,7 @@ for pdb in $pdbname #\
 do
 #echo $pdb
 
-jobfile=`printf "$pdb.sh"`
+jobfile=$pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`".sh"
 echo $jobfile
 
 cat > ${jobfile} << EOD
@@ -56,7 +56,7 @@ cd ../../
 pwd
 
 echo "python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 >& ../$pdb.log"
-python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 >& ../$pdb.log 
+python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes $modes --ecuts $ecuts --res 1920 1080 >& ../$pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`.log 
 
 echo "--- finished with $pdb"
 EOD
