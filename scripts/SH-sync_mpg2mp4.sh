@@ -21,11 +21,12 @@ do
 
     pwd
 
-    for mpg in *-combi.mpg
+    for mpg in *-combi.mpg 
     do 
 	if [[ ! -f $target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4 ]] || [[ $mpg -nt $target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4 ]]
 	then
 	echo $mpg "--> .mp4"
+	#echo "making for "$target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4
 #	    ffmpeg -hide_banner -loglevel panic drawtext="text="`basename $mpg`": fontcolor=white: fontsize=24: box=1: boxcolor=black@0.5: boxborderw=5: x=(w-text_w)/4: y=(h-text_h)/4" -i $mpg -vcodec libx264 -crf 28 $target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4
 	ffmpeg -$overwrite -hide_banner -loglevel panic -i $mpg -vcodec libx264 -crf 28 $target/$dir/$dir/$dir-`basename $mpg .mpg`.mp4
 	else
