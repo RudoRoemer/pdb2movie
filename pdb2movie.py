@@ -60,6 +60,8 @@ def parsing_args(sys_args):
                         help='Python file with PyMOL commands to be run before generating video')
     parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
                         help='Initial PDB file')
+    parser.add_argument('--mp4',  action='store_true',
+                        help='Generate mp4 videos with ffmpeg')
 
     # actually do the parsing for all system args other than 0
     # (which is the python script name) and return the structure generated

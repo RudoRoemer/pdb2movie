@@ -133,17 +133,16 @@ def gen_video(exec_folder, args, folder):
     print ("gen_video: UNLESS already done by PYMOL+FREEMOL")
     print ("----------------------------------------------------------------")
 
-    # checks whether freemol is present in the system, if it is not we will have some extra work
-    #if (os.system('grep \'FREEMOL\' $(which pymol)')):
-    if (os.system('echo $FREEMOL | grep \'freemol\' ')):
+    # checks if freemol is not present in the system or if MP4 videos have been specified, if so we have some extra work
+    if ((os.environ['FREEMOL'] == "") or args.mp4):
 
         # if freemol is not there, we will loop over all combinations once more, generate the correct filename and so on
-        print ( "gen_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
+        print ( "generate_video: Using ffmpeg to generate mp4s" )
         
         for cut in cutlist:
             for mode in modelist:
                 for sign in signals:
-                    filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                    filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mp4"
                     tmpfolder = filename.rsplit("/", 1)[1][:-3]
                     currfolder = folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
 
@@ -154,16 +153,16 @@ def gen_video(exec_folder, args, folder):
                     # based on the ppm screenshots pymol has generated before
                     # command = ['convert', '-quality', ' 100', folder+'/'+tmpfolder+'tmp/*.ppm', filename]
 
-                    command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
+                    command = 'ffmpeg -framerate 30 -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -framerate 30 -c:v libx264 -pix_fmt yuv420p -threads 4 -y -b:v 6000k '+filename
                     
                     # command = ['ffmpeg', '-pattern_type', 'glob', '-i', '\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\"', '-c:v', 'mpeg2video', '-pix_fmt', 'yuv420p', '-me_method', 'epzs', '-threads', '4', '-r', '30.000030', '-g', '45', '-bf', '2', '-trellis', '2', '-y', '-b', '6000k', filename]
                     print(command)
                     os.system("bash -c '{0}'".format(command))
                     # subprocess.call(command)
     else:
-        print ( "gen_video: $FREEMOL is defined --- hence pymol should have done movies already" )
+        print ( "gen_video: $FREEMOL is defined and MP4s have not been requested, so pymol should have made the movies already" )
 
-    # now we loop over cutoffs and modes, and if we want combined movies we do that purely by concatenating two videos
+    # now we loop over cutoffs and modes, and combine movies if --combi is specified
    
     print ("---------------------------------------------------------------")
     print ("gen_video: final production details")
@@ -176,12 +175,23 @@ def gen_video(exec_folder, args, folder):
                 os.system('cat '+filename+'pos.mpg '+filename+'neg.mpg > '+filename+'combi.mpg')
                 os.system('chmod 744 '+filename+'combi.mpg')
 
+                #if mp4s were generated (and --combi is specifiec), we create .combi mp4s from the .pos and .neg mp4s
+                if ((os.environ['FREEMOL'] == "") or args.mp4):
+                    os.system('ffmpeg -i '+filename+'pos.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts '+filename+'1.ts')
+                    os.system('ffmpeg -i '+filename+'neg.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts '+filename+'2.ts')
+                    os.system('ffmpeg -i "concat:'+filename+'1.ts|'+filename+'2.ts" -c copy '+filename+'combi.mp4')
+                    os.system('rm '+filename+'1.ts')
+                    os.system('rm '+filename+'2.ts')
+                    os.system('chmod 744 '+filename+'combi.mp4')
+
             # we also need to fix permissions for the all the videos 
             for sign in signals:
                 # os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
-                filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
-                os.system('chmod 744 '+filename)
-                tmpfolder = filename.rsplit("/", 1)[1][:-3]
+                filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign
+                os.system('chmod 744 '+filename+".mpg")
+                if ((os.environ['FREEMOL'] == "") or args.mp4):
+                    os.system('chmod 744 '+filename+".mp4")
+                tmpfolder = (filename+".mpg").rsplit("/", 1)[1][:-3]
                 os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
     return
 
