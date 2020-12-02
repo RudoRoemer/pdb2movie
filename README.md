@@ -34,7 +34,7 @@ Options:
 --threed    -          Generates anaglyph stereo videos     
 --combi     -          Creates videos combining positive and negative directions for each mode/cutoff energy      
 --multiple      -      Keeps multiple chains from the original PDB file (default: uses only chain A)   
---mp4      -           Generate mp4 videos with ffmpeg (if vmd is specified, then mp4 is used regardless)
+--mp4      -           Generate mp4 videos with ffmpeg (if vmd is specified, then mp4 is used regardless)     
 --drawingengine   -    Whether to use vmd or pymol (defaults to pymol for now)
 
 See also the web-server-based implementation at https://pdb2movie.warwick.ac.uk.
