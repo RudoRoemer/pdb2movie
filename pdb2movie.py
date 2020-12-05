@@ -32,8 +32,8 @@ def parsing_args(sys_args):
                         help='List of molecules to be kept')
     parser.add_argument('--output',  nargs=1,
                         help='Output directory')
-    parser.add_argument('--res',  nargs=2,
-                        help='Video resolution (width, height)')
+    parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
+                        help='Video resolution (width, height), range [16, 8192]')
     parser.add_argument('--waters',  action='store_true',
                         help='Flag for keeping water molecules')
     parser.add_argument('--multiple',  action='store_true',
@@ -57,13 +57,15 @@ def parsing_args(sys_args):
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
     parser.add_argument('--video',  nargs=1,
-                        help='Python file with PyMOL commands to be run before generating video')
+                        help='File with PyMOL or VMD commands to be run before generating video')
     parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
                         help='Initial PDB file')
-    parser.add_argument('--mp4',  action='store_true',
-                        help='Generate mp4 videos with ffmpeg (if vmd is specified, then mp4 is used regardless)')
-    parser.add_argument('--drawingengine', type=str,
-                        help='Whether to use vmd or pymol (defaults to pymol for now)')
+    parser.add_argument('--videocodec', type=str, default="mp4", 
+                        help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
+    parser.add_argument('--drawingengine', type=str, default="pymol", 
+                        help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
+    parser.add_argument('--fps',  nargs=1, type=int, default=30,
+                        help='Frames per second of the videos, range [1, 240]')
 
     # actually do the parsing for all system args other than 0
     # (which is the python script name) and return the structure generated

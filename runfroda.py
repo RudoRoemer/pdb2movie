@@ -51,7 +51,7 @@ def frodasim(exec_folder,args,hydro_file):
     if args.freq:
         freq=int(args.freq[0])
     else:
-        freq=100
+        freq=50
 
     if args.step:
         step=float(args.step[0])

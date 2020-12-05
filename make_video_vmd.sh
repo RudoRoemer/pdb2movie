@@ -1,34 +1,41 @@
 #!/bin/bash
 
 #check that five arguments have been given
-if [ "$#" -ne 5 ]
+if [ "$#" -ne 6 ] && [ "$#" -ne 7 ]
 then
-	echo "usage: $0 video_width video_height frame_rate path_with_pdb_files destination_file_name_and_path"
-	exit -1
+  echo "usage: $0 video_width video_height frame_rate path_with_pdb_files destination_file_name_and_path video_codec [pymol_command_file]"
+  exit -1
 fi
 
 #arguments:
 #PDB_PATH is where to find the PDBs which must begin 'tmp_froda_'.
 #DEST_FILE is the name (and location) of the video to generate
+#OTIONAL_COMMAND_FILE is optional, and allows extra instructions to be given to pymol before generation of frames
 VIDEO_WIDTH=$1
 VIDEO_HEIGHT=$2
 FPS=$3
 PDB_PATH=$4
 DEST_FILE=$5
+VIDEO_CODEC=$6
+OTIONAL_COMMAND_FILE=$6
 
 TMP_PATH=$PDB_PATH/vmd_temp
 
-#calculate how many seconds each frame lasts
-FRAME_LENGTH=$(awk -v fps=$FPS 'BEGIN { print 1.0 / fps }')
+#calculate how many seconds each frame lasts, rounded to ensure ffmpeg does the right thing
+FRAME_LENGTH=$(awk -v fps=$FPS 'BEGIN { printf "%.6f", 1.0 / fps }')
 
 #make a temporary folder for the temporary files
 rm -rf $TMP_PATH
 mkdir $TMP_PATH
 
-#file to give vmd to generate all necessary frames (in tga format)
+#command file to give to vmd, to generate all necessary frames (in tga format)
 CMD_FILE=$TMP_PATH/vmd.cmd
 
 PDB_FILES=$PDB_PATH/tmp_froda_*.pdb
+
+###
+echo "make_video_vmd.sh: generating command file to give vmd - ${PDB_PATH}"
+####
 
 #function allowing vmd zooming
 echo 'proc AutoScaleAllVisible {{zoom_factor 1}} {
@@ -85,75 +92,122 @@ echo 'proc AutoScaleAllVisible {{zoom_factor 1}} {
 }' > $CMD_FILE
 
 #setting up the vmd visuals
+echo "animate goto 0" >> $CMD_FILE
 echo "axes location off" >> $CMD_FILE
 echo "color Display Background black" >> $CMD_FILE
 echo "mol modstyle 0 0 NewCartoon 0.300000 10.000000 4.100000 0" >> $CMD_FILE
 echo "mol modcolor 0 0 Fragment" >> $CMD_FILE
 echo "color scale method RGB" >> $CMD_FILE
-echo "animate goto 0" >> $CMD_FILE
 echo "AutoScaleAllVisible 0.93" >> $CMD_FILE
 
+#if an optional file with extra instructions for vmd has been included, use it
+if [ "$OPT_SETTINGS_FILE" != "" ]
+then
+  cat $OTIONAL_COMMAND_FILE >>  $CMD_FILE
+fi
 
 COUNTER=0
 
 for i in `ls $PDB_FILES`
 do
+  #id of the next frame (tga file) to generate
+  id=$(printf "%08d" $COUNTER)
 
-	id=$(printf "%08d" $COUNTER)
+  #load the next pdb
+  echo "mol addfile {$i} type {pdb} first 0 last -1 step 1 waitfor 1 0" >> $CMD_FILE
 
-	echo "animate goto $COUNTER" >> $CMD_FILE
+  #goto the pdb just loaded
+  echo "animate goto 1" >> $CMD_FILE
 
-	echo "render snapshot $TMP_PATH/$id.tga" >> $CMD_FILE
+  #render a tga file (the next frame)
+  echo "render snapshot $TMP_PATH/$id.tga" >> $CMD_FILE
 
-	((COUNTER+=1))
+  #remove (deload) the pdb just used
+  echo "animate delete beg 1 end 1 skip 0 0" >> $CMD_FILE
+
+  ((COUNTER+=1))
 done
-
 
 echo "quit" >> $CMD_FILE
 
 
-#run vmd without the GUI, giving it the command file to run
-vmd -dispdev openglpbuffer -size $VIDEO_WIDTH $VIDEO_HEIGHT -e $CMD_FILE $PDB_FILES
+#array of all pdb files
+arr=(`ls $PDB_FILES`)
 
+###
+echo "make_video_vmd.sh: running vmd with generated command file to create frames (tga files) - ${PDB_PATH}"
+###
+
+#run vmd without the GUI, giving it the command file to run
+( set -x ; vmd -dispdev openglpbuffer -size $VIDEO_WIDTH $VIDEO_HEIGHT -e $CMD_FILE ${arr[0]} )
+
+###
+echo "make_video_vmd.sh: generating concat file to give ffmpeg - ${PDB_PATH}"
+###
 
 #file to give to ffmpeg, stating ordering and repeating of frames (1s freezeframe, forwards, 1s freezeframe, backwards)
 CONCAT_FILE=$TMP_PATH/concat
 
 
+#hold the first png file for one second
 echo "file $TMP_PATH/00000000.tga" > $CONCAT_FILE
 echo "duration 1" >> $CONCAT_FILE
 
-
+#use each png file in forward order, holding each for the length of a frame
 ((COUNTER-=2))
 
 for ((i=1; i<=COUNTER; i++))
 do
 
-	id=$(printf "%08d" $i)
+  id=$(printf "%08d" $i)
 
-	echo "file $TMP_PATH/$id.tga" >> $CONCAT_FILE
-	echo "duration $FRAME_LENGTH" >> $CONCAT_FILE
+  echo "file $TMP_PATH/$id.tga" >> $CONCAT_FILE
+  echo "duration $FRAME_LENGTH" >> $CONCAT_FILE
 
 done
 
-
+#hold the last png file for one second
 echo "file $TMP_PATH/$(printf "%08d" $((COUNTER+1))).tga" >> $CONCAT_FILE
 echo "duration 1" >> $CONCAT_FILE
 
-
+#use each png file in reverse order, holding each for the length of a frame
 for ((i=COUNTER; i>=0; i--))
 do
 
-	id=$(printf "%08d" $i)
+  id=$(printf "%08d" $i)
 
-	echo "file $TMP_PATH/$id.tga" >> $CONCAT_FILE
-	echo "duration $FRAME_LENGTH" >> $CONCAT_FILE
+  echo "file $TMP_PATH/$id.tga" >> $CONCAT_FILE
+  echo "duration $FRAME_LENGTH" >> $CONCAT_FILE
 
 done
 
+###
+echo "make_video_vmd.sh: running ffmpeg with generated concat file to create video from frames - ${PDB_PATH}"
+###
 
-#encode video from frames (tgas) using ffmpeg
-ffmpeg -f concat -safe 0 -i $TMP_PATH/concat -framerate $FPS -r $FPS -c:v libx264 -pix_fmt yuv420p -crf 20 -maxrate 6M -bufsize 1M -threads 1 -y $DEST_FILE
+#encode video from frames (tga files) using ffmpeg and the specified codec
+
+if [ "$VIDEO_CODEC" == "mp4" ]
+then
+  (
+  set -x
+  
+  ffmpeg -hide_banner -loglevel warning -f concat -safe 0 -i $TMP_PATH/concat -framerate $FPS -r $FPS -c:v libx264 -pix_fmt yuv420p -crf 20 -maxrate 6M -bufsize 1M -threads 1 -movflags faststart -y ${DEST_FILE}
+  )
+fi
+
+if [ "$VIDEO_CODEC" == "hevc" ]
+then
+  (
+  set -x
+  
+  ffmpeg -hide_banner -loglevel warning -f concat -safe 0 -i $TMP_PATH/concat -framerate $FPS -r $FPS -c:v libx265 -pix_fmt yuv420p -crf 25 -maxrate 6M -bufsize 1M -threads 1 -movflags faststart -y ${DEST_FILE}
+  )
+fi
+
+
+#set the correct permissions
+chmod 744 $DEST_FILE
 
 
 #remove all the temporary files/folders made in this script, leaving only the video
