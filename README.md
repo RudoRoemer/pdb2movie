@@ -4,7 +4,8 @@ Code for generating movies of the most relevant movement modes of proteins from 
 
 Requirements:     
 PyMOL or VMD     
-Python libraries: argparse        
+Python libraries: argparse     
+ffmpeg   
 
 Instructions:      
 Recompiling FIRST and diagstd is necessary!

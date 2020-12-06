@@ -85,14 +85,10 @@ if __name__ == "__main__":#
     #     if (userinput!="y"):
     #         quit()
 
-    # check from where the python script is being called and the relative path to it;
-    # if there is no relative path, the scripts are on current directory
-    exec_folder=sys.argv[0].rsplit("/",1)[0]
-    if (exec_folder.endswith(".py")):
-        exec_folder = os.getcwd()
+    # set exec_folder to the full path of this script
+    exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
 
     #print(exec_folder)
-
 
     # if an output folder was defined, we need to make that directory if it doesn't exist,
     # and warn the user that the folder will be emptied if it exists
