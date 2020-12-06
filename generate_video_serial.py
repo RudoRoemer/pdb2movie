@@ -56,19 +56,21 @@ def parsing_video_args(sys_args):
 call_pymol: simple wrapper for calling a Linux command
 '''
 
+'''
 def call_pymol(command):
     name = multiprocessing.current_process().name
     print('--- starting:', name)
     os.system(command)
     print('--- exiting:', name)
+'''
 
 '''
-gen_video: takes a folder full of PDB files for conformers and generate a video out of them
+gen_video: takes a structured folder full of PDB files for conformers and generate videos out of them
 
 Inputs:
 string exec_folder: folder where the python scripts are located (full path)
 struct args: structure containing all arguments already parsed
-string folder: folder where the PDB files to be turned into a video are located (full path)
+string folder: folder where the PDB files to be turned into videos are located (full path)
 
 
 '''
@@ -94,22 +96,19 @@ def gen_video(exec_folder, args, folder):
     modelist = [format(i, '02d') for i in modelist]
     signals = ['pos', 'neg']
 
-    # initialise a list of jobs for multiprocessing 
-    jobs = []
-
     
-    #set width and height to inputted values, defaulting to 640x480
+    #ensure the width and height inputs are within allowed ranges
     if (args.res[0] < 16 or args.res[0] > 8192) or (args.res[1] < 16 or args.res[1] > 8192):
         print("width or heigth out of range [16, 8192]")
         return
 
-    #set width and height to inputted values, defaulting to 640x480
+    #ensure the fps input is within allowed ranges
     if (args.fps < 1 or args.fps > 240):
         print("fps out of range [1, 240]")
         return
 
 
-    #set drawingengine to inputted string, defaulting to pymol
+    #ensure the drawingengine input is an allowed option
     if args.drawingengine != "pymol" and args.drawingengine != "vmd":
         print("drawingengine invalid")
         return
@@ -121,11 +120,12 @@ def gen_video(exec_folder, args, folder):
     if args.video:
         commandfile = args.video
 
-    #set codec to inputted videocodec, defaulting to mp4; and set the file extension accordingly
+    #ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
         print("videocodec invalid")
         return
 
+    #set the fileextension according to the videocodec chosen
     fileextension = ".mp4"
     if args.videocodec == "hevc":
         fileextension = ".mov"
@@ -160,9 +160,11 @@ def gen_video(exec_folder, args, folder):
         print ("gen_video: finalizing - creating combi videos")
         print ("----------------------------------------------------------------")
 
+        #if --combi is specified, create .combi videos from the pos and neg videos
         for cut in cutlist:
             for mode in modelist:
 
+                #create a videolist file (specifying the videos to combine) to give ffmpeg
                 filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"
                 videolist = folder + "/Run-" + str(cut) + "-mode" + mode + "-list" 
                 outF = open(videolist, "w")
@@ -170,8 +172,10 @@ def gen_video(exec_folder, args, folder):
                 print >>outF, "file " + filename+'neg'+fileextension
                 outF.close()
 
-                #if mp4s were generated (and --combi is specifiec), we create .combi mp4s from the .pos and .neg mp4s
+                #run ffmpeg to create the combi
                 os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y '+filename+'combi' + fileextension)
+
+                #fix the permissions on the combi video
                 os.system('rm ' + videolist)
                 os.system('chmod 744 '+filename+'combi'+fileextension)
 
@@ -192,10 +196,13 @@ def gen_video(exec_folder, args, folder):
 # if we're running this as a separate script, we need to parse arguments and then call gen_video, that's pretty much it!
 if __name__ == "__main__":
     args = parsing_video_args(sys.argv)
+
+    # set exec_folder to the full path of this script
+    exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
+
     folder = args.folder[0]
-    exec_folder = sys.argv[0].rsplit("/", 1)[0]
-    if (exec_folder.endswith(".py")):
-        exec_folder = "."
+    os.chdir(folder)
+
     # pymol_test()
     # prepare_script(sys.argv,"t1t.mpg")
     gen_video(exec_folder, args, folder)

@@ -157,10 +157,13 @@ def generate_pdbmat(struct_file,folder):
 
 if __name__ == "__main__":#
     args=[]
-    hydro=sys.argv[1]
-    exec_folder=sys.argv[0].rsplit("/",1)[0]
-    if (exec_folder.endswith(".py")):
-        exec_folder="."
+    hydro=os.path.abspath(sys.argv[1])
+
+    # set exec_folder to the full path of this script
+    exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
+
+    os.chdir(os.path.dirname(hydro))
+
     # pymol_test()
     # prepare_script(sys.argv,"t1t.mpg")
     elnemosim(exec_folder,args,hydro)

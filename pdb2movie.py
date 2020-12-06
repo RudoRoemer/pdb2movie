@@ -97,12 +97,12 @@ if __name__ == "__main__":#
 
         try:
             os.mkdir(args.output[0])
-            os.chdir(args.outpur[0])
+            os.chdir(args.output[0])
         except Exception:
             userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/n]   ")
             if (userinput=="y"):
                 os.system("rm -r "+args.output[0]+"/*")
-                os.chdir(args.outpur[0])
+                os.chdir(args.output[0])
             else:
                 quit()
             pass
