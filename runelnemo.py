@@ -42,10 +42,7 @@ def elnemosim(exec_folder,args,hydropdb):
 
 
     # now we have a series of shell commands to set up input files for the ElNemo tools
-    # we copy the struct file as a temporary one with the process ID to avoid any duplicates
-    os.system("cp "+struct_file+" tmp_"+str(os.getpid())+".structure")
-    # we create a local copy of the pdbmat program, since it only looks for files in its current directory
-    os.system("cp "+exec_folder+"/pdbmat "+folder+"/pdbmat")
+
 
     # now, we need to generate a pdbmat options file using an external function as well - more details there!
     print ("---------------------------------------------------------------")
@@ -53,50 +50,33 @@ def elnemosim(exec_folder,args,hydropdb):
     print ("----------------------------------------------------------------")
 
     generate_pdbmat(struct_file,folder)
-    print("calling "+folder+"/pdbmat")
+    print("calling "+exec_folder+"/pdbmat")
 
-    # finally, we run our local copy of pdbmat
+    # finally, we run pdbmat
     print ("---------------------------------------------------------------")
     print ("elnemosim: running local pdbmat()")
     print ("----------------------------------------------------------------")
 
-    os.system(folder+"/pdbmat")
-    
-    # we will need to use the same trick of a local copy with diagstd as well
-    os.system("cp "+exec_folder+"/./FIRST-190916-SAW/src/diagstd "+folder+"/diagstd")
+    os.system(exec_folder+"/pdbmat")
 
-    # now, we run the local copy of diagstd
+    # now, we run diagstd
     print ("---------------------------------------------------------------")
     print ("elnemosim: running local diagstd()")
     print ("----------------------------------------------------------------")
 
-    os.system(folder+"/diagstd")
-
-    # same trick with modesplit as well 
-    os.system("cp "+exec_folder+"/modesplit "+folder+"/modesplit")
-
-    # diagstd generates an output file (pdbmat.eigenfacs) in the folder where the script was called, not necessarily the output folder - we need to copy it there
-    os.system("mv pdbmat.eigenfacs "+folder+"/pdbmat.eigenfacs")
+    os.system(exec_folder + "/FIRST-190916-SAW/src/diagstd")
 
     # now, we run modesplit with the generated structure file, the output of diagstd and the list of modes we generated (actually, a range from lowest mode to highest mode with everything in between)
-    os.system(folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs "+str(modelist[0])+" "+str(modelist[-1]))
-    # os.system("rm "+folder+"/modesplit")
+    os.system(exec_folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs "+str(modelist[0])+" "+str(modelist[-1]))
 
-    # modesplit also generates outputs in the local folder, not the output one - we need to move them there
-    os.system("mv pdbmat.* mode*.in "+folder+"/")
-
-    # now we have some housekeeping to do - putting all movement modes into a "Modes" folder and removing all local copies of executables
+    # now we have some housekeeping to do - putting all movement modes into a "Modes" folder
     try:
         os.mkdir(folder+"/Modes/")
     except Exception:
         os.system("rm -r "+folder+"/Modes/*")
         pass
     os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
-    os.system("rm tmp_"+str(os.getpid())+".structure")
-    os.system("rm "+folder+"/pdbmat")
-    os.system("rm "+folder+"/diagstd")
-    os.system("rm "+folder+"/modesplit")
-    # print folder,prot
+
 
 
 '''
@@ -151,12 +131,12 @@ string folder: path to the folder where outputs are being written
 
 def generate_pdbmat(struct_file,folder):
     # print("pdbmat.dat at "+folder+"/pdbmat.dat")
-    filename='pdbmat.dat'
+    filename=folder + '/pdbmat.dat'
     # we start by creating a pdbmat.dat file and opening it
     datfile=open(filename,'w')
 
-    # the only variable in this is the name of the struct file - we should probably be getting it from the argument being passed, but we're not for some reason (??)
-    datfile.write("Coordinate FILENAME = tmp_"+str(os.getpid())+".structure\n")
+    # the only variable in this is the name of the struct file
+    datfile.write("Coordinate FILENAME = " + struct_file + "\n")
     datfile.write("INTERACtion DISTance CUTOF =     12.000\n")
     datfile.write("INTERACtion FORCE CONStant =      1.000\n")
     datfile.write("Origin of MASS values      =       CONS ! CONstant, or from COOrdinate file.\n")

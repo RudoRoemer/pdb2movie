@@ -92,13 +92,17 @@ echo 'proc AutoScaleAllVisible {{zoom_factor 1}} {
 }' > $CMD_FILE
 
 #setting up the vmd visuals
-echo "animate goto 0" >> $CMD_FILE
-echo "axes location off" >> $CMD_FILE
-echo "color Display Background black" >> $CMD_FILE
-echo "mol modstyle 0 0 NewCartoon 0.300000 10.000000 4.100000 0" >> $CMD_FILE
-echo "mol modcolor 0 0 Fragment" >> $CMD_FILE
-echo "color scale method RGB" >> $CMD_FILE
-echo "AutoScaleAllVisible 0.93" >> $CMD_FILE
+echo "
+  display shadows off
+  display ambientocclusion off
+  display dof off
+  animate goto 0
+  axes location off
+  color Display Background black
+  mol modstyle 0 0 NewCartoon 0.300000 10.000000 4.100000 0
+  mol modcolor 0 0 Fragment
+  color scale method RGB
+  AutoScaleAllVisible 0.93" >> $CMD_FILE
 
 #if an optional file with extra instructions for vmd has been included, use it
 if [ "$OPT_SETTINGS_FILE" != "" ]

@@ -89,20 +89,24 @@ if __name__ == "__main__":#
     # if there is no relative path, the scripts are on current directory
     exec_folder=sys.argv[0].rsplit("/",1)[0]
     if (exec_folder.endswith(".py")):
-        exec_folder="."
-    # print(exec_folder)
+        exec_folder = os.getcwd()
+
+    #print(exec_folder)
 
 
     # if an output folder was defined, we need to make that directory if it doesn't exist,
     # and warn the user that the folder will be emptied if it exists
+    # and then make that the present working directory
     if (args.output):
 
         try:
             os.mkdir(args.output[0])
+            os.chdir(args.outpur[0])
         except Exception:
             userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/n]   ")
             if (userinput=="y"):
                 os.system("rm -r "+args.output[0]+"/*")
+                os.chdir(args.outpur[0])
             else:
                 quit()
             pass
@@ -112,8 +116,10 @@ if __name__ == "__main__":#
 
         try:
             os.mkdir(args.pdbfile[0][:-4])
+            os.chdir(args.pdbfile[0][:-4])
         except Exception:
             os.system("rm -r "+args.pdbfile[0][:-4]+"/*")
+            os.chdir(args.pdbfile[0][:-4])
             pass
 
     # now we will just call the functions defined in other files in sequence
