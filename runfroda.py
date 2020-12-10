@@ -20,6 +20,27 @@ def call_froda(command):
     os.system(command)
     print '--- exiting:', name
 
+
+
+'''
+call_froda_multiple: simple wrapper for calling multiple shell commands
+
+Inputs: 
+- string list commands: list of shell commands to be run
+'''
+
+
+def call_froda_multiple(commands):
+    name = multiprocessing.current_process().name
+    print '--- starting thread:', name
+
+    for command in commands:
+        print '--- starting command:', command
+        os.system(command)
+        print '--- finished command:', command
+
+    print '--- exiting thread:', name
+
 '''
 frodasim: main function for running FRODA simulations on a protein
 
@@ -42,7 +63,7 @@ def frodasim(exec_folder,args,hydro_file):
     folder=hydro_file.rsplit("/",1)[0]
 
     # now we need to care about a bunch of command-line arguments: if they were passed, we set them, otherwise we use default values
-    # that is true for confs, frew, step, dstep, modes, ecuts
+    # that is true for confs, freq, step, dstep, modes, ecuts
     if args.confs:
         totconf=int(args.confs[0])
     else:
@@ -51,7 +72,7 @@ def frodasim(exec_folder,args,hydro_file):
     if args.freq:
         freq=int(args.freq[0])
     else:
-        freq=100
+        freq=50
 
     if args.step:
         step=float(args.step[0])
@@ -96,6 +117,21 @@ def frodasim(exec_folder,args,hydro_file):
     print ("runfroda: generating subfolders")
     print ("----------------------------------------------------------------")
 
+    #count the number of cores; this is the number of threads we will run
+    number_of_cores = multiprocessing.cpu_count()
+
+    #this counts up for every command that must be run
+    counter = 0
+
+    #create a list of lists of commands, so that each list is given to a different thread to run
+    commands = [[]]
+
+    #we want to have a list for each thread
+    for i in range (0, number_of_cores - 1):
+        commands.append([])
+
+    #print(number_of_cores)
+
     # now for every cutoff energy we will create a subfolder before anything
     for cut in cutlist:
         try:
@@ -135,10 +171,19 @@ def frodasim(exec_folder,args,hydro_file):
                 else:
                     command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin"
 
-                # we assign a new process to this call of froda (the reason why call_froda exists at all), append it to job list and start it
-                p = multiprocessing.Process(name=command,target=call_froda,args=(command,))
-                jobs.append(p)
-                p.start()
+                #add each command to one of the lists of commands, rotating which one each time
+                commands[counter % number_of_cores].append(command)
+                counter += 1
+
+
+    #print(commands)
+
+    #start a thread for each core, giving it a list of commands
+    for i in range (0, number_of_cores):
+        p = multiprocessing.Process(name="thread" + str(i),target=call_froda_multiple,args=(commands[i],))
+        jobs.append(p)
+        p.start()
+
 
     # this is here so that we wait for all processes to finish before proceeding
     for job in jobs:

@@ -44,7 +44,7 @@ def firstsim(exec_folder,args,cleanpdb):
     print ("firstsim: calling reduce.3.23.130521")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/./reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
+    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
 
     # we also isolate the folder where outputs are being saved
     folder=cleanpdb.rsplit("/",1)[0]
@@ -58,14 +58,7 @@ def firstsim(exec_folder,args,cleanpdb):
     print ("firstsim: running FIRST with new PDB file after hydrogens added")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/./FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
-
-    # housekeeping: move the output files to the output folder
-    os.system("mv "+prot+"_hydro_hbdilute.txt "+folder+"/"+prot+"_hydro_hbdilute.txt")
-    os.system("mv "+prot+"_hydro_hbdpath.txt "+folder+"/"+prot+"_hydro_hbdpath.txt")
-    os.system("mv "+prot+"_hydro_hbd_lrc.txt "+folder+"/"+prot+"_hydro_hbd_lrc.txt")
-    os.system("mv residue_map.txt "+folder+"/residue_map.txt")
-    # print("\n\n\n\n"+cleanpdb[:-9]+"hydro.pdb")
+    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
 
     # finally, return the hydro-added PDB path
     return cleanpdb[:-9]+"hydro.pdb"
