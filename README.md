@@ -1,24 +1,23 @@
 # pdb2movie
 Code for generating movies of the most relevant movement modes of proteins from their PDB files, using rigidity clustering analysis
 
-
 Requirements:     
 PyMOL or VMD     
 Python libraries: argparse     
 ffmpeg   
 
-Instructions:      
+## Instructions:      
 Recompiling FIRST and diagstd is necessary!
 1) Go to FIRST-190916-SAW/src and run 'make'.
 2) You should be ready to go! 
 
 (Note that if your C++/Fortran compilers are not the ones we use, you might need to edit some Makefiles.)   
 
-Usage:     
+## Usage:     
 python pdb2movie.py FILE [options]    
 FILE is your desired PDB file    
 
-Options:     
+## Options:     
 
 --keep MOLECULE LIST - Stops the cleaning routine from removing the listed molecules from the PDB file     
 --output PATH        - Sets the output location for the simulations and videos    
