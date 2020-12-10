@@ -3,15 +3,11 @@ generate_video.py - takes a series of PDB files and generates a video
 
 '''
 
-
-
-
 import sys
 import os
 import multiprocessing
 import argparse
 import subprocess
-
 
 '''
 parsing_video_args: takes all command-line arguments and parse them into a structure with argument fields
@@ -24,7 +20,6 @@ Outputs:
 structure args: structured object with fields corresponding to the possible parameters from command line
 
 '''
-
 
 def parsing_video_args(sys_args):
 
@@ -46,12 +41,14 @@ def parsing_video_args(sys_args):
                         help='Python file with PyMOL commands to be run before generating video')
     parser.add_argument('folder', metavar='PDB', type=str, nargs=1,
                         help='Folder where the runs can be found')
+    parser.add_argument('--mp4',  action='store_true',
+                        help='Generate mp4 videos with ffmpeg (if vmd is specified, then mp4 is used regardless)')
+    parser.add_argument('--drawingengine', type=str, nargs=1,
+                        help='Whether to use vmd or pymol (defaults to pymol for now)')
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
     args = parser.parse_args(sys_args[1:])
     return args
-
-
 
 '''
 call_pymol: simple wrapper for calling a Linux command
@@ -59,8 +56,6 @@ call_pymol: simple wrapper for calling a Linux command
 
 def call_pymol(command):
     os.system(command)
-
-
 
 '''
 gen_video: takes a folder full of PDB files for conformers and generate a video out of them
@@ -72,8 +67,6 @@ string folder: folder where the PDB files to be turned into a video are located 
 
 
 '''
-
-
 def gen_video(exec_folder, args, folder):
     
     print ("---------------------------------------------------------------")
@@ -96,10 +89,8 @@ def gen_video(exec_folder, args, folder):
     modelist = [format(i, '02d') for i in modelist]
     signals = ['pos', 'neg']
 
-
     # initialise a list of jobs for multiprocessing 
     jobs = []
-
 
     # loop over all combinations of cutoffs, modes, signs
     for cut in cutlist:
@@ -109,7 +100,6 @@ def gen_video(exec_folder, args, folder):
                 # generates a filename with the correct cutoff, mode and sign
                 filename = folder + "/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
                 print (filename)
-
 
                 # generates a separate script for this combination of cutoff, mode and sign
                 prepare_script(exec_folder, args, filename, cut, mode, sign, folder)
@@ -127,7 +117,6 @@ def gen_video(exec_folder, args, folder):
                 jobs.append(p)
                 p.start()
 
-
     # this is here so that we wait for every process to finish before proceeding
     for job in jobs:
         job.join()
@@ -136,33 +125,29 @@ def gen_video(exec_folder, args, folder):
 
     print ( "generate_video: working on "+filename+" in "+currfolder)
 
-    # checks whether freemol is present in the system, if it is not we will have some extra work
-    if (os.system('grep \'FREEMOL\' $(which pymol)')):
-        print ( "generate_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
-        # if freemol is not there, we will loop over all combinations once more, generate the correct filename and so on
-        print ( "generate_video: FREEMOL is missing --- using pymol static images2 and ffmpeg" )
+    # checks if freemol is not present in the system or if MP4 videos have been specified, if so we have some extra work
+    if ((os.environ['FREEMOL'] == "") or args.mp4):
+        print ( "generate_video: Using ffmpeg to generate mp4s" )
+
+        # loop over all combinations, generate the correct filenames and so on
         for cut in cutlist:
             for mode in modelist:
                 for sign in signals:
-                    filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
+                    filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mp4"
                     tmpfolder = filename.rsplit("/", 1)[1][:-3]
 
                     currfolder = folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/"
                     # command = ['convert', '-quality', ' 100', folder+'/'+tmpfolder+'tmp/*.ppm', filename]
 
-
-                    # finally, we will generate a video using ffmpeg instead of freemol, based on the ppm screenshots pymol has generated before
-                    command = 'ffmpeg -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -c:v mpeg2video -pix_fmt yuv420p -me_method epzs -threads 4 -r 30.000030 -g 45 -bf 2 -trellis 2 -y -b 6000k '+filename
+                    # finally, we will generate a video using ffmpeg based on the ppm screenshots pymol has generated before
+                    command = 'ffmpeg -framerate 30 -pattern_type glob -i '+'\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\" -framerate 30 -c:v libx264 -pix_fmt yuv420p -threads 4 -y -b:v 6000k '+filename
                     
                     # command = ['ffmpeg', '-pattern_type', 'glob', '-i', '\"'+folder+'/'+tmpfolder+'tmp/*.ppm'+'\"', '-c:v', 'mpeg2video', '-pix_fmt', 'yuv420p', '-me_method', 'epzs', '-threads', '4', '-r', '30.000030', '-g', '45', '-bf', '2', '-trellis', '2', '-y', '-b', '6000k', filename]
                     print(command)
                     os.system("bash -c '{0}'".format(command))
                     # subprocess.call(command)
 
-
-
-
-    # now we loop over cutoffs and modes, and if we want combined movies we do that purely by concatenating two videos
+    # now we loop over cutoffs and modes, and combine movies if --combi is specified
     for cut in cutlist:
         for mode in modelist:
             if args.combi:
@@ -170,12 +155,23 @@ def gen_video(exec_folder, args, folder):
                 os.system('cat '+filename+'pos.mpg '+filename+'neg.mpg > '+filename+'combi.mpg')
                 os.system('chmod 744 '+filename+'combi.mpg')
 
+                #if mp4s were generated (and --combi is specifiec), we create .combi mp4s from the .pos and .neg mp4s
+                if ((os.environ['FREEMOL'] == "") or args.mp4):
+                    os.system('ffmpeg -i '+filename+'pos.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts '+filename+'1.ts')
+                    os.system('ffmpeg -i '+filename+'neg.mp4 -c copy -bsf:v h264_mp4toannexb -f mpegts '+filename+'2.ts')
+                    os.system('ffmpeg -i "concat:'+filename+'1.ts|'+filename+'2.ts" -c copy '+filename+'combi.mp4')
+                    os.system('rm '+filename+'1.ts')
+                    os.system('rm '+filename+'2.ts')
+                    os.system('chmod 744 '+filename+'combi.mp4')
+
             # we also need to fix permissions for the all the videos 
             for sign in signals:
                 # os.system('rm '+folder+'/pymolvideo'+str(cut)+mode+sign+'.py')
-                filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign+".mpg"
-                os.system('chmod 744 '+filename)
-                tmpfolder = filename.rsplit("/", 1)[1][:-3]
+                filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"+sign
+                os.system('chmod 744 '+filename+".mpg")
+                if ((os.environ['FREEMOL'] == "") or args.mp4):
+                    os.system('chmod 744 '+filename+".mp4")
+                tmpfolder = (filename+".mpg").rsplit("/", 1)[1][:-3]
                 os.system('rm -r '+folder+'/'+tmpfolder+'tmp/')
     return
 
@@ -207,12 +203,10 @@ string folder: folder where the PDB files to be turned into a video are located 
 
 '''
 
-
 def prepare_script(exec_folder, args, filename, cut, mode, sign, folder):
 
     # string="cat video_template.py <(echo filename=\'"+filename+"\') video_minimal.py >pymolvideo.py"
     # string='cat video_template.py <(echo \"stereo anaglyph\") <(echo filename=\\"'+filename+'\\") ' +args.video[0]+' video_minimal.py > pymolvideo.py'
-
 
     # the way this works is we generate a pretty big string with a command that will concatenate a bunch of stuff into a py file.
     # the start of this py file is video_template.py
@@ -239,9 +233,6 @@ def prepare_script(exec_folder, args, filename, cut, mode, sign, folder):
 
     # then, we run the big string command!
     os.system("bash -c '{0}'".format(string))
-
-
-
 
 # if we're running this as a separate script, we need to parse arguments and then call gen_video, that's pretty much it!
 if __name__ == "__main__":

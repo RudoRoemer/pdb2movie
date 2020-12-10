@@ -9,7 +9,7 @@ import cleanpdb
 import runfirst
 import runelnemo
 import runfroda
-import generate_video
+import generate_video_serial
 import argparse
 
 '''
@@ -32,12 +32,14 @@ def parsing_args(sys_args):
                         help='List of molecules to be kept')
     parser.add_argument('--output',  nargs=1,
                         help='Output directory')
-    parser.add_argument('--res',  nargs=2,
-                        help='Video resolution (width, height)')
+    parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
+                        help='Video resolution (width, height), range [16, 8192]')
     parser.add_argument('--waters',  action='store_true',
                         help='Flag for keeping water molecules')
     parser.add_argument('--multiple',  action='store_true',
                         help='Keep multiple chains (default: uses only chain A)')
+    parser.add_argument('--nomovie',  action='store_true',
+                        help='Stop calculation after FRODA and before any attempt to generate images and movies')
     parser.add_argument('--combi',  action='store_true',
                         help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--threed',  action='store_true',
@@ -55,9 +57,15 @@ def parsing_args(sys_args):
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
     parser.add_argument('--video',  nargs=1,
-                        help='Python file with PyMOL commands to be run before generating video')
+                        help='File with PyMOL or VMD commands to be run before generating video')
     parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
                         help='Initial PDB file')
+    parser.add_argument('--videocodec', type=str, default="mp4", 
+                        help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
+    parser.add_argument('--drawingengine', type=str, default="pymol", 
+                        help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
+    parser.add_argument('--fps',  nargs=1, type=int, default=30,
+                        help='Frames per second of the videos, range [1, 240]')
 
     # actually do the parsing for all system args other than 0
     # (which is the python script name) and return the structure generated
@@ -71,31 +79,30 @@ if __name__ == "__main__":#
     # first things first: we need to parse command-line arguments with the function we have defined
     args=parsing_args(sys.argv)
 
-
     # print "test"
     # if (args.threed):
     #     userinput=raw_input("WARNING: PyMOL windows will open during generation and they won't close by themselves. You have been warned. Are you sure you want to continue? [y/n]   ")
     #     if (userinput!="y"):
     #         quit()
 
-    # check from where the python script is being called and the relative path to it;
-    # if there is no relative path, the scripts are on current directory
-    exec_folder=sys.argv[0].rsplit("/",1)[0]
-    if (exec_folder.endswith(".py")):
-        exec_folder="."
-    # print(exec_folder)
+    # set exec_folder to the full path of this script
+    exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
 
+    #print(exec_folder)
 
     # if an output folder was defined, we need to make that directory if it doesn't exist,
     # and warn the user that the folder will be emptied if it exists
+    # and then make that the present working directory
     if (args.output):
 
         try:
             os.mkdir(args.output[0])
+            os.chdir(args.output[0])
         except Exception:
             userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/n]   ")
             if (userinput=="y"):
                 os.system("rm -r "+args.output[0]+"/*")
+                os.chdir(args.output[0])
             else:
                 quit()
             pass
@@ -105,8 +112,10 @@ if __name__ == "__main__":#
 
         try:
             os.mkdir(args.pdbfile[0][:-4])
+            os.chdir(args.pdbfile[0][:-4])
         except Exception:
             os.system("rm -r "+args.pdbfile[0][:-4]+"/*")
+            os.chdir(args.pdbfile[0][:-4])
             pass
 
     # now we will just call the functions defined in other files in sequence
@@ -140,12 +149,18 @@ if __name__ == "__main__":#
     print ("----------------------------------------------------------------")
     runfroda.frodasim(exec_folder,args,hydro_file)
 
-    # We generate the videos
-    print ("---------------------------------------------------------------")
-    print ("pdb2movie: generating the videos")
-    print ("----------------------------------------------------------------")
-    generate_video.gen_video(exec_folder,args,folder)
-    
+    if args.nomovie:
+        # --nomovie setting
+        print ("---------------------------------------------------------------")
+        print ("pdb2movie: NOT generating any videos")
+        print ("----------------------------------------------------------------")
+    else:
+        # We generate the videos
+        print ("---------------------------------------------------------------")
+        print ("pdb2movie: generating the videos")
+        print ("----------------------------------------------------------------")
+        generate_video_serial.gen_video(exec_folder,args,folder)
+        
     # finally, we are done
     print ("---------------------------------------------------------------")
     print ("pdb2movie: all should be done, enjoy!")
