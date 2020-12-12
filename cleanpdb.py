@@ -63,6 +63,10 @@ def parsing_args(sys_args):
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
     args = parser.parse_args(sys_args[1:])
+
+    #ensure pdbfile has the full path
+    args.pdbfile[0] = os.path.abspath(args.pdbfile[0])
+    
     return args
 
 
