@@ -34,7 +34,7 @@ FILE is your desired PDB file
 --combi              - Creates videos combining positive and negative directions for each mode/cutoff energy      
 --multiple           - Keeps multiple chains from the original PDB file (default: uses only chain A)   
 --videocodec         - Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)     
---drawingengine      - Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now) 
+--drawingengine      - Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)
 --fps                - Frames per second of the videos, range [1, 240] 
 
 See also the web-server-based implementation at https://pdb2movie.warwick.ac.uk.
