@@ -58,7 +58,7 @@ def firstsim(exec_folder,args,cleanpdb):
     print ("firstsim: running FIRST with new PDB file after hydrogens added")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout")
+    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
 
     # finally, return the hydro-added PDB path
     return cleanpdb[:-9]+"hydro.pdb"
