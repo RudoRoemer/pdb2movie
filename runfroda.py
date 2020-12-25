@@ -67,7 +67,7 @@ def frodasim(exec_folder,args,hydro_file):
     if args.confs:
         totconf=int(args.confs[0])
     else:
-        totconf=5000
+        totconf=1000
 
     if args.freq:
         freq=int(args.freq[0])
@@ -87,12 +87,12 @@ def frodasim(exec_folder,args,hydro_file):
     if args.modes:
         modelist=[int(x) for x in args.modes]
     else:
-        modelist=range(7,12)
+        modelist=range(7, 9)
 
     if args.ecuts:
         cutlist=[float(x) for x in args.ecuts]
     else:
-        cutlist=[1.0, 2.0]
+        cutlist=[2.0] #[1.0, 2.0]
 
 
     # we isolate the name of the protein, which is in the PDB_path somewhere!
