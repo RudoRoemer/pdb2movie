@@ -136,7 +136,7 @@ def generate_pdbmat(struct_file,folder):
     datfile=open(filename,'w')
 
     # the only variable in this is the name of the struct file
-    datfile.write("Coordinate FILENAME = " + struct_file + "\n")
+    datfile.write("Coordinate FILENAME = " + os.path.basename(struct_file) + "\n")
     datfile.write("INTERACtion DISTance CUTOF =     12.000\n")
     datfile.write("INTERACtion FORCE CONStant =      1.000\n")
     datfile.write("Origin of MASS values      =       CONS ! CONstant, or from COOrdinate file.\n")
