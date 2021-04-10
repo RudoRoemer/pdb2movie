@@ -150,7 +150,14 @@ def gen_video(exec_folder, args, folder):
                 os.system('ln -s '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
 
                 #make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
-                os.system(exec_folder + '/make_video_' + args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + commandfile)
+                print('gen_video: '+exec_folder + '/make_video_' + 
+					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
+					''.join([str(i) for i in commandfile]))
+                os.system(exec_folder + '/make_video_' + 
+					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
+					''.join([str(i) for i in commandfile]))
 
     
     # now we loop over cutoffs and modes, and combine movies if --combi is specified
