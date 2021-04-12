@@ -147,7 +147,8 @@ def gen_video(exec_folder, args, folder):
                 videoname = folder + "/Run-" + str(cut) + "-mode" + mode + "-" + sign + fileextension
 
                 #create a link to tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
-                os.system('ln -s '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
+                #os.system('ln -s '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
+                os.system('cp '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
 
                 #make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
                 os.system(exec_folder + '/make_video_' + args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + commandfile)
