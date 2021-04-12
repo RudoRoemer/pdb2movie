@@ -28,7 +28,7 @@ def elnemosim(exec_folder,args,hydropdb):
     if args.modes:
         modelist=[int(x) for x in args.modes]
     else:
-        modelist=range(7,12)
+        modelist=range(7, 9)
 
     # call external function to generate a structure file - more details in that function
     print ("---------------------------------------------------------------")
