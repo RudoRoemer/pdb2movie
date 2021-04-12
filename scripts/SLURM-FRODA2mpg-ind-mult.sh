@@ -34,7 +34,7 @@ cat > ${jobfile} << EOD
 ##SBATCH --mem-per-cpu=2012
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=2012
-#SBATCH --time=01:00:00
+#SBATCH --time=48:00:00
 
 pwd
 echo "--- working on $pdb"
@@ -44,9 +44,13 @@ pwd
 
 echo $pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`
 
-mkdir -p $pdb
-cd $pdb
+mkdir -p $pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`
+cd $pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`
 pwd
+
+#mkdir -p $pdb
+#cd $pdb
+#pwd
 
 cp ../$pdb.pdb .
 
@@ -72,8 +76,8 @@ EOD
 
 chmod 755 ${jobfile}
 #(sbatch -q devel ${jobfile})
-#(sbatch -q taskfarm ${jobfile})
+(sbatch -q taskfarm ${jobfile})
 #(sbatch ${jobfile})
-source ${jobfile}
+#source ${jobfile}
 
 done
