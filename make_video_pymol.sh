@@ -17,7 +17,7 @@ FPS=$3
 PDB_PATH=$4
 DEST_FILE=$5
 VIDEO_CODEC=$6
-OTIONAL_COMMAND_FILE=$6
+OPTIONAL_COMMAND_FILE=$7
 
 TMP_PATH=$PDB_PATH/pymol_temp
 
@@ -52,9 +52,10 @@ echo 'cmd.show("cartoon")' >> $CMD_FILE
 echo 'cmd.bg_color("grey")' >> $CMD_FILE
 
 #if an optional file with extra instructions for pymol has been included, use it
-if [ "$OPT_SETTINGS_FILE" != "" ]
+echo "OPTIONAL_COMMAND_FILE:" $OPTIONAL_COMMAND_FILE
+if [ $OPTIONAL_COMMAND_FILE != "" ]
 then
-  cat $OTIONAL_COMMAND_FILE >>  $CMD_FILE
+  cat $OPTIONAL_COMMAND_FILE >>  $CMD_FILE
 fi
 
 echo "cmd.save(\"$PDB_PATH/cartoon.pse\")" >> $CMD_FILE
@@ -95,6 +96,8 @@ echo 'cmd.quit()' >> $CMD_FILE
 
 ###
 echo "make_video_pymol.sh: running pymol with generated command file to create frames (png files) - ${PDB_PATH}"
+echo "make_video_pymol.sh: copy of pymol command file following NOW"
+cat $CMD_FILE
 ###
 
 #run pymol without the GUI, suppressing the startup output, giving it the command file to run

@@ -1,0 +1,41 @@
+# --------------------------------------------------------------------
+# FILE INFO:
+
+ Input file name: /home/physics/phsht/Projects/pdb2movie/1ccn/Runs/2.0/Mode07-pos/tmp.pdb
+ Date: Wed Jan  6 11:49:49 2021
+
+# --------------------------------------------------------------------
+# INPUT PARAMETERS:
+
+ Command line: "/home/physics/phsht/Projects/pdb2movie/./FIRST-190916-SAW/src/FIRST /home/physics/phsht/Projects/pdb2movie/1ccn/Runs/2.0/Mode07-pos/tmp.pdb -non -E -2.0 -FRODA -mobRC1 -freq 50 -totconf 10 -modei -step 0.1 -dstep 0.01 -covin -hbin -phin -srin -L /home/physics/phsht/Projects/pdb2movie/FIRST-190916-SAW"
+ Energy cutoff: -2.00 kcal/mol
+
+# --------------------------------------------------------------------
+# RESULTS:
+
+            642 Sites included in the calculation.
+              0 Sites excluded in the calculation.
+             46 Unique residues found.
+              0 Isolated sites.
+              0 Isolated dimers.
+             22 Hydrogen bonds included.
+             13 Hydrophobic tethers included.
+              0 Stacked ring interactions included.
+            147 Rigid clusters.
+              3 Rigid clusters larger than size 20.
+             80 Sites in largest rigid cluster.
+             65 Sites in second largest rigid cluster.
+             10 Stressed Regions.
+             83 Total independent degrees of freedom.
+
+# --------------------------------------------------------------------
+# WARNINGS: LEVEL 1 warnings are most severe.
+
+ LEVEL 1 WARNINGS: 0
+
+ LEVEL 2 WARNINGS: 0
+
+ LEVEL 3 WARNINGS: 0
+
+
+# --------------------------------------------------------------------
