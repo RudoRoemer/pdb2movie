@@ -73,7 +73,8 @@ def parsing_args(sys_args):
 
     #ensure pdbfile and output are full paths, not relative ones (so they are correct from here on, regardless of pwd)
     args.pdbfile[0] = os.path.abspath(args.pdbfile[0])
-    args.output[0] = os.path.abspath(args.output[0])
+    if (args.output):
+		args.output[0] = os.path.abspath(args.output[0])
     
     return args
 
