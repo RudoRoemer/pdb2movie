@@ -3,43 +3,22 @@ runfroda.py - functions to run FRODA_simulations, generating conformers for the 
 '''
 
 import os
-import multiprocessing
+from multiprocessing import Pool
 
 
 '''
-call_froda: simple wrapper for calling sheel commands
+call_command: simple wrapper for calling shell commands
 
 Inputs: 
 - string command: shell command to be run
 '''
 
-
-def call_froda(command):
-    name = multiprocessing.current_process().name
-    print '--- starting:', name
+def call_command(command):
+    print ("--- calling:" + command)
     os.system(command)
-    print '--- exiting:', name
+    print ("--- finished calling:" + command)
+    return
 
-
-
-'''
-call_froda_multiple: simple wrapper for calling multiple shell commands
-
-Inputs: 
-- string list commands: list of shell commands to be run
-'''
-
-
-def call_froda_multiple(commands):
-    name = multiprocessing.current_process().name
-    print '--- starting thread:', name
-
-    for command in commands:
-        print '--- starting command:', command
-        os.system(command)
-        print '--- finished command:', command
-
-    print '--- exiting thread:', name
 
 '''
 frodasim: main function for running FRODA simulations on a protein
@@ -50,8 +29,6 @@ Inputs:
 - string hydro_file: full path to PDB file after addition of hydrogens (by extension, also includes path to where all outputs are)
 
 '''
-
-
 
 def frodasim(exec_folder,args,hydro_file):
 
@@ -94,62 +71,46 @@ def frodasim(exec_folder,args,hydro_file):
     else:
         cutlist=[2.0] #[1.0, 2.0]
 
+    print ("---------------------------------------------------------------")
+    print ("runfroda: preparing folders for FRODA")
+    print ("----------------------------------------------------------------")
 
     # we isolate the name of the protein, which is in the PDB_path somewhere!
     prot=hydro_file.rsplit("/",1)[1][:-10]
-    # print modelist, cutlist
 
     # now we make modelist into a list of strings instead of ints and define the signs positive and negative
     modelist=[format(i, '02d') for i in modelist]
     signals=["pos","neg"]
 
-    # initialising job list for multiprocessing
-    jobs=[]
-
-    # now we need to create the folder where all conformers are going to live (or empty and existing one)
+    # create a folder (or empty an existing folder) for all the conformers and other outputs
     try:
         os.mkdir(folder+"/Runs/")
     except Exception:
         os.system("rm -r "+folder+"/Runs/*")
         pass
 
-    print ("---------------------------------------------------------------")
-    print ("runfroda: generating subfolders")
-    print ("----------------------------------------------------------------")
+    # create a list of commands, that will later be given to a pool of processes to run
+    commands = []
 
-    #count the number of cores; this is the number of threads we will run
-    number_of_cores = multiprocessing.cpu_count()
-
-    #this counts up for every command that must be run
-    counter = 0
-
-    #create a list of lists of commands, so that each list is given to a different thread to run
-    commands = [[]]
-
-    #we want to have a list for each thread
-    for i in range (0, number_of_cores - 1):
-        commands.append([])
-
-    #print(number_of_cores)
-
-    # now for every cutoff energy we will create a subfolder before anything
+    # create and organise folders, and add commands (that will generate the conformers) to 'commands'
     for cut in cutlist:
+
+        # folder for each cut
         try:
             os.mkdir(folder+"/Runs/"+str(cut))
         except Exception:
             os.system("rm -r "+folder+"/Runs/"+str(cut)+"/*")
             pass
 
-        # and for every mode and sign combination we will, before anything, create a subfolder for that
         for mode in modelist:
 
+            # subfolder for each mode
             for sign in signals:
                 try:
                     os.mkdir(folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign)
                 except Exception:
                     os.system("rm -r "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/*")
                     pass
-
 
                 # now there's some setup before starting FRODA: we need to copy the correct mode file from Modes...
                 os.system("cp "+folder+"/Modes/"+"mode"+mode+".in "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/mode.in")
@@ -160,35 +121,23 @@ def frodasim(exec_folder,args,hydro_file):
                 os.system("cp "+folder+"/hbonds.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hbonds.in")
                 os.system("cp "+folder+"/hphobes.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hphobes.in")
 
-
-                # now we actually run FRODA - there's a slight difference between positive and negative directions
-                print ("---------------------------------------------------------------")
-                print ("runfroda:",cut,mode,sign)
-                print ("----------------------------------------------------------------")
-
+                # now we generate commands to run FRODA
+                # note that there's a slight difference (in the dstep) between positive and negative directions
                 if (sign=="neg"):
                     command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
                 else:
                     command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
 
-                #add each command to one of the lists of commands, rotating which one each time
-                commands[counter % number_of_cores].append(command)
-                counter += 1
+                #add each command to the list of commands
+                commands.append(command)
 
-
-    #print(commands)
-
-    #start a thread for each core, giving it a list of commands
-    for i in range (0, number_of_cores):
-        p = multiprocessing.Process(name="thread" + str(i),target=call_froda_multiple,args=(commands[i],))
-        jobs.append(p)
-        p.start()
-
-
-    # this is here so that we wait for all processes to finish before proceeding
-    for job in jobs:
-        job.join()
-
+    print ("---------------------------------------------------------------")
+    print ("runfroda: running FRODA to generate conformer PDBs")
+    print ("----------------------------------------------------------------")
+    
+    # give the commands to a pool of processes (one for each core) to run
+    # the 'chunksize' is 1, meaning the commands are given to processes individually as the processes become free
+    Pool().map(call_command, commands, 1)
 
     # now some housekeeping: we remove all temp files we created at each subfolder
     for cut in cutlist:
