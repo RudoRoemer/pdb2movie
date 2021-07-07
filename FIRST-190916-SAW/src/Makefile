@@ -47,7 +47,7 @@ FORT = gfortran
 CPP = g++
 CPP_OPTIMIZATION = -O3
 #DEBUG = -g -pg
-EXTRA = -Wall
+#EXTRA = -Wall
 CPPFLAGS = $(INC) ${CPP_OPTIMIZATION} $(DEBUG) ${EXTRA} -ansi -fPIC
 
 INSTALL_HOME = $(CURDIR)/..
