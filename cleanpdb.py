@@ -9,7 +9,10 @@ cleanpdb.py - removes rotamers and non-protein molecules
 import sys
 import os
 import argparse
-from exceptions import RuntimeError
+try:
+    from exceptions import RuntimeError
+except ImportError:
+    from builtins import RuntimeError
 
 '''
 remove_rotamers: uses pymol to keep a single rotamer from the pdb file
@@ -148,11 +151,11 @@ def cleanPDB(args,exec_folder):
 
     # check whether there are missing residues by comparing the list with a range
     try:
-		for i in range(residues[0],residues[-1]):
-			if (not(i in residues)):
-				print("WARNING: residue "+str(i)+" is missing!")
+	    for i in range(residues[0],residues[-1]):
+	        if (not(i in residues)):
+	            print("WARNING: residue "+str(i)+" is missing!")
     except:
-		raise RuntimeError("cleanpdb: chain A seems to be empty/non-existent! --- aborting")
+	    raise RuntimeError("cleanpdb: chain A seems to be empty/non-existent! --- aborting")
 
     # close files
     inputfile.close()

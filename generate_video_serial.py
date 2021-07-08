@@ -3,6 +3,7 @@ generate_video.py - takes a series of PDB files and generates a video
 
 '''
 
+from __future__ import print_function
 import sys
 import os
 #import multiprocessing
@@ -176,8 +177,8 @@ def gen_video(exec_folder, args, folder):
                 filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"
                 videolist = folder + "/Run-" + str(cut) + "-mode" + mode + "-list" 
                 outF = open(videolist, "w")
-                print >>outF, "file " + filename+'pos'+fileextension
-                print >>outF, "file " + filename+'neg'+fileextension
+                print("file " + filename+'pos'+fileextension, end="\n", file=outF)
+                print("file " + filename+'neg'+fileextension, end="", file=outF)
                 outF.close()
 
                 #run ffmpeg to create the combi

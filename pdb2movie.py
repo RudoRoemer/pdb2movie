@@ -74,7 +74,7 @@ def parsing_args(sys_args):
     #ensure pdbfile and output are full paths, not relative ones (so they are correct from here on, regardless of pwd)
     args.pdbfile[0] = os.path.abspath(args.pdbfile[0])
     if (args.output):
-		args.output[0] = os.path.abspath(args.output[0])
+	    args.output[0] = os.path.abspath(args.output[0])
     
     return args
 
@@ -105,7 +105,10 @@ if __name__ == "__main__":#
             os.mkdir(args.output[0])
             os.chdir(args.output[0])
         except Exception:
-            userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+            try:
+                userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+            except NameError:
+                userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
             if (userinput=="y"):
                 os.system("rm -r "+args.output[0]+"/*")
                 os.chdir(args.output[0])
