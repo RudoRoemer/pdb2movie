@@ -30,6 +30,7 @@ Recompiling FIRST and diagstd is necessary!
 --modes MODE LIST      - Movement modes to be investigated           
 --ecuts ECUTS LIST     - Energy cutoff values        
 --video FILE           - Python file with PyMOL commands to be run before generating video            
+--nomovie              - Do not generate any videos            
 --threed               - Generates anaglyph stereo videos     
 --combi                - Creates videos combining positive and negative directions for each mode/cutoff energy      
 --multiple             - Keeps multiple chains from the original PDB file (default: uses only chain A)   
