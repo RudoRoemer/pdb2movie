@@ -82,7 +82,7 @@ def parsing_args(sys_args):
 
 if __name__ == "__main__":#
 
-    # first things first: we need to parse command-line arguments with the function we have defined
+    # parse commmand-line arguments
     args=parsing_args(sys.argv)
 
     # print "test"
@@ -94,42 +94,25 @@ if __name__ == "__main__":#
     # set exec_folder to the full path of this script
     exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
 
-    #print(exec_folder)
-
-    # if an output folder was defined, we need to make that directory if it doesn't exist,
-    # and warn the user that the folder will be emptied if it exists
-    # and then make that the present working directory
-    #if (args.output):
-
-    #    try:
-    #        os.mkdir(args.output[0])
-    #        os.chdir(args.output[0])
-    #    except Exception:
-    #        try:
-    #            userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-    #        except NameError:
-    #            userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-    #        if (userinput=="y"):
-    #            os.system("rm -r "+args.output[0]+"/*")
-    #            os.chdir(args.output[0])
-    #        else:
-    #            quit()
-    #        pass
-
-
     # set the output folder if not specified
     if (not args.output):
         args.output = [args.pdbfile[0][:-4]]
 
-    # make or (if necessary) empty the output folder
+    # make or (if necessary) empty the output folder, warning the user before any emptying occurs
     try:
-        os.mkdir(args.pdbfile[0][:-4])
-        os.chdir(args.pdbfile[0][:-4])
+        os.mkdir(args.output[0])
     except Exception:
-        os.system("rm -r "+args.pdbfile[0][:-4]+"/*")
-        os.chdir(args.pdbfile[0][:-4])
-        pass
+        #try:
+        #    userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+        #except NameError:
+        #    userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+        if (userinput=="y"):
+            os.system("rm -r "+args.output[0]+"/*")
+        else:
+            quit()
 
+    #enter the output folder
+    os.chdir(args.output[0])
 
     # now we will just call the functions defined in other files in sequence
     # and that's all we need to do!
