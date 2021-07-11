@@ -98,21 +98,15 @@ def cleanPDB(args,exec_folder):
     # opens the input file received as one of the arguments for reading
     inputfile=open(args.pdbfile[0],'r')
 
-
     # initialise a list of residues
     residues=[]
 
+    print(args.output[0])
+
     # set output filename based on arguments received and open that file for writing
-    if (args.output):
-        output_filename=args.output[0]+"/"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
-
-    else:
-        folder=args.pdbfile[0].split("/")
-        output_filename=args.pdbfile[0][:-4]+"/"+folder[-1][:-4]+"_clean.pdb"
-    #print(output_filename)
+    output_filename=args.output[0]+"/"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
+    print(output_filename)
     output=open(output_filename,'w')
-
-
 
     # goes over every single line from tge 
     for line in inputfile:

@@ -99,33 +99,37 @@ if __name__ == "__main__":#
     # if an output folder was defined, we need to make that directory if it doesn't exist,
     # and warn the user that the folder will be emptied if it exists
     # and then make that the present working directory
-    if (args.output):
+    #if (args.output):
 
-        try:
-            os.mkdir(args.output[0])
-            os.chdir(args.output[0])
-        except Exception:
-            try:
-                userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-            except NameError:
-                userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-            if (userinput=="y"):
-                os.system("rm -r "+args.output[0]+"/*")
-                os.chdir(args.output[0])
-            else:
-                quit()
-            pass
+    #    try:
+    #        os.mkdir(args.output[0])
+    #        os.chdir(args.output[0])
+    #    except Exception:
+    #        try:
+    #            userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+    #        except NameError:
+    #            userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+    #        if (userinput=="y"):
+    #            os.system("rm -r "+args.output[0]+"/*")
+    #            os.chdir(args.output[0])
+    #        else:
+    #            quit()
+    #        pass
 
-    # if we haven't specified an output folder, we make a subfolder at current directory with the protein name (or empty an existing subfolder)
-    else:
 
-        try:
-            os.mkdir(args.pdbfile[0][:-4])
-            os.chdir(args.pdbfile[0][:-4])
-        except Exception:
-            os.system("rm -r "+args.pdbfile[0][:-4]+"/*")
-            os.chdir(args.pdbfile[0][:-4])
-            pass
+    # set the output folder if not specified
+    if (not args.output):
+        args.output = [args.pdbfile[0][:-4]]
+
+    # make or (if necessary) empty the output folder
+    try:
+        os.mkdir(args.pdbfile[0][:-4])
+        os.chdir(args.pdbfile[0][:-4])
+    except Exception:
+        os.system("rm -r "+args.pdbfile[0][:-4]+"/*")
+        os.chdir(args.pdbfile[0][:-4])
+        pass
+
 
     # now we will just call the functions defined in other files in sequence
     # and that's all we need to do!
