@@ -8,8 +8,8 @@ cleanpdb.py - removes rotamers and non-protein molecules
 
 import sys
 import os
-import argparse
-import pdb2movie
+
+import helpers
 try:
     from exceptions import RuntimeError
 except ImportError:
@@ -28,54 +28,6 @@ structure args: structured object with fields corresponding to the possible para
 def remove_rotamers(output_filename,exec_folder):
     # calls pymol using remove_rotamers.py - for details on this, see that file!
     os.system('pymol -qc '+exec_folder+'/remove_rotamers.py '+output_filename)
-
-
-def parsing_args(sys_args):
-
-    # the argparse library takes care of all the parsing from a list of command-line arguments to a structure
-    parser = argparse.ArgumentParser(description='Runs simulations and generates videos for the most likely movement modes given a PDB file.',usage='%(prog)s PDB [options]')
-
-    parser.add_argument('--keep',  nargs="+",
-                        help='List of molecules to be kept')
-    parser.add_argument('--output',  nargs=1,
-                        help='Output directory')
-    parser.add_argument('--res',  nargs=2,
-                        help='Video resolution (width, height)')
-    parser.add_argument('--waters',  action='store_true',
-                        help='Flag for keeping water molecules')
-    parser.add_argument('--multiple',  action='store_true',
-                        help='Keep multiple chains (default: uses only chain A)')
-    parser.add_argument('--combi',  action='store_true',
-                        help='Combine both positive and negative directions into a single movie')
-    parser.add_argument('--threed',  action='store_true',
-                        help='Flag for generating anaglyph stereo movies')
-    parser.add_argument('--confs',  nargs=1,
-                        help='Total number of configurations to be calculated')
-    parser.add_argument('--freq',  nargs=1,
-                        help='Frequency of saving intermediate configurations')
-    parser.add_argument('--step',  nargs=1,
-                        help='Size of random step')
-    parser.add_argument('--dstep',  nargs=1,
-                        help='Size of directed step')
-    parser.add_argument('--modes',  nargs="+",
-                        help='Movement modes to be investigated')
-    parser.add_argument('--ecuts',  nargs="+",
-                        help='Energy cutoff values')
-    parser.add_argument('--video',  nargs=1,
-                        help='Python file with PyMOL commands to be run before generating video')
-    parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
-                        help='Initial PDB file')
-
-    # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
-    args = parser.parse_args(sys_args[1:])
-
-    #ensure pdbfile and output are full paths, not relative ones (so they are correct from here on, regardless of pwd)
-    args.pdbfile[0] = os.path.abspath(args.pdbfile[0])
-    if (args.output):
-        args.output[0] = os.path.abspath(args.output[0])
-    
-    return args
-
 
 
 '''
@@ -172,13 +124,13 @@ def cleanPDB(args):
 #calling this as a single script will probably not work, I think?
 if __name__ == "__main__":
     # parse commmand-line arguments
-    args=parsing_args(sys.argv)
+    args=helpers.parsing_args(sys.argv)
 
     # set the output folder if not specified
     if (not args.output):
         args.output = [args.pdbfile[0][:-4]]
 
-    # organise the output folder
-    pdb2movie.go_to_output_folder(args)
+    # change directory to the output folder
+    helpers.go_to_output_folder(args)
 
     cleanPDB(args)
