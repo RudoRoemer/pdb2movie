@@ -18,7 +18,7 @@ Inputs:
 
 '''
 
-def elnemosim(exec_folder,args,hydropdb):
+def elnemosim(exec_folder, args, hydropdb):
 
     print ("---------------------------------------------------------------")
     print ("elnemosim:")
@@ -36,20 +36,15 @@ def elnemosim(exec_folder,args,hydropdb):
     print ("----------------------------------------------------------------")
 
     struct_file=generate_structure(hydropdb)
-    # from that filename, get the folder where all the outputs are
-    folder=struct_file.rsplit("/",1)[0]
-    # print(struct_file)
-
 
     # now we have a series of shell commands to set up input files for the ElNemo tools
-
 
     # now, we need to generate a pdbmat options file using an external function as well - more details there!
     print ("---------------------------------------------------------------")
     print ("elnemosim: generate pdbmat options file")
     print ("----------------------------------------------------------------")
 
-    generate_pdbmat(struct_file,folder)
+    generate_pdbmat(struct_file)
     print("calling "+exec_folder+"/pdbmat")
 
     # finally, we run pdbmat
@@ -67,15 +62,15 @@ def elnemosim(exec_folder,args,hydropdb):
     os.system(exec_folder + "/FIRST-190916-SAW/src/diagstd")
 
     # now, we run modesplit with the generated structure file, the output of diagstd and the list of modes we generated (actually, a range from lowest mode to highest mode with everything in between)
-    os.system(exec_folder+"/modesplit "+struct_file+" "+folder+"/pdbmat.eigenfacs "+str(modelist[0])+" "+str(modelist[-1]))
+    os.system(exec_folder+"/modesplit "+struct_file+" "+"pdbmat.eigenfacs "+str(modelist[0])+" "+str(modelist[-1]))
 
     # now we have some housekeeping to do - putting all movement modes into a "Modes" folder
     try:
-        os.mkdir(folder+"/Modes/")
+        os.mkdir("Modes/")
     except Exception:
-        os.system("rm -r "+folder+"/Modes/*")
+        os.system("rm -r "+"Modes/*")
         pass
-    os.system("mv "+folder+"/mode*.in "+folder+"/Modes/")
+    os.system("mv "+"mode*.in "+"Modes/")
 
 
 
@@ -93,30 +88,24 @@ string outputfile: path to the generated .structure file
 
 def generate_structure(filename):
 
-
     # let's open up the PDB file and generate a filename for the output file based on its path
     inputfile=open(filename,'r')
-    outputfile=filename[:-10]+".structure"
-    #print outputfile
+    outputfilename=filename[:-10]+".structure"
 
     # now we open the output file as well
-    tempfile=open(outputfile,'w')
+    outputfile=open(outputfilename,'w')
 
     # now we can loop over all lines from the PDB file...
     for line in inputfile:
 
         # ...and write only the alpha carbons to the output file
         if (line[0:6].strip()=='ATOM' and line[12:15].strip()=='CA'):
-            # line=line[:7]+format(counter, '04d')+line[11:]
-            tempfile.write(line)
-            # counter=counter+1
+            outputfile.write(line)
 
-    # we close both files and return the path to the output file
+    # we close both files and return the name of the output file
     inputfile.close()
-    tempfile.close()
-    return outputfile
-    # os.system("rm "+filename)
-    # os.system("mv tmp.pdb "+filename)
+    outputfile.close()
+    return outputfilename
 
 
 '''
@@ -124,15 +113,14 @@ generate_pdbmat: a simple wrapper to a bunch of write calls to generate a very s
 
 Inputs:
 string struct_file: path to the .structure file that was already generated at this point
-string folder: path to the folder where outputs are being written
 
 '''
 
 
-def generate_pdbmat(struct_file,folder):
-    # print("pdbmat.dat at "+folder+"/pdbmat.dat")
-    filename=folder + '/pdbmat.dat'
+def generate_pdbmat(struct_file):
+
     # we start by creating a pdbmat.dat file and opening it
+    filename='pdbmat.dat'
     datfile=open(filename,'w')
 
     # the only variable in this is the name of the struct file
@@ -152,18 +140,23 @@ def generate_pdbmat(struct_file,folder):
 
 
 
-
 # calling this script by itself is probably something you shouldn't do! But you can pass a filename for a PDB file with hydrogens and it should work, I guess?
 
-if __name__ == "__main__":#
-    args=[]
+if __name__ == "__main__":
+    # parse commmand-line arguments
+    args=helpers.parsing_args(sys.argv)
+
     hydro=os.path.abspath(sys.argv[1])
 
     # set exec_folder to the full path of this script
     exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
 
-    os.chdir(os.path.dirname(hydro))
+    # set the output folder if not specified
+    if (not args.output):
+        args.output = [args.pdbfile[0][:-4]]
 
-    # pymol_test()
-    # prepare_script(sys.argv,"t1t.mpg")
+    # change directory to the output folder
+    helpers.go_to_output_folder(args)
+
+
     elnemosim(exec_folder,args,hydro)
