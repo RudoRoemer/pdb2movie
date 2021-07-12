@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-
 '''
 runfirst.py - functions to run FIRST simulations, analyzing rigidity in proteins
+
 '''
 
 
@@ -19,8 +19,6 @@ Outputs:
 - string hydropdb: full path to PDB file after addition of hydrogens 
 
 '''
-
-
 def firstsim(exec_folder,cleanpdb):
 
     print ("---------------------------------------------------------------")
@@ -51,6 +49,7 @@ def firstsim(exec_folder,cleanpdb):
     return cleanpdb[:-9]+"hydro.pdb"
 
 
+
 '''
 renum_atoms: renumber the atoms in a PDB file to make sure they're in order and without gaps
 
@@ -58,8 +57,6 @@ Inputs:
 string filename: path to origin PDB file
 
 '''
-
-
 def renum_atoms(filename):
 
     # open the input file and a temp file

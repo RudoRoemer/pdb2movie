@@ -8,12 +8,13 @@ cleanpdb.py - removes rotamers and non-protein molecules
 
 import sys
 import os
-
-import helpers
 try:
     from exceptions import RuntimeError
 except ImportError:
     from builtins import RuntimeError
+
+import helpers
+
 
 '''
 remove_rotamers: uses pymol to keep a single rotamer from the pdb file
@@ -24,10 +25,12 @@ string exec_folder: location where the python scripts are located
 
 Outputs:
 structure args: structured object with fields corresponding to the possible parameters from command line
+
 '''
 def remove_rotamers(output_filename,exec_folder):
     # calls pymol using remove_rotamers.py - for details on this, see that file!
     os.system('pymol -qc '+exec_folder+'/remove_rotamers.py '+output_filename)
+
 
 
 '''
@@ -123,7 +126,8 @@ def cleanPDB(args):
     return output_filename
 
 
-# calling this script by itself works as if it were pdb2movie works but is inadvisable
+
+# calling this script by itself works as if it were pdb2movie but is inadvisable
 
 if __name__ == "__main__":
     # parse commmand-line arguments

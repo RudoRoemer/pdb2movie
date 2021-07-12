@@ -1,9 +1,12 @@
 '''
-this contains some useful helper functions used throughout the project
+helpers.py - this contains some useful helper functions used throughout the project
+
 '''
+
 
 import os
 import argparse
+
 
 '''
 parsing_args: takes all command-line arguments and parse them into a structure with argument fields
@@ -13,8 +16,8 @@ list sys_args: list of system arguments as received in the command line
 
 Outputs:
 structure args: structured object with fields corresponding to the possible parameters from command line
-'''
 
+'''
 def parsing_args(sys_args):
 
     # the argparse library takes care of all the parsing from a list of
@@ -83,6 +86,7 @@ def parsing_args(sys_args):
     return args
 
 
+
 '''
 go_to_output_folder: creates or (if necessary) empties output folder and enters it,
                      and warns user before deletions if necessary
@@ -90,10 +94,7 @@ go_to_output_folder: creates or (if necessary) empties output folder and enters 
 Inputs:
 argument list args: object containing all command-line arguments as parsed by pdb2movie
 
-Outputs:
-None
 '''
-
 def go_to_output_folder(args):
 
     # make or (if necessary) empty the output folder, warning the user before any emptying occurs

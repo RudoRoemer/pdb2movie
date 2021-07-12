@@ -3,12 +3,13 @@ generate_video.py - takes a series of PDB files and generates a video
 
 '''
 
+
 from __future__ import print_function
 import sys
 import os
 #import multiprocessing
 import argparse
-import subprocess
+
 
 '''
 parsing_video_args: takes all command-line arguments and parse them into a structure with argument fields
@@ -21,7 +22,6 @@ Outputs:
 structure args: structured object with fields corresponding to the possible parameters from command line
 
 '''
-
 def parsing_video_args(sys_args):
 
     # the argparse library takes care of all the parsing from a list of command-line arguments to a structure
@@ -53,10 +53,12 @@ def parsing_video_args(sys_args):
     args = parser.parse_args(sys_args[1:])
     return args
 
+
+
 '''
 call_pymol: simple wrapper for calling a Linux command
-'''
 
+'''
 '''
 def call_pymol(command):
     name = multiprocessing.current_process().name
@@ -65,13 +67,14 @@ def call_pymol(command):
     print('--- exiting:', name)
 '''
 
+
+
 '''
 gen_video: takes a structured folder full of PDB files for conformers and generate videos out of them
 
 Inputs:
 string exec_folder: folder where the python scripts are located (full path)
 struct args: structure containing all arguments already parsed
-
 
 '''
 def gen_video(exec_folder, args):
@@ -97,35 +100,35 @@ def gen_video(exec_folder, args):
     signals = ['pos', 'neg']
 
     
-    #ensure the width and height inputs are within allowed ranges
+    # ensure the width and height inputs are within allowed ranges
     if (args.res[0] < 16 or args.res[0] > 8192) or (args.res[1] < 16 or args.res[1] > 8192):
         print("width or heigth out of range [16, 8192]")
         return
 
-    #ensure the fps input is within allowed ranges
+    # ensure the fps input is within allowed ranges
     if (args.fps < 1 or args.fps > 240):
         print("fps out of range [1, 240]")
         return
 
 
-    #ensure the drawingengine input is an allowed option
+    # ensure the drawingengine input is an allowed option
     if args.drawingengine != "pymol" and args.drawingengine != "vmd":
         print("drawingengine invalid")
         return
 
 
-    #set commandfile to inputted path, including none by default
+    # set commandfile to inputted path, including none by default
     commandfile = ""
 
     if args.video:
         commandfile = args.video
 
-    #ensure the videocodec input is an allowed option
+    # ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
         print("videocodec invalid")
         return
 
-    #set the fileextension according to the videocodec chosen
+    # set the fileextension according to the videocodec chosen
     fileextension = ".mp4"
     if args.videocodec == "hevc":
         fileextension = ".mov"
@@ -161,18 +164,9 @@ def gen_video(exec_folder, args):
 					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
 					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
 					''.join([str(i) for i in commandfile]))
-
     
-    # now we loop over cutoffs and modes, and combine movies if --combi is specified
-    if args.combi:
-
-        print ("---------------------------------------------------------------")
-        print ("gen_video: finalizing - creating combi videos")
-        print ("----------------------------------------------------------------")
-
-        #if --combi is specified, create .combi videos from the pos and neg videos
-        for cut in cutlist:
-            for mode in modelist:
+            # combine the pos and neg videos into if desired
+            if args.combi:
 
                 #create a videolist file (specifying the videos to combine) to give ffmpeg
                 filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"
@@ -191,6 +185,8 @@ def gen_video(exec_folder, args):
 
     return
 
+
+
 # cmd.set(full_screen='on')
 
 # cut below here and paste into script ###
@@ -203,16 +199,17 @@ def gen_video(exec_folder, args):
 
 
 
-# if we're running this as a separate script, we need to parse arguments and then call gen_video, that's pretty much it!
+# calling this script by itself works but is inadvisable
+
 if __name__ == "__main__":
     args = parsing_video_args(sys.argv)
 
-    # set exec_folder to the full path of this script
+    # set exec_folder to the full path of the location of this script
     exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
 
-    folder = args.folder[0]
-    os.chdir(folder)
+    # go into the output folder
+    os.chdir(args.folder[0])
 
     # pymol_test()
     # prepare_script(sys.argv,"t1t.mpg")
-    gen_video(exec_folder, args, folder)
+    gen_video(exec_folder, args)

@@ -1,6 +1,8 @@
 '''
 runfroda.py - functions to run FRODA_simulations, generating conformers for the proteins
+
 '''
+
 
 import os
 from multiprocessing import Pool
@@ -11,13 +13,14 @@ call_command: simple wrapper for calling shell commands
 
 Inputs: 
 - string command: shell command to be run
-'''
 
+'''
 def call_command(command):
     print ("--- calling:" + command)
     os.system(command)
     print ("--- finished calling:" + command)
     return
+
 
 
 '''
@@ -29,7 +32,6 @@ Inputs:
 - string hydro_file: full path to PDB file after addition of hydrogens (by extension, also includes path to where all outputs are)
 
 '''
-
 def frodasim(exec_folder,args,hydro_file):
 
     print ("---------------------------------------------------------------")
@@ -74,9 +76,6 @@ def frodasim(exec_folder,args,hydro_file):
     print ("---------------------------------------------------------------")
     print ("runfroda: preparing folders for FRODA")
     print ("----------------------------------------------------------------")
-
-    # we isolate the name of the protein, which is in the PDB_path somewhere!
-    prot=hydro_file.rsplit("/",1)[1][:-10]
 
     # now we make modelist into a list of strings instead of ints and define the signs positive and negative
     modelist=[format(i, '02d') for i in modelist]

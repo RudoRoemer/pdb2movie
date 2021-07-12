@@ -4,11 +4,11 @@ runelnemo.py - functions related to running Elastic Network model ElNemo
 '''
 
 
-
 import os
 import sys
 
 import helpers
+
 
 '''
 elnemosim: main function for running ElNemo simulations
@@ -19,7 +19,6 @@ Inputs:
 - string hydropdb: full path to PDB file after addition of hydrogens (by extension, also includes path to where all outputs are)
 
 '''
-
 def elnemosim(exec_folder, args, hydropdb):
 
     print ("---------------------------------------------------------------")
@@ -86,8 +85,6 @@ Outputs:
 string outputfile: path to the generated .structure file
 
 '''
-
-
 def generate_structure(filename):
 
     # let's open up the PDB file and generate a filename for the output file based on its path
@@ -110,6 +107,7 @@ def generate_structure(filename):
     return outputfilename
 
 
+
 '''
 generate_pdbmat: a simple wrapper to a bunch of write calls to generate a very specific pdbmat.dat file with the correct options for diagstd
 
@@ -117,8 +115,6 @@ Inputs:
 string struct_file: path to the .structure file that was already generated at this point
 
 '''
-
-
 def generate_pdbmat(struct_file):
 
     # we start by creating a pdbmat.dat file and opening it
@@ -140,8 +136,7 @@ def generate_pdbmat(struct_file):
     datfile.close()
 
 
-
-# calling this script by itself works as if it were pdb2movie works but is inadvisable
+# calling this script by itself works as if it were pdb2movie but is inadvisable
 
 if __name__ == "__main__":
     # parse commmand-line arguments
