@@ -9,6 +9,7 @@ cleanpdb.py - removes rotamers and non-protein molecules
 import sys
 import os
 import argparse
+import pdb2movie
 try:
     from exceptions import RuntimeError
 except ImportError:
@@ -21,7 +22,8 @@ Inputs:
 string output_filename: a filename (full path) where the pdb file with rotamers is located
 string exec_folder: location where the python scripts are located
 
-
+Outputs:
+structure args: structured object with fields corresponding to the possible parameters from command line
 '''
 def remove_rotamers(output_filename,exec_folder):
     # calls pymol using remove_rotamers.py - for details on this, see that file!
@@ -66,6 +68,11 @@ def parsing_args(sys_args):
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
     args = parser.parse_args(sys_args[1:])
+
+    #ensure pdbfile and output are full paths, not relative ones (so they are correct from here on, regardless of pwd)
+    args.pdbfile[0] = os.path.abspath(args.pdbfile[0])
+    if (args.output):
+        args.output[0] = os.path.abspath(args.output[0])
     
     return args
 
@@ -75,17 +82,19 @@ def parsing_args(sys_args):
 cleanPDB: 
 
 Inputs: 
-- argument list args: object containing all command-line arguments as parsed by pdb2movie
-- string exec_folder: location where the python scripts are located
+argument list args: object containing all command-line arguments as parsed by pdb2movie
 
 Outputs:
-- string output_filename: a filename (full path) where the clean pdb file will be located
+string output_filename: a filename (full path) where the clean pdb file will be located
 
 '''
-def cleanPDB(args,exec_folder):
-# def main():
+def cleanPDB(args):
+
+    # opens the input file received as one of the arguments for reading
+    inputfile=open(args.pdbfile[0],'r')
 
     # set args.keep as a list of molecules that need to be kept, based on the arguments received
+    # if there are any to keep, make/move to a folder for them, named after them in alphabetical order
     if (args.keep==None):
         args.keep=[]
     if args.waters:
@@ -94,17 +103,15 @@ def cleanPDB(args,exec_folder):
         print("Keeping the following molecules: ")
         for i in args.keep:
             print(i)
-
-    # opens the input file received as one of the arguments for reading
-    inputfile=open(args.pdbfile[0],'r')
+        args.keep.sort()
+        os.system("mkdir -p " + '_'.join(args.keep))
+        os.chdir('_'.join(args.keep))
 
     # initialise a list of residues
     residues=[]
 
-    print(args.output[0])
-
     # set output filename based on arguments received and open that file for writing
-    output_filename=args.output[0]+"/"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
+    output_filename="./"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
     print(output_filename)
     output=open(output_filename,'w')
 
@@ -163,7 +170,15 @@ def cleanPDB(args,exec_folder):
 
 
 #calling this as a single script will probably not work, I think?
-if __name__ == "__main__":#
-   args=parsing_args(sys.argv)
-   exec_folder=sys.argv[0].rsplit("/",1)[0]
-   cleanPDB(args,exec_folder)
+if __name__ == "__main__":
+    # parse commmand-line arguments
+    args=parsing_args(sys.argv)
+
+    # set the output folder if not specified
+    if (not args.output):
+        args.output = [args.pdbfile[0][:-4]]
+
+    # organise the output folder
+    pdb2movie.go_to_output_folder(args)
+
+    cleanPDB(args)

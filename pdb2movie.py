@@ -78,6 +78,37 @@ def parsing_args(sys_args):
     
     return args
 
+
+'''
+go_to_output_folder: creates or (if necessary) empties output folder and enters it,
+                     and warns user before deletions if necessary
+
+Inputs:
+argument list args: object containing all command-line arguments as parsed by pdb2movie
+
+Outputs:
+None
+'''
+
+def go_to_output_folder(args):
+
+    # make or (if necessary) empty the output folder, warning the user before any emptying occurs
+    try:
+        os.mkdir(args.output[0])
+    except Exception:
+        #try:
+        #    userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+        #except NameError:
+        #    userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+        #if (userinput=="y"):
+            os.system("rm -r -f "+args.output[0]+"/*")
+        #else:
+        #    quit()
+
+    #enter the output folder
+    os.chdir(args.output[0])
+
+
 # no specific function is defined here, since this is our main program!
 
 if __name__ == "__main__":#
@@ -98,21 +129,8 @@ if __name__ == "__main__":#
     if (not args.output):
         args.output = [args.pdbfile[0][:-4]]
 
-    # make or (if necessary) empty the output folder, warning the user before any emptying occurs
-    try:
-        os.mkdir(args.output[0])
-    except Exception:
-        #try:
-        #    userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-        #except NameError:
-        #    userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-        if (userinput=="y"):
-            os.system("rm -r "+args.output[0]+"/*")
-        else:
-            quit()
-
-    #enter the output folder
-    os.chdir(args.output[0])
+    # organise the output folder
+    go_to_output_folder(args)
 
     # now we will just call the functions defined in other files in sequence
     # and that's all we need to do!
@@ -121,7 +139,7 @@ if __name__ == "__main__":#
     print ("---------------------------------------------------------------")
     print ("pdb2movie: cleaning the PDB file")
     print ("----------------------------------------------------------------")
-    clean_file=cleanpdb.cleanPDB(args,exec_folder)
+    clean_file=cleanpdb.cleanPDB(args)
 
     # then we run FIRST on it
     print ("---------------------------------------------------------------")
@@ -130,8 +148,8 @@ if __name__ == "__main__":#
     hydro_file=runfirst.firstsim(exec_folder,args,clean_file)
 
     # we get the folder path because we forgot to save it when creating/emptying it beforehand
-    folder=hydro_file.rsplit("/",1)[0]
-    
+    folder=os.path.abspath(hydro_file.rsplit("/",1)[0])
+
     # these don't even have outputs that need to be saved:
     # first we run ElNemo...
     print ("---------------------------------------------------------------")
