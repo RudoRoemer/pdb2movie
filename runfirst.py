@@ -13,7 +13,6 @@ firstsim - main function for running FIRST analysis on a protein
 
 Inputs:
 - string exec_folder: folder where the python scripts are located (full path)
-- struct args: structure containing all arguments already parsed
 - string cleanpdb: full path to PDB file after cleaning (by extension, also includes path to where all outputs are)
 
 Outputs:
@@ -22,7 +21,7 @@ Outputs:
 '''
 
 
-def firstsim(exec_folder,args,cleanpdb):
+def firstsim(exec_folder,cleanpdb):
 
     print ("---------------------------------------------------------------")
     print ("firstsim:")
@@ -82,7 +81,7 @@ def renum_atoms(filename):
 
             # we chop up the line, cutting out the current atom number and putting the value of counter as atom number
             line=line[:6]+format(counter, '05d')+line[11:]
-            
+
             # write it to temp file and increase counter
             tempfile.write(line)
             counter=counter+1

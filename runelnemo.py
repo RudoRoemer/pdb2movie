@@ -8,6 +8,8 @@ runelnemo.py - functions related to running Elastic Network model ElNemo
 import os
 import sys
 
+import helpers
+
 '''
 elnemosim: main function for running ElNemo simulations
 
@@ -139,14 +141,13 @@ def generate_pdbmat(struct_file):
 
 
 
-
-# calling this script by itself is probably something you shouldn't do! But you can pass a filename for a PDB file with hydrogens and it should work, I guess?
+# calling this script by itself works as if it were pdb2movie works but is inadvisable
 
 if __name__ == "__main__":
     # parse commmand-line arguments
     args=helpers.parsing_args(sys.argv)
 
-    hydro=os.path.abspath(sys.argv[1])
+    hydro="./" + os.path.basename(sys.argv[1])[:-4] + "_hydro" + os.path.basename(sys.argv[1])[-4:]
 
     # set exec_folder to the full path of this script
     exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -158,5 +159,4 @@ if __name__ == "__main__":
     # change directory to the output folder
     helpers.go_to_output_folder(args)
 
-
-    elnemosim(exec_folder,args,hydro)
+    elnemosim(exec_folder, args, hydro)

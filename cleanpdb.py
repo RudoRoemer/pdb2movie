@@ -45,19 +45,11 @@ def cleanPDB(args):
     # opens the input file received as one of the arguments for reading
     inputfile=open(args.pdbfile[0],'r')
 
-    # set args.keep as a list of molecules that need to be kept, based on the arguments received
-    # if there are any to keep, make/move to a folder for them, named after them in alphabetical order
-    if (args.keep==None):
-        args.keep=[]
-    if args.waters:
-        args.keep.append('HOH')
+    # print which molecules are being protected from being removed by cleanPDB
     if (args.keep!=[]):
         print("Keeping the following molecules: ")
         for i in args.keep:
             print(i)
-        args.keep.sort()
-        os.system("mkdir -p " + '_'.join(args.keep))
-        os.chdir('_'.join(args.keep))
 
     # set output filename based on arguments received
     output_filename="./"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
@@ -131,7 +123,8 @@ def cleanPDB(args):
     return output_filename
 
 
-#calling this as a single script will probably not work, I think?
+# calling this script by itself works as if it were pdb2movie works but is inadvisable
+
 if __name__ == "__main__":
     # parse commmand-line arguments
     args=helpers.parsing_args(sys.argv)

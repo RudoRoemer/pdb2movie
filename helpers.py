@@ -68,10 +68,17 @@ def parsing_args(sys_args):
     # (which is the python script name) and return the structure generated
     args = parser.parse_args(sys_args[1:])
 
-    #ensure pdbfile and output are full paths, not relative ones (so they are correct from here on, regardless of pwd)
+    # ensure pdbfile and output are full paths, not relative ones (so they are correct from here on, regardless of pwd)
     args.pdbfile[0] = os.path.abspath(args.pdbfile[0])
     if (args.output):
         args.output[0] = os.path.abspath(args.output[0])
+
+    # correct and order args.keep
+    if (args.keep==None):
+        args.keep=[]
+    if args.waters:
+        args.keep.append('HOH')
+    args.keep.sort()
     
     return args
 
@@ -108,3 +115,8 @@ def go_to_output_folder(args):
 
     #enter the output folder
     os.chdir(args.output[0])
+
+    #enter a subfolder for specific kept molecules if necessary
+    if (not args.keep==[]):
+        os.system("mkdir -p " + '_'.join(args.keep))
+        os.chdir('_'.join(args.keep))
