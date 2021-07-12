@@ -52,9 +52,6 @@ if __name__ == "__main__":#
     print ("----------------------------------------------------------------")
     hydro_file=runfirst.firstsim(exec_folder,args,clean_file)
 
-    # we get the folder path because we forgot to save it when creating/emptying it beforehand
-    folder=os.path.abspath(hydro_file.rsplit("/",1)[0])
-
     # these don't even have outputs that need to be saved:
     # first we run ElNemo...
     print ("---------------------------------------------------------------")
@@ -78,7 +75,7 @@ if __name__ == "__main__":#
         print ("---------------------------------------------------------------")
         print ("pdb2movie: generating the videos")
         print ("----------------------------------------------------------------")
-        generate_video_serial.gen_video(exec_folder,args,folder)
+        generate_video_serial.gen_video(exec_folder,args)
         
     # finally, we are done
     print ("---------------------------------------------------------------")

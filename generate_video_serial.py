@@ -71,11 +71,10 @@ gen_video: takes a structured folder full of PDB files for conformers and genera
 Inputs:
 string exec_folder: folder where the python scripts are located (full path)
 struct args: structure containing all arguments already parsed
-string folder: folder where the PDB files to be turned into videos are located (full path)
 
 
 '''
-def gen_video(exec_folder, args, folder):
+def gen_video(exec_folder, args):
     
     print ("---------------------------------------------------------------")
     print ("gen_video:")
@@ -131,6 +130,8 @@ def gen_video(exec_folder, args, folder):
     if args.videocodec == "hevc":
         fileextension = ".mov"
 
+    # set present working directory
+    folder = os.getcwd()
 
     print ("---------------------------------------------------------------")
     print ("gen_video: converting from pdb files to videos")
