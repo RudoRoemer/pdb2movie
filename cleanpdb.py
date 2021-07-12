@@ -59,13 +59,20 @@ def cleanPDB(args):
         os.system("mkdir -p " + '_'.join(args.keep))
         os.chdir('_'.join(args.keep))
 
+    # set output filename based on arguments received
+    output_filename="./"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
+
+    # if the cleaned file is already here we don't need to do anything
+    if (os.path.isfile(output_filename)):
+        print("clean file already generated: " + os.path.basename(output_filename))
+        return output_filename
+
+    # open a file to write to
+    os.system("rm -f " + output_filename + "_incomplete")
+    output=open(output_filename + "_incomplete",'w')
+
     # initialise a list of residues
     residues=[]
-
-    # set output filename based on arguments received and open that file for writing
-    output_filename="./"+args.pdbfile[0].rsplit("/",1)[1][:-4]+"_clean.pdb"
-    print(output_filename)
-    output=open(output_filename,'w')
 
     # goes over every single line from tge 
     for line in inputfile:
@@ -113,6 +120,9 @@ def cleanPDB(args):
     # close files
     inputfile.close()
     output.close()
+
+    # rename file to indicate it is complete
+    os.system("mv " + output_filename + "_incomplete " + output_filename)
 
     # calls pymol to remove remaining rotamers
     #remove_rotamers(output_filename,exec_folder)

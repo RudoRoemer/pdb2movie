@@ -21,10 +21,14 @@ def parsing_args(sys_args):
     # command-line arguments to a structure
     parser = argparse.ArgumentParser(description='Runs simulations and generates videos for the most likely movement modes given a PDB file.',usage='%(prog)s pdbfile [options]')
 
+    parser.add_argument('--output',  nargs=1,
+                        help='Set the output location for the videos, defaulting to `FILE` without the `.pdb`')
+    parser.add_argument('--overwrite',  action='store_true',
+                        help='Delete the contents of the output folder before beginning')
+    parser.add_argument('--forceoverwrite',  action='store_true',
+                        help='Overwrite and silence all are-you-sure messages')
     parser.add_argument('--keep',  nargs="+",
                         help='List of molecules to be kept')
-    parser.add_argument('--output',  nargs=1,
-                        help='Output directory')
     parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
                         help='Video resolution (width, height), range [16, 8192]')
     parser.add_argument('--waters',  action='store_true',
@@ -89,14 +93,18 @@ def go_to_output_folder(args):
     try:
         os.mkdir(args.output[0])
     except Exception:
-        #try:
-        #    userinput=raw_input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-        #except NameError:
-        #    userinput=input("WARNING: everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
-        #if (userinput=="y"):
+        if (args.forceoverwrite):
             os.system("rm -r -f "+args.output[0]+"/*")
-        #else:
-        #    quit()
+        elif (args.overwrite):
+
+            try:
+                userinput=raw_input("WARNING: --overwrite option chosen. Everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+            except NameError:
+                userinput=input("WARNING: --overwrite option chosen. everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
+            if (userinput=="y"):
+                os.system("rm -r -f "+args.output[0]+"/*")
+            else:
+                quit()
 
     #enter the output folder
     os.chdir(args.output[0])

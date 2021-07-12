@@ -50,7 +50,7 @@ if __name__ == "__main__":#
     print ("---------------------------------------------------------------")
     print ("pdb2movie: starting rigidity analysis with FIRST")
     print ("----------------------------------------------------------------")
-    hydro_file=runfirst.firstsim(exec_folder,args,clean_file)
+    hydro_file=runfirst.firstsim(exec_folder, clean_file)
 
     # these don't even have outputs that need to be saved:
     # first we run ElNemo...
