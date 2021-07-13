@@ -1,23 +1,25 @@
 #!/bin/bash
 
 #check that five arguments have been given
-if [ "$#" -ne 6 ] && [ "$#" -ne 7 ]
+if [ "$#" -ne 8 ] && [ "$#" -ne 9 ]
 then
-  echo "usage: $0 video_width video_height frame_rate path_with_pdb_files destination_file_name_and_path video_codec [pymol_command_file]"
+  echo "usage: $0 video_width video_height frame_rate path_with_pdb_files destination_file_name_and_path video_codec confs freq [pymol_command_file]"
   exit -1
 fi
 
 #arguments:
 #PDB_PATH is where to find the PDBs which must begin 'tmp_froda_'.
 #DEST_FILE is the name (and location) of the video to generate
-#OTIONAL_COMMAND_FILE is optional, and allows extra instructions to be given to pymol before generation of frames
+#OPTIONAL_COMMAND_FILE is optional, and allows extra instructions to be given to pymol before generation of frames
 VIDEO_WIDTH=$1
 VIDEO_HEIGHT=$2
 FPS=$3
 PDB_PATH=$4
 DEST_FILE=$5
 VIDEO_CODEC=$6
-OPTIONAL_COMMAND_FILE=$7
+CONFS=$7
+FREQ=$8
+OPTIONAL_COMMAND_FILE=$9
 
 TMP_PATH=$PDB_PATH/pymol_temp
 
@@ -60,11 +62,35 @@ fi
 
 echo "cmd.save(\"$PDB_PATH/cartoon.pse\")" >> $CMD_FILE
 
-
 COUNTER=0
 
 for i in `ls $PDB_FILES`
 do
+
+  #get the filename, and extract the conformer number
+  j="$(basename -- $i)"
+  j=${j:10:8}
+  if [ "$j" -eq "00000000" ]
+  then
+    j=0
+  else
+    j=$(echo $j | sed 's/^0*//')
+  fi
+
+  #check if we want to use this pdb; if not, then skip it
+
+  #its number must be less than CONFS...
+  if (( $j > $CONFS ))
+  then
+    continue
+  fi
+
+  #...and must be a multiple of FREQ
+  if (( $j % $FREQ != 0 ))
+  then
+    continue
+  fi
+
   #id of the next frame (png file) to generate
   id=$(printf "%08d" $COUNTER)
 

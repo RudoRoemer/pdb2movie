@@ -9,6 +9,7 @@ import sys
 import os
 #import multiprocessing
 import argparse
+import subprocess
 
 
 '''
@@ -112,6 +113,17 @@ def gen_video(exec_folder, args):
     else:
         dstep=0.01
 
+    # more args to know which pdbs to use to make videos
+    if args.confs:
+        confs=int(args.confs[0])
+    else:
+        confs=1000
+
+    if args.freq:
+        freq=int(args.freq[0])
+    else:
+        freq=50
+
     # ensure the width and height inputs are within allowed ranges
     if (args.res[0] < 16 or args.res[0] > 8192) or (args.res[1] < 16 or args.res[1] > 8192):
         print("width or heigth out of range [16, 8192]")
@@ -163,53 +175,88 @@ def gen_video(exec_folder, args):
                 else:
                     commandfilebase = "/" + os.path.basename(commandfile)
                     
-                    # make or empty a folder for the videos with this commandfile
+                    # folder for the videos with this commandfile
                     try:
                         os.mkdir(commandfilebase[1:])
                     except:
-                        #os.system("rm -r " + commandfilebase + "/*")
                         pass
+
+                filenamestart = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-"
 
                 # for both directions (neg and pos)
                 for sign in signals:
 
-                    # this is where the relevant pdbs are located
-                    currfolder = folder + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "/Mode" + mode + "-" + sign
-
                     # this is where the video will be put and what it will be called
-                    videoname =  folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-" + sign + fileextension
+                    videoname =  filenamestart + sign + "-" + str(args.fps) + "fps" + fileextension
+                    temp_videoname =  filenamestart + sign + "-" + str(args.fps) + "fps_temp" + fileextension
 
-                    # copy tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
-                    os.system('chmod 744 '+currfolder+'/tmp_RCD.pdb')
-                    os.system('ln -s '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
+                    # this is where the relevant pdbs are located
+                    pdbfolder = folder + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "/Mode" + mode + "-" + sign
 
-                    #make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
+                    # determine whether we need to generate a video
+                    if (os.path.isfile(videoname) and not os.path.isfile(videoname + "_in_progress")):
+                        # read what confs and freq the existing video was made with (from the video's metadata)
+                        output = subprocess.getoutput("ffprobe -loglevel quiet -show_format " + videoname + " | grep title")
+                        prevconfs = int(output.rsplit("/")[0].rsplit("=")[1])
+                        prevfreq = int(output.rsplit("/")[1])
+                        if (prevconfs >= confs and freq % prevfreq == 0):
+                            print("   video already generated: " + os.path.basename(videoname))
+                            continue
+
+                    os.system("touch " + videoname + "_in_progress")
+                    os.system("rm -f " + videoname)
+
+                    # link tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
+                    os.system('chmod 744 '+pdbfolder+'/tmp_RCD.pdb')
+                    os.system('ln -s '+pdbfolder+'/tmp_RCD.pdb '+pdbfolder+'/tmp_froda_00000000.pdb')
+
+                    # now we make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
                     print('gen_video: ' + exec_folder + '/make_video_' + 
-    					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
-    					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
-    					commandfile)
+                        args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+                        str(args.fps) + ' ' + pdbfolder + ' ' + temp_videoname + ' ' + args.videocodec + ' ' + 
+                        commandfile + ' ' + str(confs) + ' ' + str(freq))
                     os.system(exec_folder + '/make_video_' + 
-    					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
-    					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
-    					commandfile)
-        
-                # combine the pos and neg videos into if desired
+                        args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+                        str(args.fps) + ' ' + pdbfolder + ' ' + temp_videoname + ' ' + args.videocodec + ' ' + 
+                        commandfile + ' ' + str(confs) + ' ' + str(freq))
+                    
+                    # rename the file (remove _temo) and add some metadata
+                    os.system("ffmpeg -loglevel quiet -i " + temp_videoname + " -codec copy -metadata title=" + str(confs) + "/" + str(freq) + " " + videoname)
+                    
+                    os.system("rm " + videoname + "_in_progress " + temp_videoname)
+
+                # combine the pos and neg videos if desired
                 if args.combi:
 
-                    # create a videolist file (specifying the videos to combine) to give ffmpeg
-                    filename  = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-"
+                    filenameend  = "-" + str(args.fps) + "fps" + fileextension
+                    videoname = filenamestart + 'combi' + filenameend
+                    temp_videoname = filenamestart + 'combi' + "-" + str(args.fps) + "fps_temp" + fileextension
                     videolist = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-list" 
+
+                    # determine whether we need to generate a video
+                    if (os.path.isfile(videoname) and not os.path.isfile(videolist)):
+                        # read what confs and freq the existing video was made with (from the video's metadata)
+                        output = subprocess.getoutput("ffprobe -loglevel quiet -show_format " + videoname + " | grep title")
+                        prevconfs = int(output.rsplit("/")[0].rsplit("=")[1])
+                        prevfreq = int(output.rsplit("/")[1])
+                        if (prevconfs >= confs and freq % prevfreq == 0):
+                            print("   video already generated: " + os.path.basename(videoname))
+                            continue
+
+                    os.system("rm -f " + videoname)
+
+                    # create a videolist file (specifying the videos to combine) to give ffmpeg
                     outF = open(videolist, "w")
-                    print("file " + filename+'pos'+fileextension, end="\n", file=outF)
-                    print("file " + filename+'neg'+fileextension, end="", file=outF)
+                    print("file " + filenamestart+'pos'+filenameend, end="\n", file=outF)
+                    print("file " + filenamestart+'neg'+filenameend, end="\n", file=outF)
                     outF.close()
 
-                    # run ffmpeg to create the combi
-                    os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y ' + filename + 'combi' + fileextension)
+                    # run ffmpeg to create the combi then update the metadata
+                    os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y ' + temp_videoname)
+                    os.system("ffmpeg -loglevel quiet -i " + temp_videoname + " -codec copy -metadata title=" + str(confs) + "/" + str(freq) + " " + videoname)
 
-                    # fix the permissions on the combi video
-                    os.system('rm ' + videolist)
-                    os.system('chmod 744 ' + filename + 'combi'+fileextension)
+                    # remove videolist file
+                    os.system('rm ' + videolist + " " + temp_videoname)
 
     return
 

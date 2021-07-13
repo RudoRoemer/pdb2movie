@@ -33,7 +33,7 @@ def firstsim(exec_folder,cleanpdb):
 
     # if the output file is already here we don't need to do anything
     if (os.path.isfile(cleanpdb[:-9] + "hydro.pdb")):
-        print("hydro file already generated: " + os.path.basename(cleanpdb[:-9] + "hydro.pdb"))
+        print("   hydro file already generated: " + os.path.basename(cleanpdb[:-9] + "hydro.pdb"))
         return cleanpdb[:-9] + "hydro.pdb"
 
     # remove any files outputted by this script (in case it was cancelled midway-through before)

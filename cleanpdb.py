@@ -59,7 +59,7 @@ def cleanPDB(args):
 
     # if the cleaned file is already here we don't need to do anything
     if (os.path.isfile(output_filename)):
-        print("clean file already generated: " + os.path.basename(output_filename))
+        print("   clean file already generated: " + os.path.basename(output_filename))
         return output_filename
 
     # open a file to write to

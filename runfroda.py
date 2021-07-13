@@ -110,6 +110,7 @@ def frodasim(exec_folder,args,hydro_file):
                 if (confs_file and freq_file):
                     if (int(confs_file[0][5:]) >= totconf):
                         if (freq % int(freq_file[0][4:]) == 0):
+                            print("   conformers already generated for " + str(cut) + "-mode" + mode + "-" + sign)
                             os.chdir("..")
                             continue
 

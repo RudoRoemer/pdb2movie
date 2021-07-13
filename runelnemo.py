@@ -36,9 +36,8 @@ def elnemosim(exec_folder, args, hydropdb):
     print ("elnemosim: generate structure file")
     print ("----------------------------------------------------------------")
 
-    
     if (os.path.isfile(hydropdb[:-10] + ".structure")):
-        print("structure file already generated: " + hydropdb[:-10] + ".structure")
+        print("   structure file already generated: " + os.path.basename(hydropdb)[:-10] + ".structure")
         struct_file=hydropdb[:-10] + ".structure"
     else:
         struct_file=generate_structure(hydropdb)
@@ -51,7 +50,7 @@ def elnemosim(exec_folder, args, hydropdb):
     print ("----------------------------------------------------------------")
 
     if (os.path.isfile("pdbmat.dat")):
-        print("pdbmat options file already generated: pdbmat.dat")
+        print("   pdbmat options file already generated: pdbmat.dat")
     else:
         generate_pdbmat(struct_file)
 
@@ -65,7 +64,7 @@ def elnemosim(exec_folder, args, hydropdb):
         os.system(exec_folder+"/pdbmat")
         os.system("rm pdbmat_in_progress")
     else:
-        print("pdbmat already run")
+        print("   pdbmat already run")
 
     # now, we run diagstd
     print ("---------------------------------------------------------------")
@@ -77,7 +76,7 @@ def elnemosim(exec_folder, args, hydropdb):
         os.system(exec_folder + "/FIRST-190916-SAW/src/diagstd")
         os.system("rm diagstd_in_progress")
     else:
-        print("diagstd already run")
+        print("   diagstd already run")
 
 
     # these variables store the lowest and highest mode we must run modesplit with
