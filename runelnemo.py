@@ -81,7 +81,7 @@ def elnemosim(exec_folder, args, hydropdb):
 
 
     # these variables store the lowest and highest mode we must run modesplit with
-    # the code here makes this rane as tight as possible, accounting for mode[num].in files already generated
+    # the code here makes this range as tight as possible, accounting for mode[num].in files already generated
     min_mode = modelist[0]
     max_mode = modelist[-1]
 
@@ -123,7 +123,6 @@ def generate_structure(filename):
 
     # let's open up the PDB file and generate a filename for the output file based on its path
     inputfile=open(filename,'r')
-    os.system("rm -f " + filename[:-10] + ".structure_temp")
 
     # now we open the output file as well
     outputfile=open(filename[:-10] + ".structure", 'w')
@@ -156,8 +155,7 @@ string struct_file: path to the .structure file that was already generated at th
 def generate_pdbmat(struct_file):
 
     # we start by creating a pdbmat.dat file and opening it
-    filename='pdbmat_temp.dat'
-    datfile=open(filename,'w')
+    datfile=open('pdbmat_temp.dat','w')
 
     # the only variable in this is the name of the struct file
     datfile.write("Coordinate FILENAME = " + os.path.basename(struct_file) + "\n")

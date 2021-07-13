@@ -101,7 +101,17 @@ def gen_video(exec_folder, args):
     modelist = [format(i, '02d') for i in modelist]
     signals = ['pos', 'neg']
 
-    
+    # other args to find the right folders of pdbs
+    if args.step:
+        step=float(args.step[0])
+    else:
+        step=0.1
+
+    if args.dstep:
+        dstep=float(args.dstep[0])
+    else:
+        dstep=0.01
+
     # ensure the width and height inputs are within allowed ranges
     if (args.res[0] < 16 or args.res[0] > 8192) or (args.res[1] < 16 or args.res[1] > 8192):
         print("width or heigth out of range [16, 8192]")
@@ -160,14 +170,14 @@ def gen_video(exec_folder, args):
                         #os.system("rm -r " + commandfilebase + "/*")
                         pass
 
-                # for both directions(neg and pos)
+                # for both directions (neg and pos)
                 for sign in signals:
 
                     # this is where the relevant pdbs are located
-                    currfolder = folder + "/Runs/" + str(cut) + "/Mode" + mode + "-" + sign
+                    currfolder = folder + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "/Mode" + mode + "-" + sign
 
                     # this is where the video will be put and what it will be called
-                    videoname =  folder + commandfilebase + "/Run-" + str(cut) + "-mode" + mode + "-" + sign + fileextension
+                    videoname =  folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-" + sign + fileextension
 
                     # copy tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
                     os.system('chmod 744 '+currfolder+'/tmp_RCD.pdb')
@@ -187,8 +197,8 @@ def gen_video(exec_folder, args):
                 if args.combi:
 
                     # create a videolist file (specifying the videos to combine) to give ffmpeg
-                    filename  = folder + commandfilebase + "/Run-" + str(cut) + "-mode" + mode + "-"
-                    videolist = folder + commandfilebase + "/Run-" + str(cut) + "-mode" + mode + "-list" 
+                    filename  = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-"
+                    videolist = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-list" 
                     outF = open(videolist, "w")
                     print("file " + filename+'pos'+fileextension, end="\n", file=outF)
                     print("file " + filename+'neg'+fileextension, end="", file=outF)

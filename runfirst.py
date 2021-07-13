@@ -72,7 +72,6 @@ def renum_atoms(filename):
 
     # open the input file and a temp file
     inputfile=open(filename,'r')
-    os.system("rm -f tmp.pdb")
     tempfile=open("tmp.pdb",'w')
 
     # let's learn how to count!

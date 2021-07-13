@@ -63,7 +63,6 @@ def cleanPDB(args):
         return output_filename
 
     # open a file to write to
-    os.system("rm -f " + output_filename + "_incomplete")
     output=open(output_filename + "_incomplete",'w')
 
     # initialise a list of residues

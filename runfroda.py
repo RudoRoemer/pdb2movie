@@ -19,6 +19,7 @@ def call_command(command):
     print ("--- calling:" + command)
     os.system(command)
     print ("--- finished calling:" + command)
+    print(os.getcwd())
     return
 
 
@@ -37,9 +38,6 @@ def frodasim(exec_folder,args,hydro_file):
     print ("---------------------------------------------------------------")
     print ("frodasim:")
     print ("----------------------------------------------------------------")
-
-    # first things first: we get the output folder from the path to the PDB file with hydrogens
-    folder=hydro_file.rsplit("/",1)[0]
 
     # now we need to care about a bunch of command-line arguments: if they were passed, we set them, otherwise we use default values
     # that is true for confs, freq, step, dstep, modes, ecuts
@@ -78,15 +76,14 @@ def frodasim(exec_folder,args,hydro_file):
     print ("----------------------------------------------------------------")
 
     # now we make modelist into a list of strings instead of ints and define the signs positive and negative
-    modelist=[format(i, '02d') for i in modelist]
-    signals=["pos","neg"]
+    modelist = [format(i, '02d') for i in modelist]
+    signals = ["pos","neg"]
 
-    # create a folder (or empty an existing folder) for all the conformers and other outputs
-    try:
-        os.mkdir(folder+"/Runs/")
-    except Exception:
-        os.system("rm -r "+folder+"/Runs/*")
-        pass
+    base = os.getcwd()
+
+    # folder for all the conformers and other outputs
+    os.system("mkdir -p Runs_step" + str(step) + "_dstep" + str(dstep))
+    os.chdir("Runs_step" + str(step) + "_dstep" + str(dstep))
 
     # create a list of commands, that will later be given to a pool of processes to run
     commands = []
@@ -95,40 +92,58 @@ def frodasim(exec_folder,args,hydro_file):
     for cut in cutlist:
 
         # folder for each cut
-        try:
-            os.mkdir(folder+"/Runs/"+str(cut))
-        except Exception:
-            os.system("rm -r "+folder+"/Runs/"+str(cut)+"/*")
-            pass
+        os.system("mkdir -p " + str(cut))
+        os.chdir(str(cut))
 
         for mode in modelist:
-
-            # subfolder for each mode
             for sign in signals:
-                try:
-                    os.mkdir(folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign)
-                except Exception:
-                    os.system("rm -r "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/*")
-                    pass
+
+                # subfolder for each mode-sign combination
+                os.system("mkdir -p Mode" + mode + "-" + sign)
+                os.chdir("Mode" + mode + "-" + sign)
+
+                # determine if we need to generate conformers
+                # if confs is not more than previously, and freq is a multiple of previously, then we do not so we skip
+                files = os.listdir(".")
+                confs_file = [x for x in files if (x[:5] == "CONFS")]
+                freq_file = [x for x in files if (x[:4] == "FREQ")]
+                if (confs_file and freq_file):
+                    if (int(confs_file[0][5:]) >= totconf):
+                        if (freq % int(freq_file[0][4:]) == 0):
+                            os.chdir("..")
+                            continue
+
+                # remove previous output files
+                os.system("rm -f *")
+                #os.system("rm -f CONFS* FREQ* problem.log tmp_bond.txt tmp_data.txt tmp_results.txt tmp_froda_00000000.pdb tmp_RCD.*")
 
                 # now there's some setup before starting FRODA: we need to copy the correct mode file from Modes...
-                os.system("cp "+folder+"/mode"+mode+".in "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/mode.in")
+                os.system("cp " + base + "/mode" + mode + ".in ./mode.in")
                 # ... the relevant PDB_file, and cov.out, and hbonds.out, and hphobes.out as input files (also we need to create an empty stacked.in)
-                os.system("cp "+hydro_file+" "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb")
-                os.system("touch "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/stacked.in")
-                os.system("cp "+folder+"/cov.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/cov.in")
-                os.system("cp "+folder+"/hbonds.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hbonds.in")
-                os.system("cp "+folder+"/hphobes.out "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/hphobes.in")
+                os.system("cp " + base + "/" + hydro_file + " ./tmp.pdb")
+                os.system("touch stacked.in")
+                os.system("cp " + base + "/cov.out ./cov.in")
+                os.system("cp " + base + "/hbonds.out ./hbonds.in")
+                os.system("cp " + base + "/hphobes.out ./hphobes.in")
 
                 # now we generate commands to run FRODA
                 # note that there's a slight difference (in the dstep) between positive and negative directions
+                command="cd " + os.path.abspath(".") + "\n"
                 if (sign=="neg"):
-                    command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
+                    command+=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+"tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
                 else:
-                    command=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+"/tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
+                    command+=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+"tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
 
-                #add each command to the list of commands
+                # record confs and freq when finished so we know we have already done them if we run this again
+                command += "\n touch CONFS" + str(totconf)
+                command += "\n touch FREQ" + str(freq)
+
+                # add each command to the list of commands
                 commands.append(command)
+
+                os.chdir("..")
+
+        os.chdir("..")
 
     print ("---------------------------------------------------------------")
     print ("runfroda: running FRODA to generate conformer PDBs")
@@ -142,10 +157,12 @@ def frodasim(exec_folder,args,hydro_file):
     for cut in cutlist:
         for mode in modelist:
             for sign in signals:
-                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/hphobes.in')
-                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/hbonds.in')
-                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/cov.in')
-                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/stacked.in')
-                os.system('rm '+folder+"/Runs/"+str(cut)+"/Mode"+mode+"-"+sign+'/tmp.pdb')
+                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/hphobes.in')
+                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/hbonds.in')
+                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/cov.in')
+                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/stacked.in')
+                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/tmp.pdb')
+
+    os.chdir("..")
 
     return
