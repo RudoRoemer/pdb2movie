@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-runfirst.py - functions to run FIRST simulations, analyzing rigidity in proteins
+runfirst.py - functions to run FIRST simulations, analyzing rigidity in proteins
 
 '''
 
@@ -31,11 +31,16 @@ def firstsim(exec_folder,cleanpdb):
     print ("firstsim: calling reduce.3.23.130521")
     print ("----------------------------------------------------------------")
 
-    # print              "./reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+ "hydro.pdb"
-    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
+    # if the output file is already here we don't need to do anything
+    if (os.path.isfile(cleanpdb[:-9] + "hydro.pdb")):
+        print("hydro file already generated: " + os.path.basename(cleanpdb[:-9] + "hydro.pdb"))
+        return cleanpdb[:-9] + "hydro.pdb"
+
+    # add hydrogens
+    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro_incomplete.pdb")
 
     # now, we call an external function to renumber the atoms taking the hydrogens into account
-    renum_atoms(cleanpdb[:-9]+"hydro.pdb")
+    renum_atoms(cleanpdb[:-9]+"hydro_incomplete.pdb")
 
     # finally we run FIRST with the PDB after hydrogen addition!
 
@@ -43,7 +48,10 @@ def firstsim(exec_folder,cleanpdb):
     print ("firstsim: running FIRST with new PDB file after hydrogens added")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
+    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro_incomplete.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
+
+    # rename the file to indicate it is complete
+    os.system("mv " + cleanpdb[:-9] + "hydro_incomplete.pdb " + cleanpdb[:-9] + "hydro.pdb")
 
     # finally, return the hydro-added PDB path
     return cleanpdb[:-9]+"hydro.pdb"
@@ -51,7 +59,7 @@ def firstsim(exec_folder,cleanpdb):
 
 
 '''
-renum_atoms: renumber the atoms in a PDB file to make sure they're in order and without gaps
+renum_atoms: renumber the atoms in a PDB file to make sure they're in order and without gaps
 
 Inputs:
 string filename: path to origin PDB file
@@ -61,6 +69,7 @@ def renum_atoms(filename):
 
     # open the input file and a temp file
     inputfile=open(filename,'r')
+    os.system("rm -f tmp.pdb")
     tempfile=open("tmp.pdb",'w')
 
     # let's learn how to count!
