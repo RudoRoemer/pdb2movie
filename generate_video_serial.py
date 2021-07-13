@@ -46,11 +46,11 @@ def parsing_video_args(sys_args):
                         help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
     parser.add_argument('folder', metavar='folder', type=str, nargs=1,
                         help='folder')
-    parser.add_argument('--fps',  nargs=1, type=int, default=30,
+    parser.add_argument('--fps', nargs=1, type=int, default=30,
                         help='Frames per second of the videos, range [1, 240]')
-    parser.add_argument('--confs',  nargs=1,
+    parser.add_argument('--confs', nargs=1, type=int,
                         help='Number of conformers go up to')
-    parser.add_argument('--freq',  nargs=1,
+    parser.add_argument('--freq', nargs=1, type=int,
                         help='Frequency of intermediate conformers to use')
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated

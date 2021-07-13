@@ -53,7 +53,7 @@ def firstsim(exec_folder,cleanpdb):
 
     os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro_temp.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
 
-    # rename the file to indicate it is complete (remove i[ncomplete])
+    # rename the file to indicate it is complete (remove "temp")
     os.system("mv " + cleanpdb[:-9] + "hydro_temp.pdb " + cleanpdb[:-9] + "hydro.pdb")
 
     # finally, return the hydro-added PDB path

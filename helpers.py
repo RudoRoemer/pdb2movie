@@ -30,7 +30,7 @@ def parsing_args(sys_args):
                         help='Delete the contents of the output folder before beginning')
     parser.add_argument('--forceoverwrite',  action='store_true',
                         help='Overwrite and silence all are-you-sure messages')
-    parser.add_argument('--keep',  nargs="+",
+    parser.add_argument('--keep',  nargs="+", default=[],
                         help='List of molecules to be kept')
     parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
                         help='Video resolution (width, height), range [16, 8192]')
@@ -44,15 +44,15 @@ def parsing_args(sys_args):
                         help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--threed',  action='store_true',
                         help='Flag for generating anaglyph stereo movies')
-    parser.add_argument('--confs',  nargs=1,
+    parser.add_argument('--confs',  nargs=1, type=int,
                         help='Total number of configurations to be calculated')
-    parser.add_argument('--freq',  nargs=1,
+    parser.add_argument('--freq',  nargs=1, type=int,
                         help='Frequency of saving intermediate configurations')
     parser.add_argument('--step',  nargs=1,
                         help='Size of random step')
     parser.add_argument('--dstep',  nargs=1,
                         help='Size of directed step')
-    parser.add_argument('--modes',  nargs="+",
+    parser.add_argument('--modes',  nargs="+", type=int, default=[7, 8],
                         help='Movement modes to be investigated')
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
@@ -77,11 +77,12 @@ def parsing_args(sys_args):
         args.output[0] = os.path.abspath(args.output[0])
 
     # correct and order args.keep
-    if (args.keep==None):
-        args.keep=[]
     if args.waters:
         args.keep.append('HOH')
     args.keep.sort()
+
+    # order modes
+    args.modes.sort()
     
     return args
 

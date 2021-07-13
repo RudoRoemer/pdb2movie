@@ -36,7 +36,12 @@ def elnemosim(exec_folder, args, hydropdb):
     print ("elnemosim: generate structure file")
     print ("----------------------------------------------------------------")
 
-    struct_file=generate_structure(hydropdb)
+    
+    if (os.path.isfile(hydropdb[:-10] + ".structure")):
+        print("structure file already generated: " + hydropdb[:-10] + ".structure")
+        struct_file=hydropdb[:-10] + ".structure"
+    else:
+        struct_file=generate_structure(hydropdb)
 
     # now we have a series of shell commands to set up input files for the ElNemo tools
 
@@ -45,33 +50,62 @@ def elnemosim(exec_folder, args, hydropdb):
     print ("elnemosim: generate pdbmat options file")
     print ("----------------------------------------------------------------")
 
-    generate_pdbmat(struct_file)
-    print("calling "+exec_folder+"/pdbmat")
+    if (os.path.isfile("pdbmat.dat")):
+        print("pdbmat options file already generated: pdbmat.dat")
+    else:
+        generate_pdbmat(struct_file)
 
     # finally, we run pdbmat
     print ("---------------------------------------------------------------")
     print ("elnemosim: running local pdbmat()")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/pdbmat")
+    if (os.path.isfile("pdbmat_in_progress") or not os.path.isfile("pdbmat.dat_run")):
+        os.system("touch pdbmat_in_progress")
+        os.system(exec_folder+"/pdbmat")
+        os.system("rm pdbmat_in_progress")
+    else:
+        print("pdbmat already run")
 
     # now, we run diagstd
     print ("---------------------------------------------------------------")
     print ("elnemosim: running local diagstd()")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder + "/FIRST-190916-SAW/src/diagstd")
+    if (os.path.isfile("diagstd_in_progress") or not os.path.isfile("pdbmat.eigenfacs")):
+        os.system("touch diagstd_in_progress")
+        os.system(exec_folder + "/FIRST-190916-SAW/src/diagstd")
+        os.system("rm diagstd_in_progress")
+    else:
+        print("diagstd already run")
+
+
+    # these variables store the lowest and highest mode we must run modesplit with
+    # the code here makes this rane as tight as possible, accounting for mode[num].in files already generated
+    min_mode = modelist[0]
+    max_mode = modelist[-1]
+
+    for _, _, files in os.walk("."):
+        numbers=[]
+        for file in files:
+            if (file[:4]=="mode" and file[-3:]==".in"):
+                numbers.append(file[4:-3])
+        numbers.sort()
+        up_down_numbers = numbers.copy()
+        numbers.reverse()
+        up_down_numbers += numbers
+        for number in up_down_numbers:
+            if (int(number)==min_mode):
+                min_mode = min_mode + 1
+            if (int(number)==max_mode):
+                max_mode = max_mode - 1
+            if (min_mode > max_mode):
+                return
+        break
 
     # now, we run modesplit with the generated structure file, the output of diagstd and the list of modes we generated (actually, a range from lowest mode to highest mode with everything in between)
-    os.system(exec_folder+"/modesplit "+struct_file+" "+"pdbmat.eigenfacs "+str(modelist[0])+" "+str(modelist[-1]))
+    os.system(exec_folder+"/modesplit "+struct_file+" "+"pdbmat.eigenfacs "+str(min_mode)+" "+str(max_mode))
 
-    # now we have some housekeeping to do - putting all movement modes into a "Modes" folder
-    try:
-        os.mkdir("Modes/")
-    except Exception:
-        os.system("rm -r "+"Modes/*")
-        pass
-    os.system("mv "+"mode*.in "+"Modes/")
 
 
 
@@ -89,10 +123,10 @@ def generate_structure(filename):
 
     # let's open up the PDB file and generate a filename for the output file based on its path
     inputfile=open(filename,'r')
-    outputfilename=filename[:-10]+".structure"
+    os.system("rm -f " + filename[:-10] + ".structure_temp")
 
     # now we open the output file as well
-    outputfile=open(outputfilename,'w')
+    outputfile=open(filename[:-10] + ".structure", 'w')
 
     # now we can loop over all lines from the PDB file...
     for line in inputfile:
@@ -101,10 +135,14 @@ def generate_structure(filename):
         if (line[0:6].strip()=='ATOM' and line[12:15].strip()=='CA'):
             outputfile.write(line)
 
-    # we close both files and return the name of the output file
+    # finished with the files
     inputfile.close()
     outputfile.close()
-    return outputfilename
+
+    # rename the file to indicate it is complete (remove "temp")
+    os.system("mv " + filename[:-10] + ".structure_temp " + filename[:-10] + ".structure")
+
+    return filename[:-10] + ".structure"
 
 
 
@@ -118,7 +156,7 @@ string struct_file: path to the .structure file that was already generated at th
 def generate_pdbmat(struct_file):
 
     # we start by creating a pdbmat.dat file and opening it
-    filename='pdbmat.dat'
+    filename='pdbmat_temp.dat'
     datfile=open(filename,'w')
 
     # the only variable in this is the name of the struct file
@@ -134,6 +172,10 @@ def generate_pdbmat(struct_file):
     datfile.write("LevelSHIFT                 =    1.0E-09 ! non-zero value often required (numerical reasons).\n")
     datfile.write("Matrix FORMAT              =       FREE ! Free, or Binary, matrix saved.\n")
     datfile.close()
+
+    # rename the file to indicate it is complete (remove "temp")
+    os.system("mv pdbmat_temp.dat pdbmat.dat")
+
 
 
 # calling this script by itself works as if it were pdb2movie but is inadvisable
