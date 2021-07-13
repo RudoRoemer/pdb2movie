@@ -38,8 +38,8 @@ def parsing_video_args(sys_args):
                         help='Movement modes to be investigated')
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
-    parser.add_argument('--video',  nargs=1,
-                        help='File with PyMOL or VMD commands to be run before generating video')
+    parser.add_argument('--video',  nargs="+", type=str,
+                        help='File(s) with PyMOL or VMD commands to be run before generating video')
     parser.add_argument('--videocodec', type=str, default="mp4", 
                         help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
     parser.add_argument('--drawingengine', type=str, default="pymol", 
@@ -48,6 +48,10 @@ def parsing_video_args(sys_args):
                         help='folder')
     parser.add_argument('--fps',  nargs=1, type=int, default=30,
                         help='Frames per second of the videos, range [1, 240]')
+    parser.add_argument('--confs',  nargs=1,
+                        help='Number of conformers go up to')
+    parser.add_argument('--freq',  nargs=1,
+                        help='Frequency of intermediate conformers to use')
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
     args = parser.parse_args(sys_args[1:])
@@ -83,8 +87,6 @@ def gen_video(exec_folder, args):
     print ("gen_video:")
     print ("----------------------------------------------------------------")
 
-    # print(folder)
-
     # check for a list of modes and cutoff energies in the arguments, fills it in with defaults if no specification
     if args.modes:
         modelist = [int(x) for x in args.modes]
@@ -110,18 +112,16 @@ def gen_video(exec_folder, args):
         print("fps out of range [1, 240]")
         return
 
-
     # ensure the drawingengine input is an allowed option
     if args.drawingengine != "pymol" and args.drawingengine != "vmd":
         print("drawingengine invalid")
         return
 
-
-    # set commandfile to inputted path, including none by default
-    commandfile = ""
-
+    # set commandfilelist to inputted paths, including none by default
     if args.video:
-        commandfile = args.video
+        commandfilelist = [x for x in args.video]
+    else:
+        commandfilelist = [""]
 
     # ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
@@ -140,48 +140,66 @@ def gen_video(exec_folder, args):
     print ("gen_video: converting from pdb files to videos")
     print ("----------------------------------------------------------------")
 
-    #for all combinations of cutoffs, modes, and signs
-    for cut in cutlist:
-        for mode in modelist:
-            for sign in signals:
+    # loop over all the command files we want to apply to the videos
+    for commandfile in commandfilelist:
 
-                #this is where the relevant pdbs are located
-                currfolder = folder + "/Runs/"+str(cut)+"/Mode"+mode+"-"+sign
+        # for all combinations of cutoffs and modes
+        for cut in cutlist:
+            for mode in modelist:
 
-                #this is where the video will be put and what it will be called
-                videoname = folder + "/Run-" + str(cut) + "-mode" + mode + "-" + sign + fileextension
+                # extract name of the file from its location
+                if (commandfile == ""):
+                    commandfilebase = ""
+                else:
+                    commandfilebase = "/" + os.path.basename(commandfile)
+                    
+                    # make or empty a folder for the videos with this commandfile
+                    try:
+                        os.mkdir(commandfilebase[1:])
+                    except:
+                        #os.system("rm -r " + commandfilebase + "/*")
+                        pass
 
-                #create a link to tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
-                #os.system('ln -s '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
-                os.system('cp '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
+                # for both directions(neg and pos)
+                for sign in signals:
 
-                #make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
-                print('gen_video: '+exec_folder + '/make_video_' + 
-					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
-					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
-					''.join([str(i) for i in commandfile]))
-                os.system(exec_folder + '/make_video_' + 
-					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
-					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
-					''.join([str(i) for i in commandfile]))
-    
-            # combine the pos and neg videos into if desired
-            if args.combi:
+                    # this is where the relevant pdbs are located
+                    currfolder = folder + "/Runs/" + str(cut) + "/Mode" + mode + "-" + sign
 
-                #create a videolist file (specifying the videos to combine) to give ffmpeg
-                filename = folder+"/Run-"+str(cut)+"-mode"+mode+"-"
-                videolist = folder + "/Run-" + str(cut) + "-mode" + mode + "-list" 
-                outF = open(videolist, "w")
-                print("file " + filename+'pos'+fileextension, end="\n", file=outF)
-                print("file " + filename+'neg'+fileextension, end="", file=outF)
-                outF.close()
+                    # this is where the video will be put and what it will be called
+                    videoname =  folder + commandfilebase + "/Run-" + str(cut) + "-mode" + mode + "-" + sign + fileextension
 
-                #run ffmpeg to create the combi
-                os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y '+filename+'combi' + fileextension)
+                    # copy tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
+                    os.system('chmod 744 '+currfolder+'/tmp_RCD.pdb')
+                    os.system('ln -s '+currfolder+'/tmp_RCD.pdb '+currfolder+'/tmp_froda_00000000.pdb')
 
-                #fix the permissions on the combi video
-                os.system('rm ' + videolist)
-                os.system('chmod 744 '+filename+'combi'+fileextension)
+                    #make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
+                    print('gen_video: ' + exec_folder + '/make_video_' + 
+    					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+    					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
+    					commandfile)
+                    os.system(exec_folder + '/make_video_' + 
+    					args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+    					str(args.fps) + ' ' + currfolder+' '+videoname + ' ' + args.videocodec + ' ' + 
+    					commandfile)
+        
+                # combine the pos and neg videos into if desired
+                if args.combi:
+
+                    # create a videolist file (specifying the videos to combine) to give ffmpeg
+                    filename  = folder + commandfilebase + "/Run-" + str(cut) + "-mode" + mode + "-"
+                    videolist = folder + commandfilebase + "/Run-" + str(cut) + "-mode" + mode + "-list" 
+                    outF = open(videolist, "w")
+                    print("file " + filename+'pos'+fileextension, end="\n", file=outF)
+                    print("file " + filename+'neg'+fileextension, end="", file=outF)
+                    outF.close()
+
+                    # run ffmpeg to create the combi
+                    os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y ' + filename + 'combi' + fileextension)
+
+                    # fix the permissions on the combi video
+                    os.system('rm ' + videolist)
+                    os.system('chmod 744 ' + filename + 'combi'+fileextension)
 
     return
 
@@ -200,6 +218,7 @@ def gen_video(exec_folder, args):
 
 
 # calling this script by itself works but is inadvisable
+# the folder (where the run folders of mode-sign folders of pdbs are located) must be given
 
 if __name__ == "__main__":
     args = parsing_video_args(sys.argv)

@@ -56,8 +56,8 @@ def parsing_args(sys_args):
                         help='Movement modes to be investigated')
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
-    parser.add_argument('--video',  nargs=1,
-                        help='File with PyMOL or VMD commands to be run before generating video')
+    parser.add_argument('--video',  nargs="+", type=str,
+                        help='File(s) with PyMOL or VMD commands to be run before generating video')
     parser.add_argument('pdbfile', metavar='PDB', type=str, nargs=1,
                         help='Initial PDB file')
     parser.add_argument('--videocodec', type=str, default="mp4", 
