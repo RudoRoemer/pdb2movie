@@ -36,11 +36,14 @@ def firstsim(exec_folder,cleanpdb):
         print("hydro file already generated: " + os.path.basename(cleanpdb[:-9] + "hydro.pdb"))
         return cleanpdb[:-9] + "hydro.pdb"
 
+    # remove any files outputted by this script (in case it was cancelled midway-through before)
+    os.system("rm -f *temp* *.out *list *map*")
+
     # add hydrogens
-    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro_incomplete.pdb")
+    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro_temp.pdb")
 
     # now, we call an external function to renumber the atoms taking the hydrogens into account
-    renum_atoms(cleanpdb[:-9]+"hydro_incomplete.pdb")
+    renum_atoms(cleanpdb[:-9]+"hydro_temp.pdb")
 
     # finally we run FIRST with the PDB after hydrogen addition!
 
@@ -48,12 +51,12 @@ def firstsim(exec_folder,cleanpdb):
     print ("firstsim: running FIRST with new PDB file after hydrogens added")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro_incomplete.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
+    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro_temp.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
 
-    # rename the file to indicate it is complete
-    os.system("mv " + cleanpdb[:-9] + "hydro_incomplete.pdb " + cleanpdb[:-9] + "hydro.pdb")
+    # rename the file to indicate it is complete (remove i[ncomplete])
+    os.system("mv " + cleanpdb[:-9] + "hydro_temp.pdb " + cleanpdb[:-9] + "hydro.pdb")
 
-    # finally, return the hydro-added PDB path
+    # finally, return the hydro-added PDB path
     return cleanpdb[:-9]+"hydro.pdb"
 
 
