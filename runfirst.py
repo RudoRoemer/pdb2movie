@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-
 '''
-runfirst.py - functions to run FIRST simulations, analyzing rigidity in proteins
+runfirst.py - functions to run FIRST simulations, analyzing rigidity in proteins
+
 '''
 
 
@@ -13,30 +13,17 @@ firstsim - main function for running FIRST analysis on a protein
 
 Inputs:
 - string exec_folder: folder where the python scripts are located (full path)
-- struct args: structure containing all arguments already parsed
 - string cleanpdb: full path to PDB file after cleaning (by extension, also includes path to where all outputs are)
 
 Outputs:
 - string hydropdb: full path to PDB file after addition of hydrogens 
 
 '''
-
-
-def firstsim(exec_folder,args,cleanpdb):
+def firstsim(exec_folder,cleanpdb):
 
     print ("---------------------------------------------------------------")
     print ("firstsim:")
     print ("----------------------------------------------------------------")
-
-    # print "./reduce.3.23.130521 -DB reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb"
-
-    # first we isolate the name of the protein, which is in the clean PDB path somewhere!
-    print ("---------------------------------------------------------------")
-    print ("firstsim: find name of protein")
-    print ("----------------------------------------------------------------")
-
-    prot=cleanpdb[:-10].rsplit("/",1)[1]
-    # print "prot is "+prot
 
     # now, we need to run reduce to add hydrogens to protein residues - this generates a PDB file with hydrogens
 
@@ -44,13 +31,19 @@ def firstsim(exec_folder,args,cleanpdb):
     print ("firstsim: calling reduce.3.23.130521")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro.pdb")
+    # if the output file is already here we don't need to do anything
+    if (os.path.isfile(cleanpdb[:-9] + "hydro.pdb")):
+        print("   hydro file already generated: " + os.path.basename(cleanpdb[:-9] + "hydro.pdb"))
+        return cleanpdb[:-9] + "hydro.pdb"
 
-    # we also isolate the folder where outputs are being saved
-    folder=cleanpdb.rsplit("/",1)[0]
+    # remove any files outputted by this script (in case it was cancelled midway-through before)
+    os.system("rm -f *temp* *.out *list *map*")
+
+    # add hydrogens
+    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro_temp.pdb")
 
     # now, we call an external function to renumber the atoms taking the hydrogens into account
-    renum_atoms(cleanpdb[:-9]+"hydro.pdb",folder)
+    renum_atoms(cleanpdb[:-9]+"hydro_temp.pdb")
 
     # finally we run FIRST with the PDB after hydrogen addition!
 
@@ -58,33 +51,31 @@ def firstsim(exec_folder,args,cleanpdb):
     print ("firstsim: running FIRST with new PDB file after hydrogens added")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
+    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro_temp.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
 
-    # finally, return the hydro-added PDB path
+    # rename the file to indicate it is complete (remove "temp")
+    os.system("mv " + cleanpdb[:-9] + "hydro_temp.pdb " + cleanpdb[:-9] + "hydro.pdb")
+
+    # finally, return the hydro-added PDB path
     return cleanpdb[:-9]+"hydro.pdb"
-    # print folder,prot
+
 
 
 '''
-renum_atoms: renumber the atoms in a PDB file to make sure they're in order and without gaps
+renum_atoms: renumber the atoms in a PDB file to make sure they're in order and without gaps
 
 Inputs:
 string filename: path to origin PDB file
-string folder: path to output folder
 
 '''
+def renum_atoms(filename):
 
-
-def renum_atoms(filename,folder):
-
-    # open the input file and a temp file at the output folder
+    # open the input file and a temp file
     inputfile=open(filename,'r')
-    tempfile=open(folder+"/tmp.pdb",'w')
+    tempfile=open("tmp.pdb",'w')
 
     # let's learn how to count!
     counter=1
-    # test=format(1, '05d')
-    # print test
 
     print ("---------------------------------------------------------------")
     print ("renum_atoms:")
@@ -98,6 +89,7 @@ def renum_atoms(filename,folder):
 
             # we chop up the line, cutting out the current atom number and putting the value of counter as atom number
             line=line[:6]+format(counter, '05d')+line[11:]
+
             # write it to temp file and increase counter
             tempfile.write(line)
             counter=counter+1
@@ -108,4 +100,4 @@ def renum_atoms(filename,folder):
 
     # finally, we replace the original file with the temporary one
     os.system("rm "+filename)
-    os.system("mv "+folder+"/tmp.pdb "+filename)
+    os.system("mv tmp.pdb "+filename)
