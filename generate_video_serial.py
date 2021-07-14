@@ -125,7 +125,9 @@ def gen_video(exec_folder, args):
         freq=50
 
     # ensure the width and height inputs are within allowed ranges
-    if (args.res[0] < 16 or args.res[0] > 8192) or (args.res[1] < 16 or args.res[1] > 8192):
+    width = args.res[0]
+    height = args.res[0]
+    if (width < 16 or width > 8192) or (height < 16 or height > 8192):
         print("width or heigth out of range [16, 8192]")
         return
 
@@ -135,7 +137,8 @@ def gen_video(exec_folder, args):
         return
 
     # ensure the drawingengine input is an allowed option
-    if args.drawingengine != "pymol" and args.drawingengine != "vmd":
+    engine = args.drawingengine
+    if engine != "pymol" and engine != "vmd":
         print("drawingengine invalid")
         return
 
@@ -144,7 +147,6 @@ def gen_video(exec_folder, args):
         commandfilelist = [(os.path.dirname(x) + "/view-" + os.path.basename(x))  for x in args.video]
     else:
         commandfilelist = [""]
-    print(commandfilelist)
 
     # ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
@@ -182,16 +184,17 @@ def gen_video(exec_folder, args):
 
         # directory for all videos with this commandfile
         dir = "/Runs"
+        if (not args.multiple):
+            dir += "_single-chain"
         if (step != 0.1):
             dir += "_step" + str(step)
         if (dstep != 0.01):
             dir += "_dstep" + str(dstep)
-        os.system("mkdir -p " + commandfilebase[1:] + dir)
+        os.system("mkdir -p " + (commandfilebase + dir)[1:])
 
         # for all combinations of cutoffs and modes
         for cut in cutlist:
             for mode in modelist:
-
 
                 filenamestart = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-"
 
@@ -199,8 +202,9 @@ def gen_video(exec_folder, args):
                 for sign in signals:
 
                     # this is where the video will be put and what it will be called
-                    videoname =  filenamestart + sign + "-" + str(args.fps) + "fps" + fileextension
-                    temp_videoname =  filenamestart + sign + "-" + str(args.fps) + "fps_temp" + fileextension
+                    filenameend  = "-" + str(confs) + "@" + str(freq) + "-" + engine + '-' + str(args.fps) + "fps-" + str(width) + "x" + str(height) + fileextension
+                    videoname =  filenamestart + sign + filenameend
+                    temp_videoname =  filenamestart + sign + "-" + str(confs) + "@" + str(freq) + "-" + engine + '-' + str(args.fps) + "fps-" + str(width) + "x" + str(height) + "_temp" + fileextension
 
                     # this is where the relevant pdbs are located
                     pdbfolder = folder + dir + "/" + str(cut) + "/Mode" + mode + "-" + sign
@@ -224,11 +228,11 @@ def gen_video(exec_folder, args):
 
                     # now we make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
                     print('gen_video: ' + exec_folder + '/make_video_' + 
-                        args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+                        engine + '.sh ' + str(width) + ' ' + str(height) + ' ' + 
                         str(args.fps) + ' ' + pdbfolder + ' ' + temp_videoname + ' ' + args.videocodec + ' ' + 
                         commandfile + ' ' + str(confs) + ' ' + str(freq))
                     os.system(exec_folder + '/make_video_' + 
-                        args.drawingengine + '.sh ' + str(args.res[0]) + ' ' + str(args.res[1]) + ' ' + 
+                        engine + '.sh ' + str(width) + ' ' + str(height) + ' ' + 
                         str(args.fps) + ' ' + pdbfolder + ' ' + temp_videoname + ' ' + args.videocodec + ' ' + 
                         commandfile + ' ' + str(confs) + ' ' + str(freq))
                     
@@ -240,9 +244,8 @@ def gen_video(exec_folder, args):
                 # combine the pos and neg videos if desired
                 if args.combi:
 
-                    filenameend  = "-" + str(args.fps) + "fps" + fileextension
                     videoname = filenamestart + 'combi' + filenameend
-                    temp_videoname = filenamestart + 'combi' + "-" + str(args.fps) + "fps_temp" + fileextension
+                    temp_videoname = filenamestart + 'combi' + "-" + str(confs) + "@" + str(freq) + "-" + engine + '-' + str(args.fps) + "fps-" + str(width) + "x" + str(height) + "_temp" + fileextension
                     videolist = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-list" 
 
                     # determine whether we need to generate a video
