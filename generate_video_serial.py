@@ -141,9 +141,10 @@ def gen_video(exec_folder, args):
 
     # set commandfilelist to inputted paths, including none by default
     if args.video:
-        commandfilelist = [x for x in args.video]
+        commandfilelist = [(os.path.dirname(x) + "/view-" + os.path.basename(x))  for x in args.video]
     else:
         commandfilelist = [""]
+    print(commandfilelist)
 
     # ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
@@ -158,6 +159,7 @@ def gen_video(exec_folder, args):
     # set present working directory
     folder = os.getcwd()
 
+
     print ("---------------------------------------------------------------")
     print ("gen_video: converting from pdb files to videos")
     print ("----------------------------------------------------------------")
@@ -165,23 +167,33 @@ def gen_video(exec_folder, args):
     # loop over all the command files we want to apply to the videos
     for commandfile in commandfilelist:
 
+
+        # extract name of the file from its location
+        if (commandfile == ""):
+            commandfilebase = ""
+        else:
+            commandfilebase = "/" + os.path.basename(commandfile)
+            
+            # folder for the videos with this commandfile
+            try:
+                os.mkdir(commandfilebase[1:])
+            except:
+                pass
+
+        # directory for all videos with this commandfile
+        dir = "/Runs"
+        if (step != 0.1):
+            dir += "_step" + str(step)
+        if (dstep != 0.01):
+            dir += "_dstep" + str(dstep)
+        os.system("mkdir -p " + commandfilebase[1:] + dir)
+
         # for all combinations of cutoffs and modes
         for cut in cutlist:
             for mode in modelist:
 
-                # extract name of the file from its location
-                if (commandfile == ""):
-                    commandfilebase = ""
-                else:
-                    commandfilebase = "/" + os.path.basename(commandfile)
-                    
-                    # folder for the videos with this commandfile
-                    try:
-                        os.mkdir(commandfilebase[1:])
-                    except:
-                        pass
 
-                filenamestart = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-"
+                filenamestart = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-"
 
                 # for both directions (neg and pos)
                 for sign in signals:
@@ -191,7 +203,7 @@ def gen_video(exec_folder, args):
                     temp_videoname =  filenamestart + sign + "-" + str(args.fps) + "fps_temp" + fileextension
 
                     # this is where the relevant pdbs are located
-                    pdbfolder = folder + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "/Mode" + mode + "-" + sign
+                    pdbfolder = folder + dir + "/" + str(cut) + "/Mode" + mode + "-" + sign
 
                     # determine whether we need to generate a video
                     if (os.path.isfile(videoname) and not os.path.isfile(videoname + "_in_progress")):
@@ -231,7 +243,7 @@ def gen_video(exec_folder, args):
                     filenameend  = "-" + str(args.fps) + "fps" + fileextension
                     videoname = filenamestart + 'combi' + filenameend
                     temp_videoname = filenamestart + 'combi' + "-" + str(args.fps) + "fps_temp" + fileextension
-                    videolist = folder + commandfilebase + "/Runs_step" + str(step) + "_dstep" + str(dstep) + "/" + str(cut) + "-mode" + mode + "-list" 
+                    videolist = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-list" 
 
                     # determine whether we need to generate a video
                     if (os.path.isfile(videoname) and not os.path.isfile(videolist)):

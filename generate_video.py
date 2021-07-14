@@ -1,3 +1,4 @@
+###THIS FILE IS DEPRECATED. USE generate_video_serial.py INSTEAD###
 '''
 generate_video.py - takes a series of PDB files and generates a video
 

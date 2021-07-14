@@ -120,5 +120,5 @@ def go_to_output_folder(args):
 
     #enter a subfolder for specific kept molecules if necessary
     if (not args.keep==[]):
-        os.system("mkdir -p " + '_'.join(args.keep))
-        os.chdir('_'.join(args.keep))
+        os.system("mkdir -p keep-" + '_'.join(args.keep))
+        os.chdir("keep-" + '_'.join(args.keep))
