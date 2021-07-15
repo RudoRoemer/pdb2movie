@@ -29,30 +29,30 @@ def parsing_video_args(sys_args):
     parser = argparse.ArgumentParser(description='Generates videos for the most likely movement modes given a folder where the runs are stored.', usage='%(prog)s folder [options]')
 
     # you just need to give the parser all arguments you want to parse for and everything just works!
-    parser.add_argument('--threed',  action='store_true',
-                        help='Flag for generating anaglyph stereo movies')
-    parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
-                        help='Video resolution (width, height), range [16, 8192]')
-    parser.add_argument('--combi',  action='store_true',
-                        help='Combine both positive and negative directions into a single movie')
+    parser.add_argument('folder', metavar='folder', type=str, nargs=1,
+                        help='folder')
     parser.add_argument('--modes',  nargs="+",
                         help='Movement modes to be investigated')
     parser.add_argument('--ecuts',  nargs="+",
                         help='Energy cutoff values')
-    parser.add_argument('--video',  nargs="+", type=str,
-                        help='File(s) with PyMOL or VMD commands to be run before generating video')
-    parser.add_argument('--videocodec', type=str, default="mp4", 
-                        help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
-    parser.add_argument('--drawingengine', type=str, default="pymol", 
-                        help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
-    parser.add_argument('folder', metavar='folder', type=str, nargs=1,
-                        help='folder')
-    parser.add_argument('--fps', nargs=1, type=int, default=30,
-                        help='Frames per second of the videos, range [1, 240]')
     parser.add_argument('--confs', nargs=1, type=int,
                         help='Number of conformers go up to')
     parser.add_argument('--freq', nargs=1, type=int,
                         help='Frequency of intermediate conformers to use')
+    parser.add_argument('--drawingengine', type=str, default="pymol", 
+                        help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
+    parser.add_argument('--video',  nargs="+", type=str,
+                        help='File(s) with PyMOL or VMD commands to be run before generating video')
+    parser.add_argument('--combi',  action='store_true',
+                        help='Combine both positive and negative directions into a single movie')
+    parser.add_argument('--videocodec', type=str, default="mp4", 
+                        help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
+    parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
+                        help='Video resolution (width, height), range [16, 8192]')
+    parser.add_argument('--fps', nargs=1, type=int, default=30,
+                        help='Frames per second of the videos, range [1, 240]')
+    parser.add_argument('--threed',  action='store_true',
+                        help='Flag for generating anaglyph stereo movies')
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
     args = parser.parse_args(sys_args[1:])
