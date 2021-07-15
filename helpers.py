@@ -98,27 +98,28 @@ argument list args: object containing all command-line arguments as parsed by pd
 '''
 def go_to_output_folder(args):
 
+    # folder to put all output data in
+    folder = args.output[0]
+
+    # use the folder name to denote which keeps are chosen
+    if (not args.keep==[]):
+        folder += "_keeping_" + '+'.join(args.keep)
+
     # make or (if necessary) empty the output folder, warning the user before any emptying occurs
     try:
-        os.mkdir(args.output[0])
+        os.mkdir(folder)
     except Exception:
         if (args.forceoverwrite):
-            os.system("rm -r -f "+args.output[0]+"/*")
+            os.system("rm -r -f " + folder + "/*")
         elif (args.overwrite):
-
             try:
                 userinput=raw_input("WARNING: --overwrite option chosen. Everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
             except NameError:
                 userinput=input("WARNING: --overwrite option chosen. everything in output folder will be deleted! Are you sure you want to continue? [y/N]   ")
             if (userinput=="y"):
-                os.system("rm -r -f "+args.output[0]+"/*")
+                os.system("rm -r -f " + folder + "/*")
             else:
                 quit()
 
-    #enter the output folder
-    os.chdir(args.output[0])
-
-    #enter a subfolder for specific kept molecules if necessary
-    if (not args.keep==[]):
-        os.system("mkdir -p keep-" + '_'.join(args.keep))
-        os.chdir("keep-" + '_'.join(args.keep))
+    # enter the output folder
+    os.chdir(folder)

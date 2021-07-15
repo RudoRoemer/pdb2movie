@@ -126,7 +126,7 @@ def gen_video(exec_folder, args):
 
     # ensure the width and height inputs are within allowed ranges
     width = args.res[0]
-    height = args.res[0]
+    height = args.res[1]
     if (width < 16 or width > 8192) or (height < 16 or height > 8192):
         print("width or heigth out of range [16, 8192]")
         return
@@ -146,7 +146,7 @@ def gen_video(exec_folder, args):
     if args.video:
         commandfilelist = [(os.path.dirname(x) + "/view-" + os.path.basename(x))  for x in args.video]
     else:
-        commandfilelist = [""]
+        commandfilelist = ["default-view"]
 
     # ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
@@ -162,6 +162,16 @@ def gen_video(exec_folder, args):
     # set present working directory
     folder = os.getcwd()
 
+    # directory for all outputs with this step and dstep combination
+    runs_dir = "Runs"
+    if (not args.multiple):
+        runs_dir += "_single-chain"
+    if (step != 0.1):
+        runs_dir += "_step" + str(step)
+    if (dstep != 0.01):
+        runs_dir += "_dstep" + str(dstep)
+    os.system("mkdir -p " + runs_dir)
+    os.chdir(runs_dir)
 
     print ("---------------------------------------------------------------")
     print ("gen_video: converting from pdb files to videos")
@@ -170,34 +180,16 @@ def gen_video(exec_folder, args):
     # loop over all the command files we want to apply to the videos
     for commandfile in commandfilelist:
 
-
-        # extract name of the file from its location
-        if (commandfile == ""):
-            commandfilebase = ""
-        else:
-            commandfilebase = "/" + os.path.basename(commandfile)
-            
-            # folder for the videos with this commandfile
-            try:
-                os.mkdir(commandfilebase[1:])
-            except:
-                pass
-
-        # directory for all videos with this commandfile
-        dir = "/Runs"
-        if (not args.multiple):
-            dir += "_single-chain"
-        if (step != 0.1):
-            dir += "_step" + str(step)
-        if (dstep != 0.01):
-            dir += "_dstep" + str(dstep)
-        os.system("mkdir -p " + (commandfilebase + dir)[1:])
+        # folder for the videos with this commandfile
+        commandfilebase = os.path.basename(commandfile)
+        os.system("mkdir -p " + commandfilebase)
+        os.system("pwd")
 
         # for all combinations of cutoffs and modes
         for cut in cutlist:
             for mode in modelist:
 
-                filenamestart = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-"
+                filenamestart = folder + "/" + runs_dir + "/" + commandfilebase + "/ecut" + str(cut) + "-mode" + mode + "-"
 
                 # for both directions (neg and pos)
                 for sign in signals:
@@ -205,10 +197,9 @@ def gen_video(exec_folder, args):
                     # this is where the video will be put and what it will be called
                     filenameend  = "-" + str(confs) + "@" + str(freq) + "-" + engine + '-' + str(args.fps) + "fps-" + str(width) + "x" + str(height) + fileextension
                     videoname =  filenamestart + sign + filenameend
-                    temp_videoname =  filenamestart + sign + "-" + str(confs) + "@" + str(freq) + "-" + engine + '-' + str(args.fps) + "fps-" + str(width) + "x" + str(height) + "_temp" + fileextension
 
                     # this is where the relevant pdbs are located
-                    pdbfolder = folder + dir + "/" + str(cut) + "/Mode" + mode + "-" + sign
+                    pdbfolder = folder + "/" + runs_dir + "/" + str(cut) + "/Mode" + mode + "-" + sign
 
                     # determine whether we need to generate a video
                     if (os.path.isfile(videoname) and not os.path.isfile(videoname + "_in_progress")):
@@ -225,21 +216,18 @@ def gen_video(exec_folder, args):
                     # now we make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
                     print('gen_video: ' + exec_folder + '/make_video_' + engine + '.sh '+
                         str(width) + ' ' + str(height) + ' ' + str(args.fps) + ' ' + pdbfolder + ' ' +
-                        temp_videoname + ' ' + codec + ' ' + commandfile + ' ' + str(confs) + ' ' + str(freq))
+                        videoname + ' ' + codec + ' ' + ' ' + str(confs) + ' ' + str(freq) + commandfile)
                     os.system(exec_folder + '/make_video_' + engine + '.sh '+
                         str(width) + ' ' + str(height) + ' ' + str(args.fps) + ' ' + pdbfolder + ' ' +
-                        temp_videoname + ' ' + codec + ' ' + commandfile + ' ' + str(confs) + ' ' + str(freq))
-                    
-                    # rename the file
-                    os.system("mv " + temp_videoname + " " + videoname)
-                    
-                    os.system("rm " + videoname + "_in_progress " + temp_videoname)
+                        videoname + ' ' + codec + ' ' + ' ' + str(confs) + ' ' + str(freq) + commandfile)
+                                        
+                    os.system("rm " + videoname + "_in_progress ")
 
                 # combine the pos and neg videos if desired
                 if args.combi:
 
                     videoname = filenamestart + 'combi' + filenameend
-                    videolist = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-list" 
+                    videolist = folder + "/" + runs_dir + "/" + str(cut) + "-mode" + mode + "-list" 
 
                     # determine whether we need to generate a video
                     if (os.path.isfile(videoname) and not os.path.isfile(videolist)):

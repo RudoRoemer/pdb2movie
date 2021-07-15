@@ -81,16 +81,16 @@ def frodasim(exec_folder,args,hydro_file):
 
     base = os.getcwd()
 
-    # folder for all the conformers and other outputs
-    dir = "Runs"
+    # folder for all the conformers (and other outputs) with this step and dstep combination
+    runs_dir = "Runs"
     if (not args.multiple):
-        dir += "_single-chain"
+        runs_dir += "_single-chain"
     if (step != 0.1):
-        dir += "_step" + str(step)
+        runs_dir += "_step" + str(step)
     if (dstep != 0.01):
-        dir += "_dstep" + str(dstep)
-    os.system("mkdir -p " + dir)
-    os.chdir(dir)
+        runs_dir += "_dstep" + str(dstep)
+    os.system("mkdir -p " + runs_dir)
+    os.chdir(runs_dir)
 
     # create a list of commands, that will later be given to a pool of processes to run
     commands = []
