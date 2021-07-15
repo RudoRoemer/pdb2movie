@@ -152,6 +152,7 @@ def gen_video(exec_folder, args):
     if args.videocodec != "mp4" and args.videocodec != "hevc":
         print("videocodec invalid")
         return
+    codec = args.videocodec
 
     # set the fileextension according to the videocodec chosen
     fileextension = ".mp4"
@@ -211,13 +212,8 @@ def gen_video(exec_folder, args):
 
                     # determine whether we need to generate a video
                     if (os.path.isfile(videoname) and not os.path.isfile(videoname + "_in_progress")):
-                        # read what confs and freq the existing video was made with (from the video's metadata)
-                        output = subprocess.getoutput("ffprobe -loglevel quiet -show_format " + videoname + " | grep title")
-                        prevconfs = int(output.rsplit("/")[0].rsplit("=")[1])
-                        prevfreq = int(output.rsplit("/")[1])
-                        if (prevconfs >= confs and freq % prevfreq == 0):
-                            print("   video already generated: " + os.path.basename(videoname))
-                            continue
+                        print("   video already generated: " + os.path.basename(videoname))
+                        continue
 
                     os.system("touch " + videoname + "_in_progress")
                     os.system("rm -f " + videoname)
@@ -227,17 +223,15 @@ def gen_video(exec_folder, args):
                     os.system('ln -s '+pdbfolder+'/tmp_RCD.pdb '+pdbfolder+'/tmp_froda_00000000.pdb')
 
                     # now we make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
-                    print('gen_video: ' + exec_folder + '/make_video_' + 
-                        engine + '.sh ' + str(width) + ' ' + str(height) + ' ' + 
-                        str(args.fps) + ' ' + pdbfolder + ' ' + temp_videoname + ' ' + args.videocodec + ' ' + 
-                        commandfile + ' ' + str(confs) + ' ' + str(freq))
-                    os.system(exec_folder + '/make_video_' + 
-                        engine + '.sh ' + str(width) + ' ' + str(height) + ' ' + 
-                        str(args.fps) + ' ' + pdbfolder + ' ' + temp_videoname + ' ' + args.videocodec + ' ' + 
-                        commandfile + ' ' + str(confs) + ' ' + str(freq))
+                    print('gen_video: ' + exec_folder + '/make_video_' + engine + '.sh '+
+                        str(width) + ' ' + str(height) + ' ' + str(args.fps) + ' ' + pdbfolder + ' ' +
+                        temp_videoname + ' ' + codec + ' ' + commandfile + ' ' + str(confs) + ' ' + str(freq))
+                    os.system(exec_folder + '/make_video_' + engine + '.sh '+
+                        str(width) + ' ' + str(height) + ' ' + str(args.fps) + ' ' + pdbfolder + ' ' +
+                        temp_videoname + ' ' + codec + ' ' + commandfile + ' ' + str(confs) + ' ' + str(freq))
                     
-                    # rename the file (remove _temo) and add some metadata
-                    os.system("ffmpeg -loglevel quiet -i " + temp_videoname + " -codec copy -metadata title=" + str(confs) + "/" + str(freq) + " " + videoname)
+                    # rename the file
+                    os.system("mv " + temp_videoname + " " + videoname)
                     
                     os.system("rm " + videoname + "_in_progress " + temp_videoname)
 
@@ -245,33 +239,26 @@ def gen_video(exec_folder, args):
                 if args.combi:
 
                     videoname = filenamestart + 'combi' + filenameend
-                    temp_videoname = filenamestart + 'combi' + "-" + str(confs) + "@" + str(freq) + "-" + engine + '-' + str(args.fps) + "fps-" + str(width) + "x" + str(height) + "_temp" + fileextension
                     videolist = folder + commandfilebase + dir + "/" + str(cut) + "-mode" + mode + "-list" 
 
                     # determine whether we need to generate a video
                     if (os.path.isfile(videoname) and not os.path.isfile(videolist)):
-                        # read what confs and freq the existing video was made with (from the video's metadata)
-                        output = subprocess.getoutput("ffprobe -loglevel quiet -show_format " + videoname + " | grep title")
-                        prevconfs = int(output.rsplit("/")[0].rsplit("=")[1])
-                        prevfreq = int(output.rsplit("/")[1])
-                        if (prevconfs >= confs and freq % prevfreq == 0):
-                            print("   video already generated: " + os.path.basename(videoname))
-                            continue
+                        print("   video already generated: " + os.path.basename(videoname))
+                        continue
 
                     os.system("rm -f " + videoname)
 
                     # create a videolist file (specifying the videos to combine) to give ffmpeg
                     outF = open(videolist, "w")
-                    print("file " + filenamestart+'pos'+filenameend, end="\n", file=outF)
-                    print("file " + filenamestart+'neg'+filenameend, end="\n", file=outF)
+                    print("file " + filenamestart + 'pos' + filenameend, end="\n", file=outF)
+                    print("file " + filenamestart + 'neg' + filenameend, end="\n", file=outF)
                     outF.close()
 
                     # run ffmpeg to create the combi then update the metadata
-                    os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y ' + temp_videoname)
-                    os.system("ffmpeg -loglevel quiet -i " + temp_videoname + " -codec copy -metadata title=" + str(confs) + "/" + str(freq) + " " + videoname)
+                    os.system('ffmpeg -hide_banner -loglevel warning -safe 0 -f concat -i ' + videolist + ' -c copy -movflags faststart -y ' + videoname)
 
                     # remove videolist file
-                    os.system('rm ' + videolist + " " + temp_videoname)
+                    os.system('rm ' + videolist)
 
     return
 
