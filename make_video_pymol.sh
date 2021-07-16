@@ -193,10 +193,5 @@ then
   )
 fi
 
-
-#set the correct permissions
-chmod 744 $DEST_FILE
-
-
 #remove all the temporary files/folders made in this script, leaving only the video
 rm -rf $TMP_PATH
