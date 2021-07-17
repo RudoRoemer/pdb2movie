@@ -9,7 +9,7 @@ import os
 
 
 '''
-firstsim - main function for running FIRST analysis on a protein
+firstsim: main function for running FIRST analysis on a protein
 
 Inputs:
 - string exec_folder: folder where the python scripts are located (full path)
