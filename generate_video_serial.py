@@ -31,9 +31,9 @@ def parsing_video_args(sys_args):
     # you just need to give the parser all arguments you want to parse for and everything just works!
     parser.add_argument('folder', metavar='folder', type=str, nargs=1,
                         help='folder')
-    parser.add_argument('--modes',  nargs="+",
+    parser.add_argument('--modes', nargs="+",
                         help='Movement modes to be investigated')
-    parser.add_argument('--ecuts',  nargs="+",
+    parser.add_argument('--ecuts', nargs="+",
                         help='Energy cutoff values')
     parser.add_argument('--confs', nargs=1, type=int,
                         help='Number of conformers go up to')
@@ -41,17 +41,17 @@ def parsing_video_args(sys_args):
                         help='Frequency of intermediate conformers to use')
     parser.add_argument('--drawingengine', type=str, default="pymol", 
                         help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
-    parser.add_argument('--video',  nargs="+", type=str,
+    parser.add_argument('--video', nargs="+", type=str,
                         help='File(s) with PyMOL or VMD commands to be run before generating video')
-    parser.add_argument('--combi',  action='store_true',
+    parser.add_argument('--combi', action='store_true',
                         help='Combine both positive and negative directions into a single movie')
     parser.add_argument('--videocodec', type=str, default="mp4", 
                         help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
-    parser.add_argument('--res',  nargs=2, type=int, default=[640, 480], 
+    parser.add_argument('--res', nargs=2, type=int, default=[640, 480], 
                         help='Video resolution (width, height), range [16, 8192]')
     parser.add_argument('--fps', nargs=1, type=int, default=30,
                         help='Frames per second of the videos, range [1, 240]')
-    parser.add_argument('--threed',  action='store_true',
+    parser.add_argument('--threed'  action='store_true',
                         help='Flag for generating anaglyph stereo movies')
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
@@ -104,25 +104,25 @@ def gen_video(exec_folder, args):
 
     # other args to find the right folders of pdbs
     if args.step:
-        step=float(args.step[0])
+        step = float(args.step[0])
     else:
-        step=0.1
+        step = 0.1
 
     if args.dstep:
-        dstep=float(args.dstep[0])
+        dstep = float(args.dstep[0])
     else:
-        dstep=0.01
+        dstep = 0.01
 
     # more args to know which pdbs to use to make videos
     if args.confs:
-        confs=int(args.confs[0])
+        confs = int(args.confs[0])
     else:
-        confs=1000
+        confs = 1000
 
     if args.freq:
-        freq=int(args.freq[0])
+        freq = int(args.freq[0])
     else:
-        freq=50
+        freq = 50
 
     # ensure the width and height inputs are within allowed ranges
     width = args.res[0]
@@ -144,9 +144,9 @@ def gen_video(exec_folder, args):
 
     # set commandfilelist to inputted paths, including none by default
     if args.video:
-        commandfilelist = [(os.path.dirname(x) + "/view-" + os.path.basename(x))  for x in args.video]
+        commandfilelist = [(os.path.dirname(x) + "/view-" + os.path.basename(x)) for x in args.video]
     else:
-        commandfilelist = ["default-view"]
+        commandfilelist = [""]
 
     # ensure the videocodec input is an allowed option
     if args.videocodec != "mp4" and args.videocodec != "hevc":
@@ -181,15 +181,17 @@ def gen_video(exec_folder, args):
     for commandfile in commandfilelist:
 
         # folder for the videos with this commandfile
-        commandfilebase = os.path.basename(commandfile)
-        os.system("mkdir -p " + commandfilebase)
-        os.system("pwd")
+        if (commandfile == ""):
+            commandfilename = "default-view"
+        else:
+            commandfilename = os.path.basename(commandfile)
+        os.system("mkdir -p " + commandfilename)
 
         # for all combinations of cutoffs and modes
         for cut in cutlist:
             for mode in modelist:
 
-                filenamestart = folder + "/" + runs_dir + "/" + commandfilebase + "/ecut" + str(cut) + "-mode" + mode + "-"
+                filenamestart = folder + "/" + runs_dir + "/" + commandfilename + "/ecut" + str(cut) + "-mode" + mode + "-"
 
                 # for both directions (neg and pos)
                 for sign in signals:
@@ -210,17 +212,17 @@ def gen_video(exec_folder, args):
                     os.system("rm -f " + videoname)
 
                     # link tmp_RCD.pdb so it can be accessed as tmp_froda_00000000.pdb
-                    os.system('chmod 744 '+pdbfolder+'/tmp_RCD.pdb')
-                    os.system('ln -s '+pdbfolder+'/tmp_RCD.pdb '+pdbfolder+'/tmp_froda_00000000.pdb')
+                    os.system('chmod 744 ' + pdbfolder + '/tmp_RCD.pdb')
+                    os.system('ln -s ' + pdbfolder + '/tmp_RCD.pdb ' + pdbfolder + '/tmp_froda_00000000.pdb')
 
                     # now we make the videos from the pdbs, using the make_video_pymol.sh or make_video_vmd.sh bash script
                     print('gen_video: ' + exec_folder + '/make_video_' + engine + '.sh '+
                         str(width) + ' ' + str(height) + ' ' + str(args.fps) + ' ' + pdbfolder + ' ' +
-                        videoname + ' ' + codec + ' ' + ' ' + str(confs) + ' ' + str(freq) + commandfile)
+                        videoname + ' ' + codec + ' ' + ' ' + str(confs) + ' ' + str(freq) + ' ' + commandfile)
                     os.system(exec_folder + '/make_video_' + engine + '.sh '+
                         str(width) + ' ' + str(height) + ' ' + str(args.fps) + ' ' + pdbfolder + ' ' +
-                        videoname + ' ' + codec + ' ' + ' ' + str(confs) + ' ' + str(freq) + commandfile)
-                                        
+                        videoname + ' ' + codec + ' ' + ' ' + str(confs) + ' ' + str(freq) + ' ' + commandfile)
+
                     os.system("rm " + videoname + "_in_progress ")
 
                 # combine the pos and neg videos if desired
@@ -271,7 +273,7 @@ if __name__ == "__main__":
     args = parsing_video_args(sys.argv)
 
     # set exec_folder to the full path of the location of this script
-    exec_folder=os.path.dirname(os.path.abspath(sys.argv[0]))
+    exec_folder = os.path.dirname(os.path.abspath(sys.argv[0]))
 
     # go into the output folder
     os.chdir(args.folder[0])
