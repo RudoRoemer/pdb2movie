@@ -36,9 +36,6 @@ def firstsim(exec_folder, cleanpdb):
     if (os.path.isfile(basename + "_hydro.pdb")):
         print("   hydro file already generated: " + os.path.basename(basename + "_hydro.pdb"))
     else:
-        # remove any files outputted by this script (in case it was cancelled midway-through before)
-        os.system("rm -f *hydro_* *.out *list *map*")
-
         # add hydrogens
         os.system(exec_folder + "/reduce.3.23.130521 -DB " + exec_folder + "/reduce_het_dict.txt -build " + cleanpdb + " > " + basename + "_hydro_temp.pdb")
 
@@ -55,6 +52,7 @@ def firstsim(exec_folder, cleanpdb):
 
     # if the output files are not here, or if FIRST was previously stopped midway through, we need to run FIRST
     if (os.path.isfile("FIRST_in_progress") or not os.path.isfile("1ccn_hydro_results.txt")):
+        os.system("rm -f *hydro_* *.out *list *map*")
         os.system("touch FIRST_in_progress")
         os.system(exec_folder + "/FIRST-190916-SAW/src/FIRST " + basename + "_hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L " + exec_folder + "/FIRST-190916-SAW")
         os.system("rm FIRST_in_progress")
