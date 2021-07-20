@@ -42,42 +42,42 @@ def frodasim(exec_folder,args,hydro_file):
     # now we need to care about a bunch of command-line arguments: if they were passed, we set them, otherwise we use default values
     # that is true for confs, freq, step, dstep, modes, ecuts
     if args.confs:
-        totconf=int(args.confs[0])
+        totconf = int(args.confs[0])
     else:
-        totconf=1000
+        totconf = 1000
 
     if args.freq:
-        freq=int(args.freq[0])
+        freq = int(args.freq[0])
     else:
-        freq=50
+        freq = 50
 
     if args.step:
-        step=float(args.step[0])
+        step = float(args.step[0])
     else:
-        step=0.1
+        step = 0.1
 
     if args.dstep:
-        dstep=float(args.dstep[0])
+        dstep = float(args.dstep[0])
     else:
-        dstep=0.01
+        dstep = 0.01
 
     if args.modes:
-        modelist=[int(x) for x in args.modes]
+        modelist = [int(x) for x in args.modes]
     else:
-        modelist=range(7, 9)
+        modelist = range(7, 9)
 
     if args.ecuts:
-        cutlist=[float(x) for x in args.ecuts]
+        cutlist = [float(x) for x in args.ecuts]
     else:
-        cutlist=[2.0] #[1.0, 2.0]
+        cutlist = [2.0] #[1.0, 2.0]
 
     print ("---------------------------------------------------------------")
-    print ("runfroda: preparing folders for FRODA")
+    print ("runfroda: preparing folders and commands for FRODA")
     print ("----------------------------------------------------------------")
 
     # now we make modelist into a list of strings instead of ints and define the signs positive and negative
     modelist = [format(i, '02d') for i in modelist]
-    signals = ["pos","neg"]
+    signals = ["pos", "neg"]
 
     base = os.getcwd()
 
@@ -125,9 +125,8 @@ def frodasim(exec_folder,args,hydro_file):
                 os.system("rm -f *")
                 #os.system("rm -f CONFS* FREQ* problem.log tmp_bond.txt tmp_data.txt tmp_results.txt tmp_froda_00000000.pdb tmp_RCD.*")
 
-                # now there's some setup before starting FRODA: we need to copy the correct mode file from Modes...
+                # we need to some files in this folder for FRODA
                 os.system("cp " + base + "/mode" + mode + ".in ./mode.in")
-                # ... the relevant PDB_file, and cov.out, and hbonds.out, and hphobes.out as input files (also we need to create an empty stacked.in)
                 os.system("cp " + base + "/" + hydro_file + " ./tmp.pdb")
                 os.system("touch stacked.in")
                 os.system("cp " + base + "/cov.out ./cov.in")
@@ -136,11 +135,11 @@ def frodasim(exec_folder,args,hydro_file):
 
                 # now we generate commands to run FRODA
                 # note that there's a slight difference (in the dstep) between positive and negative directions
-                command="cd " + os.path.abspath(".") + "\n"
-                if (sign=="neg"):
-                    command+=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+"tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep -"+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
+                command = "cd " + os.path.abspath(".") + "\n"
+                if (sign == "neg"):
+                    command += exec_folder + "/./FIRST-190916-SAW/src/FIRST tmp.pdb -non -E -" + str(cut) + " -FRODA -resrmsd -mobRC1 -freq " + str(freq) + " -totconf " + str(totconf) + " -modei -step " + str(step) + " -dstep -" + str(dstep) + " -covin -hbin -phin -srin -L " + exec_folder + "/FIRST-190916-SAW"
                 else:
-                    command+=exec_folder+"/./FIRST-190916-SAW/src/FIRST "+"tmp.pdb"+" -non -E -"+str(cut)+" -FRODA -resrmsd -mobRC1 -freq "+str(freq)+" -totconf "+str(totconf)+" -modei -step "+str(step)+" -dstep "+str(dstep)+" -covin -hbin -phin -srin -L "+exec_folder+"/FIRST-190916-SAW"
+                    command += exec_folder + "/./FIRST-190916-SAW/src/FIRST tmp.pdb -non -E -" + str(cut) + " -FRODA -resrmsd -mobRC1 -freq " + str(freq) + " -totconf " + str(totconf) + " -modei -step " + str(step) + " -dstep " + str(dstep) + " -covin -hbin -phin -srin -L " + exec_folder + "/FIRST-190916-SAW"
 
                 # record confs and freq when finished so we know we have already done them if we run this again
                 command += "\n touch CONFS" + str(totconf)
@@ -154,22 +153,25 @@ def frodasim(exec_folder,args,hydro_file):
         os.chdir("..")
 
     print ("---------------------------------------------------------------")
-    print ("runfroda: running FRODA to generate conformer PDBs")
+    print ("runfroda: running FRODA commands to generate conformer PDBs")
     print ("----------------------------------------------------------------")
-    
-    # give the commands to a pool of processes (one for each core) to run
-    # the 'chunksize' is 1, meaning the commands are given to processes individually as the processes become free
-    Pool().map(call_command, commands, 1)
+
+    if (commands == []):
+        print("   no commands to run; conformers all already generated")
+    else:    
+        # give the commands to a pool of processes (one for each core) to run
+        # the 'chunksize' is 1, meaning the commands are given to processes individually as the processes become free
+        Pool().map(call_command, commands, 1)
 
     # now some housekeeping: we remove all temp files we created at each subfolder
     for cut in cutlist:
         for mode in modelist:
             for sign in signals:
-                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/hphobes.in')
-                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/hbonds.in')
-                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/cov.in')
-                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/stacked.in')
-                os.system('rm -f '+str(cut)+"/Mode"+mode+"-"+sign+'/tmp.pdb')
+                os.system('rm -f ' + str(cut) + "/Mode" + mode + "-" + sign + '/hphobes.in')
+                os.system('rm -f ' + str(cut) + "/Mode" + mode + "-" + sign + '/hbonds.in')
+                os.system('rm -f ' + str(cut) + "/Mode" + mode + "-" + sign + '/cov.in')
+                os.system('rm -f ' + str(cut) + "/Mode" + mode + "-" + sign + '/stacked.in')
+                os.system('rm -f ' + str(cut) + "/Mode" + mode + "-" + sign + '/tmp.pdb')
 
     os.chdir("..")
 
