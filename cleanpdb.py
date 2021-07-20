@@ -45,15 +45,6 @@ string output_filename: a filename (full path) where the clean pdb file will be 
 '''
 def cleanPDB(args):
 
-    # opens the input file received as one of the arguments for reading
-    inputfile = open(args.pdbfile[0], 'r')
-
-    # print which molecules are being protected from being removed by cleanPDB
-    if (args.keep != []):
-        print("Keeping the following molecules: ")
-        for i in args.keep:
-            print(i)
-
     # set output filename based on arguments received
     output_filename = "./" + args.pdbfile[0].rsplit("/",1)[1][:-4] + "_clean.pdb"
 
@@ -62,18 +53,26 @@ def cleanPDB(args):
         print("   clean file already generated: " + os.path.basename(output_filename))
         return output_filename
 
+    # print which molecules are being protected from being removed by cleanPDB
+    if (args.keep != []):
+        print("Keeping the following molecules: ")
+        for i in args.keep:
+            print(i)
+
+    # opens the input file received as one of the arguments for reading
+    inputfile = open(args.pdbfile[0], 'r')
+
     # open a file to write to
-    output=open(output_filename + "_incomplete", 'w')
+    output = open(output_filename + "_temp", 'w')
 
     # initialise a list of residues
     residues = []
 
-    # goes over every single line from tge 
+    # goes over all lines in the input PDB
     for line in inputfile:
 
         # only looks at atoms in the PDB file
         if (line[0:6].strip() == 'ATOM'):
-
 
             # if there are multiple chains and the "multiple" flag has not been set, only use the first chain
             if ((line[21] != 'A') and (line[21] != ' ') and (not(args.multiple))):
@@ -83,21 +82,21 @@ def cleanPDB(args):
             # add the residue number to the list of residues
             residues.append(int(line[23:26].strip()))
 
-
         # this section looks at the HETATM lines in the file
         if (line[0:6] == 'HETATM'):
 
-            # if any extraneous molecules need to be kept, check whether this HETATM is part of one of them and keep it or not
+            # if any extraneous molecules need to be kept, check whether this HETATM is part of one of them
             if args.keep:
                 if line[17:20].strip() in args.keep:
                     output.write(line)
+
             continue
 
         # if you didn't hit a continue, you get here and that line is kept
         output.write(line)
 
     # takes only unique values of residues list
-    residues=list(set(residues))
+    residues = list(set(residues))
 
     # check whether there are missing residues by comparing the list with a range
     try:
@@ -111,13 +110,12 @@ def cleanPDB(args):
     inputfile.close()
     output.close()
 
-    # rename file to indicate it is complete
-    os.system("mv " + output_filename + "_incomplete " + output_filename)
-
     # calls pymol to remove remaining rotamers
-    #remove_rotamers(output_filename,exec_folder)
+    #remove_rotamers(output_filename + "_temp", exec_folder)
 
-    #done!
+    # rename file to indicate it is complete
+    os.system("mv " + output_filename + "_temp " + output_filename)
+
     return output_filename
 
 
