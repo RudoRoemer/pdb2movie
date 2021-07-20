@@ -19,45 +19,50 @@ Outputs:
 - string hydropdb: full path to PDB file after addition of hydrogens 
 
 '''
-def firstsim(exec_folder,cleanpdb):
+def firstsim(exec_folder, cleanpdb):
 
     print ("---------------------------------------------------------------")
     print ("firstsim:")
     print ("----------------------------------------------------------------")
 
     # now, we need to run reduce to add hydrogens to protein residues - this generates a PDB file with hydrogens
-
     print ("---------------------------------------------------------------")
-    print ("firstsim: calling reduce.3.23.130521")
+    print ("firstsim: adding hydrogens")
     print ("----------------------------------------------------------------")
 
+    basename = cleanpdb[:-10]
+
     # if the output file is already here we don't need to do anything
-    if (os.path.isfile(cleanpdb[:-9] + "hydro.pdb")):
-        print("   hydro file already generated: " + os.path.basename(cleanpdb[:-9] + "hydro.pdb"))
-        return cleanpdb[:-9] + "hydro.pdb"
+    if (os.path.isfile(basename + "_hydro.pdb")):
+        print("   hydro file already generated: " + os.path.basename(basename + "_hydro.pdb"))
+    else:
+        # remove any files outputted by this script (in case it was cancelled midway-through before)
+        os.system("rm -f *hydro_* *.out *list *map*")
 
-    # remove any files outputted by this script (in case it was cancelled midway-through before)
-    os.system("rm -f *temp* *.out *list *map*")
+        # add hydrogens
+        os.system(exec_folder + "/reduce.3.23.130521 -DB " + exec_folder + "/reduce_het_dict.txt -build " + cleanpdb + " > " + basename + "_hydro_temp.pdb")
 
-    # add hydrogens
-    os.system(exec_folder+"/reduce.3.23.130521 -DB "+exec_folder+"/reduce_het_dict.txt -build "+cleanpdb+" > "+cleanpdb[:-9]+"hydro_temp.pdb")
+        # now, we call an external function to renumber the atoms taking the hydrogens into account
+        renum_atoms(basename + "_hydro_temp.pdb")
 
-    # now, we call an external function to renumber the atoms taking the hydrogens into account
-    renum_atoms(cleanpdb[:-9]+"hydro_temp.pdb")
+        # rename the file to indicate it is complete (remove "temp")
+        os.system("mv " + basename + "_hydro_temp.pdb " + basename + "_hydro.pdb")
 
     # finally we run FIRST with the PDB after hydrogen addition!
-
     print ("---------------------------------------------------------------")
     print ("firstsim: running FIRST with new PDB file after hydrogens added")
     print ("----------------------------------------------------------------")
 
-    os.system(exec_folder+"/FIRST-190916-SAW/src/FIRST "+cleanpdb[:-9]+"hydro_temp.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L "+exec_folder+"/FIRST-190916-SAW")
+    # if the output files are not here, or if FIRST was previously stopped midway through, we need to run FIRST
+    if (os.path.isfile("FIRST_in_progress") or not os.path.isfile("1ccn_hydro_results.txt")):
+        os.system("touch FIRST_in_progress")
+        os.system(exec_folder + "/FIRST-190916-SAW/src/FIRST " + basename + "_hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L " + exec_folder + "/FIRST-190916-SAW")
+        os.system("rm FIRST_in_progress")
+    else:
+        print("   FIRST already run")
 
-    # rename the file to indicate it is complete (remove "temp")
-    os.system("mv " + cleanpdb[:-9] + "hydro_temp.pdb " + cleanpdb[:-9] + "hydro.pdb")
-
-    # finally, return the hydro-added PDB path
-    return cleanpdb[:-9]+"hydro.pdb"
+    # finally, return the path of the PBD with added hydrogens
+    return basename + "_hydro.pdb"
 
 
 
@@ -70,34 +75,33 @@ string filename: path to origin PDB file
 '''
 def renum_atoms(filename):
 
-    # open the input file and a temp file
-    inputfile=open(filename,'r')
-    tempfile=open("tmp.pdb",'w')
-
-    # let's learn how to count!
-    counter=1
-
     print ("---------------------------------------------------------------")
     print ("renum_atoms:")
     print ("----------------------------------------------------------------")
+
+    # open the input file and a temp file
+    inputfile = open(filename, 'r')
+    tempfile = open("tmp.pdb", 'w')
+
+    counter = 1
 
     # looping over every line in the input file
     for line in inputfile:
 
         # if line is an atom...
-        if (line[0:6].strip()=='ATOM' or line[0:6].strip()=='HETATM'):
+        if (line[0:6].strip() == 'ATOM' or line[0:6].strip() == 'HETATM'):
 
             # we chop up the line, cutting out the current atom number and putting the value of counter as atom number
-            line=line[:6]+format(counter, '05d')+line[11:]
+            line = line[:6] + format(counter, '05d') + line[11:]
 
             # write it to temp file and increase counter
             tempfile.write(line)
-            counter=counter+1
+            counter = counter + 1
 
     # now we can close them both
     inputfile.close()
     tempfile.close()
 
-    # finally, we replace the original file with the temporary one
-    os.system("rm "+filename)
-    os.system("mv tmp.pdb "+filename)
+    # finally, we replace the original file with the temporary one we just made
+    os.system("rm " + filename)
+    os.system("mv tmp.pdb " + filename)
