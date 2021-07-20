@@ -51,7 +51,7 @@ def parsing_video_args(sys_args):
                         help='Video resolution (width, height), range [16, 8192]')
     parser.add_argument('--fps', nargs=1, type=int, default=30,
                         help='Frames per second of the videos, range [1, 240]')
-    parser.add_argument('--threed'  action='store_true',
+    parser.add_argument('--threed', action='store_true',
                         help='Flag for generating anaglyph stereo movies')
 
     # actually do the parsing for all system args other than 0 (which is the python script name) and return the structure generated
