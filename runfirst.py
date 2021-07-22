@@ -51,7 +51,7 @@ def firstsim(exec_folder, cleanpdb):
     print ("----------------------------------------------------------------")
 
     # if the output files are not here, or if FIRST was previously stopped midway through, we need to run FIRST
-    if (os.path.isfile("FIRST_in_progress") or not os.path.isfile("1ccn_hydro_results.txt")):
+    if (os.path.isfile("FIRST_in_progress") or not os.path.isfile(basename + "_hydro_results.txt")):
         os.system("rm -f *hydro_* *.out *list *map*")
         os.system("touch FIRST_in_progress")
         os.system(exec_folder + "/FIRST-190916-SAW/src/FIRST " + basename + "_hydro.pdb -non -dil 1 -E -0 -covout -hbout -phout -srout -L " + exec_folder + "/FIRST-190916-SAW")
