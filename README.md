@@ -34,7 +34,7 @@ Recompiling FIRST and diagstd is necessary!
 --nomovie              - Do not generate any videos  
 --drawingengine ENGINE - Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)  
 --video FILE LIST      - File(s) with PyMOL or VMD commands to be run before generating video  
---combi                - Creates videos combining positive and negative directions for each mode/cutoff energy  
+--nocombi              - Prevent creation of videos combining both pos and neg directions  
 --videocodec CODEC     - Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (default: mp4)  
 --res WID HEI          - Video resolution (width, height), range [16, 8192]  
 --fps FPS              - Frames per second of the videos, range [1, 240]  

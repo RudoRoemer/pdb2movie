@@ -43,8 +43,8 @@ def parsing_video_args(sys_args):
                         help="Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)")
     parser.add_argument('--video', nargs="+", type=str,
                         help='File(s) with PyMOL or VMD commands to be run before generating video')
-    parser.add_argument('--combi', action='store_true',
-                        help='Combine both positive and negative directions into a single movie')
+    parser.add_argument('--nocombi', action='store_true',
+                        help='Prevent creation of videos combining both pos and neg directions')
     parser.add_argument('--videocodec', type=str, default="mp4", 
                         help="Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (defaults to mp4)")
     parser.add_argument('--res', nargs=2, type=int, default=[640, 480], 
@@ -226,7 +226,7 @@ def gen_video(exec_folder, args):
                     os.system("rm " + videoname + "_in_progress ")
 
                 # combine the pos and neg videos if desired
-                if args.combi:
+                if (not args.nocombi):
 
                     videoname = filenamestart + 'combi' + filenameend
                     videolist = folder + "/" + runs_dir + "/" + str(cut) + "-mode" + mode + "-list" 
