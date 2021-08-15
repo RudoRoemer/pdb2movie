@@ -27,7 +27,7 @@ Outputs:
 structure args: structured object with fields corresponding to the possible parameters from command line
 
 '''
-def remove_rotamers(output_filename,exec_folder):
+def remove_rotamers(output_filename, exec_folder):
     # calls pymol using remove_rotamers.py - for details on this, see that file!
     os.system('pymol -qc ' + exec_folder + '/remove_rotamers.py ' + output_filename)
 
@@ -74,8 +74,8 @@ def cleanPDB(args):
         # only looks at atoms in the PDB file
         if (line[0:6].strip() == 'ATOM'):
 
-            # if there are multiple chains and the "multiple" flag has not been set, only use the first chain
-            if ((line[21] != 'A') and (line[21] != ' ') and (not(args.multiple))):
+            # if the single flag has been set, only use chain A
+            if ((line[21] != 'A') and (line[21] != ' ') and (args.single)):
 
                 continue
 

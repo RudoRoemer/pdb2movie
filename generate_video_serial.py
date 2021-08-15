@@ -164,7 +164,7 @@ def gen_video(exec_folder, args):
 
     # directory for all outputs with this step and dstep combination
     runs_dir = "Runs"
-    if (not args.multiple):
+    if (args.single):
         runs_dir += "-singlechain"
     if (step != 0.1):
         runs_dir += "-step" + str(step)

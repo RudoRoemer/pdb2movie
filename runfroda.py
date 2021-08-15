@@ -83,7 +83,7 @@ def frodasim(exec_folder,args,hydro_file):
 
     # folder for all the conformers (and other outputs) with this step and dstep combination
     runs_dir = "Runs"
-    if (not args.multiple):
+    if (args.single):
         runs_dir += "-singlechain"
     if (step != 0.1):
         runs_dir += "-step" + str(step)
