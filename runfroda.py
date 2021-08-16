@@ -5,7 +5,7 @@ runfroda.py - functions to run FRODA_simulations, generating conformers for the 
 
 
 import os
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 
 
 '''
@@ -158,10 +158,14 @@ def frodasim(exec_folder,args,hydro_file):
 
     if (commands == []):
         print("   no commands to run; conformers all already generated")
-    else:    
-        # give the commands to a pool of processes (one for each core) to run
+    else:
+        # set the number of threads to be the number of cores if not already specified
+        if (not args.frodathreads):
+            args.frodathreads[0] = cpu_count()
+
+        # give the commands to a pool of processes to run
         # the 'chunksize' is 1, meaning the commands are given to processes individually as the processes become free
-        Pool().map(call_command, commands, 1)
+        Pool(processes=args.frodathreads[0]).map(call_command, commands, 1)
 
     # now some housekeeping: we remove all temp files we created at each subfolder
     for cut in cutlist:

@@ -32,6 +32,8 @@ def parsing_args(sys_args):
                         help='Delete the contents of the output folder before beginning')
     parser.add_argument('--forceoverwrite', action='store_true',
                         help='Overwrite and silence all are-you-sure messages')
+    parser.add_argument('--frodathreads', nargs=1, type=int,
+                        help='Set the number of threads to use for the FRODA analysis')
     parser.add_argument('--single', action='store_true',
                         help='Only use chain A from the pdb file (default: use all chains)')
     parser.add_argument('--keep', nargs="+", default=[],

@@ -22,6 +22,7 @@ Recompiling FIRST and diagstd is necessary!
 --output PATH          - Set the output location for the videos, defaulting to `FILE` without the `.pdb`  
 --overwrite            - Delete the contents of the output folder before beginning  
 --forceoverwrite       - Overwrite, and silence all are-you-sure messages  
+--frodathreads COUNT   - Set the number of threads to use for the FRODA analysis
 --single               - Only use chain A from the pdb file (default: use all chains)  
 --keep MOLECULE LIST   - Stops the cleaning routine from removing the listed molecules from the PDB file  
 --waters               - Keeps water molecules in the PDB file (equivalent to --keep HOH)  
