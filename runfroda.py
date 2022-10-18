@@ -160,12 +160,14 @@ def frodasim(exec_folder,args,hydro_file):
         print("   no commands to run; conformers all already generated")
     else:
         # set the number of threads to be the number of cores if not already specified
-        if (not args.frodathreads):
-            args.frodathreads[0] = cpu_count()
+        if args.frodathreads:
+            frodathreads = int(args.frodathreads[0])
+        else:
+            frodathreads = cpu_count()
 
         # give the commands to a pool of processes to run
         # the 'chunksize' is 1, meaning the commands are given to processes individually as the processes become free
-        Pool(processes=args.frodathreads[0]).map(call_command, commands, 1)
+        Pool(processes=frodathreads).map(call_command, commands, 1)
 
     # now some housekeeping: we remove all temp files we created at each subfolder
     for cut in cutlist:
