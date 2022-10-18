@@ -51,8 +51,8 @@ cd ../../
 
 pwd
 
-echo "python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes 7 8 9 10 11 12 --ecuts 1.0 2.0 3.0 --res 1920 1080 >& ../$pdb.log"
-python pdb2movie.py ../$pdb.pdb --combi --confs $confs --freq 50 --modes 7 8 9 10 11 12 --ecuts 1.0 2.0 3.0 --res 1920 1080 >& ../$pdb.log 
+echo "python3 pdb2movie.py ../$pdb.pdb --confs $confs --freq 50 --modes 7 8 9 10 11 12 --ecuts 1.0 2.0 3.0 --res 1920 1080 >& ../$pdb.log"
+python3 pdb2movie.py ../$pdb.pdb --confs $confs --freq 50 --modes 7 8 9 10 11 12 --ecuts 1.0 2.0 3.0 --res 1920 1080 >& ../$pdb.log 
 
 echo "--- finished with $pdb"
 EOD

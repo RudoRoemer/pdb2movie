@@ -2,6 +2,7 @@
 Code for generating movies of the most relevant movement modes of proteins from their PDB files, using rigidity clustering analysis
 
 Requirements:     
+python3
 PyMOL or VMD     
 Python libraries: argparse     
 ffmpeg   
@@ -14,7 +15,7 @@ Recompiling FIRST and diagstd is necessary!
 (Note that if your C++/Fortran compilers are not the ones we use, you might need to edit some Makefiles.)   
 
 ## Usage:     
-`python pdb2movie.py FILE [options]`    
+`python3 pdb2movie.py FILE [options]`    
 `FILE` is the PBD file of the protein for which you want to generate videos.    
 
 ## Options:     
@@ -22,7 +23,8 @@ Recompiling FIRST and diagstd is necessary!
 --output PATH          - Set the output location for the videos, defaulting to `FILE` without the `.pdb`  
 --overwrite            - Delete the contents of the output folder before beginning  
 --forceoverwrite       - Overwrite, and silence all are-you-sure messages  
---multiple             - Keeps multiple chains from the original PDB file (default: uses only chain A)  
+--frodathreads COUNT   - Set the number of threads to use for the FRODA analysis
+--single               - Only use chain A from the pdb file (default: use all chains)  
 --keep MOLECULE LIST   - Stops the cleaning routine from removing the listed molecules from the PDB file  
 --waters               - Keeps water molecules in the PDB file (equivalent to --keep HOH)  
 --modes MODE LIST      - Movement modes to be investigated  
@@ -34,7 +36,7 @@ Recompiling FIRST and diagstd is necessary!
 --nomovie              - Do not generate any videos  
 --drawingengine ENGINE - Use 'vmd' or 'pymol' to render pdb files to frames (defaults to pymol for now)  
 --video FILE LIST      - File(s) with PyMOL or VMD commands to be run before generating video  
---combi                - Creates videos combining positive and negative directions for each mode/cutoff energy  
+--nocombi              - Prevent creation of videos combining both pos and neg directions  
 --videocodec CODEC     - Use 'mp4' or 'hevc' to enode the videos, resulting in .mp4 or .mov files (default: mp4)  
 --res WID HEI          - Video resolution (width, height), range [16, 8192]  
 --fps FPS              - Frames per second of the videos, range [1, 240]  
