@@ -2,6 +2,7 @@
 Code for generating movies of the most relevant movement modes of proteins from their PDB files, using rigidity clustering analysis
 
 Requirements:     
+python3
 PyMOL or VMD     
 Python libraries: argparse     
 ffmpeg   
@@ -14,7 +15,7 @@ Recompiling FIRST and diagstd is necessary!
 (Note that if your C++/Fortran compilers are not the ones we use, you might need to edit some Makefiles.)   
 
 ## Usage:     
-`python pdb2movie.py FILE [options]`    
+`python3 pdb2movie.py FILE [options]`    
 `FILE` is the PBD file of the protein for which you want to generate videos.    
 
 ## Options:     

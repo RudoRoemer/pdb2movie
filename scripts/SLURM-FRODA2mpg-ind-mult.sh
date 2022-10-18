@@ -66,8 +66,8 @@ cd ../../../$pdb
 execdir=\$( pwd )
 echo \$execdir
 
-echo "python ../pdb2movie/generate_video_serial.py \$execdir --combi --modes $modes --ecuts $ecuts --res 1920 1080 $options >& ../$pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`.log"
-python ../pdb2movie/generate_video_serial.py \$execdir --combi --modes $modes --ecuts $ecuts --res 1920 1080 $options >& ../$pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`.log 
+echo "python3 ../pdb2movie/generate_video_serial.py \$execdir --combi --modes $modes --ecuts $ecuts --res 1920 1080 $options >& ../$pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`.log"
+python3 ../pdb2movie/generate_video_serial.py \$execdir --combi --modes $modes --ecuts $ecuts --res 1920 1080 $options >& ../$pdb-`echo $modes | sed "s/ /-/g"`_`echo $ecuts | sed "s/ /-/g"`.log 
 
 echo "--- finished with $pdb"
 EOD
