@@ -14,9 +14,14 @@ then
 elif [ -d $pdb/Runs/ ]
 then
     cd $pdb/Runs/
+elif [ -d $pdb/out_tidy/Runs/ ] # Flex-SARS-CoV-2-mutations
+then
+    cd $pdb/out_tidy/Runs/
 else
-    echo "MMP: neither $pdb/Runs_single-chain/ no $pdb/Runs/ exist --- aborting!"
+    echo "MMP: did not find Runs directory --- aborting!"
 fi
+
+echo "MMP: working in "`pwd`
 
 for ecut in $ecuts
 do
